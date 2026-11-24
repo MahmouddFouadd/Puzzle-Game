@@ -19,6 +19,7 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
   const [error, setError] = useState<string | null>(null)
   const [answerResult, setAnswerResult] = useState<AnswerResult | null>(null)
   const [decision, setDecision] = useState<DecisionResult | null>(null)
+  const [draggingPiece, setDraggingPiece] = useState(false)
   const [notice, setNotice] = useState<Key | null>(null)
   const [now, setNow] = useState(Date.now())
   // One idempotency key per pending action: a retry after a network error reuses it, so the server never acts twice.
@@ -27,7 +28,7 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
   const done = (k: string) => { delete keys.current[k] }
 
   const card = state?.card ?? null
-  useEffect(() => { setAnswer(''); setOption(null) }, [card?.draw_id])
+  useEffect(() => { setAnswer(''); setOption(null); setDraggingPiece(false) }, [card?.draw_id])
   useEffect(() => {
     if (!card?.time_limit_seconds || card.state !== 'DRAWN') return
     const id = window.setInterval(() => setNow(Date.now()), 500)
@@ -60,6 +61,11 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
     const r = await decideCard(card.draw_id, d, key(k))
     delete keys.current[k]; setDecision(r); setAnswerResult(null)
   })
+  const placeDraggedPiece = () => {
+    if (!draggingPiece || !canAct || card?.state !== 'ANSWER_CORRECT') return
+    setDraggingPiece(false)
+    void decide('PLACE')
+  }
 
   const left = card?.time_limit_seconds && card.state === 'DRAWN' ? Math.max(0, Math.ceil((Date.parse(card.drawn_at) + card.time_limit_seconds * 1000 - now) / 1000)) : null
   const q = card?.question
@@ -75,7 +81,8 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
         <div className="text-end"><div className="text-3xl font-bold text-gold-400" aria-live="polite">{state.team.score}</div><div className="text-xs opacity-70">{t('scoreLabel')}</div></div>
       </header>
 
-      {state.image && <PieceBoard width={state.image.width} height={state.image.height} pieces={state.pieces} label={t('yourBoard')} />}
+      {state.image && <PieceBoard width={state.image.width} height={state.image.height} pieces={state.pieces} label={t('yourBoard')}
+        dropActive={draggingPiece && card?.state === 'ANSWER_CORRECT'} onDrop={placeDraggedPiece} />}
       <div className="text-sm opacity-80" aria-live="polite">{t('piecesFound')}: {state.progress.revealed}/{state.progress.total} · {t('cardsLeft')}: {state.cards_left}</div>
 
       {state.team.state === 'COMPLETED' && (
@@ -118,9 +125,20 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
             </>
           )}
           {card.state === 'ANSWER_CORRECT' && (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-3">
+              <div className="rounded-xl border border-gold-400/40 bg-gold-500/10 p-3 text-center text-sm" aria-live="polite">
+                <p className="mb-2">{t('dragPieceToImage')}</p>
+                <button type="button" draggable disabled={!canAct} onDragStart={() => setDraggingPiece(true)}
+                  onDragEnd={() => setDraggingPiece(false)} onPointerDown={() => setDraggingPiece(true)}
+                  onPointerUp={() => { if (draggingPiece) placeDraggedPiece() }}
+                  className={`mx-auto block rounded-xl border-2 border-dashed border-gold-400 px-5 py-3 font-semibold text-gold-400 transition ${draggingPiece ? 'scale-105 bg-gold-500/20' : 'hover:bg-gold-500/10'}`}>
+                  {t('dragPiece')}
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
               <button className="btn-primary" type="button" disabled={!canAct} onClick={() => void decide('PLACE')}>{t('placeOnImage')}</button>
               <button className="btn-ghost" type="button" disabled={!canAct} onClick={() => void decide('DISCARD')}>{t('discardBasket')}</button>
+              </div>
             </div>
           )}
         </article>
