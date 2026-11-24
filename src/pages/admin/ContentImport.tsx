@@ -66,15 +66,15 @@ export default function ContentImport() {
         final = { ...result, validStories: [], invalidStoryKeys: result.stories.map((story) => story.story_key), issues: [...result.issues, issue] }
       }
       setParsed(final)
-      const status = dryRun ? 'COMPLETED' : final.validStories.length > 0 ? 'READY' : 'FAILED'
       const id = await createImportBatch({
         filename: `${workbookFile.name}${imagesFile ? ` + ${imagesFile.name}` : ''}`.slice(0, 255),
-        total_rows: final.stories.length, valid_rows: final.validStories.length, error_rows: final.issues.length,
-        dry_run: dryRun, status
+        total_rows: final.stories.length, valid_rows: final.validStories.length, dry_run: dryRun
       })
       setBatchId(id)
-      setBatchStatus(status)
       await recordImportErrors(id, final.issues)
+      const requestedStatus = dryRun ? 'COMPLETED' : final.validStories.length > 0 ? 'READY' : 'FAILED'
+      const status = await updateImportBatch(id, { status: requestedStatus })
+      setBatchStatus(status)
       if (dryRun) setNotice(t('dryRunDone'))
       await refreshHistory()
     } catch (e) { setError(e instanceof Error ? e.message : t('importFailed')) }
@@ -87,8 +87,8 @@ export default function ContentImport() {
     const errors: ImportIssue[] = []
     let imported = 0
     try {
-      await updateImportBatch(batchId, { status: 'IMPORTING' })
-      setBatchStatus('IMPORTING')
+      const startedStatus = await updateImportBatch(batchId, { status: 'IMPORTING' })
+      setBatchStatus(startedStatus)
       for (let index = 0; index < parsed.validStories.length; index++) {
         const story = parsed.validStories[index]
         try {
@@ -121,16 +121,15 @@ export default function ContentImport() {
       if (errors.length) await recordImportErrors(batchId, errors)
       const errorCount = (parsed.issues.length + errors.length)
       const status = errorCount ? imported ? 'PARTIAL' : 'FAILED' : 'COMPLETED'
-      await updateImportBatch(batchId, { status, error_rows: errorCount, finished_at: new Date().toISOString() })
-      setBatchStatus(status)
+      const finalStatus = await updateImportBatch(batchId, { status })
+      setBatchStatus(finalStatus)
       setRuntimeIssues(errors)
       setNotice(`${t('importDone')} ${t('validRows')}: ${imported}`)
       await refreshHistory()
     } catch (e) {
       setError(e instanceof Error ? e.message : t('importFailed'))
       const status = imported ? 'PARTIAL' : 'FAILED'
-      setBatchStatus(status)
-      try { await updateImportBatch(batchId, { status, error_rows: parsed.issues.length + errors.length, finished_at: new Date().toISOString() }) } catch { /* keep original error */ }
+      try { setBatchStatus(await updateImportBatch(batchId, { status })) } catch { /* keep original error */ }
       setRuntimeIssues(errors)
       await refreshHistory()
     } finally { setBusy(false) }

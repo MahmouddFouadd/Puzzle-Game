@@ -277,11 +277,11 @@ export async function getImportStoryLimit(): Promise<number> {
   return data.max_stories_per_import
 }
 
-export async function createImportBatch(input: { filename: string; total_rows: number; valid_rows: number; error_rows: number; dry_run: boolean; status: 'READY' | 'COMPLETED' | 'FAILED' }): Promise<string> {
+export async function createImportBatch(input: { filename: string; total_rows: number; valid_rows: number; dry_run: boolean }): Promise<string> {
   const { data: auth, error: authError } = await supabase.auth.getUser()
   if (authError || !auth.user) throw new Error('not_authenticated')
   const { data, error } = await supabase.from('content_import_batches').insert({
-    ...input, uploaded_by: auth.user.id, finished_at: input.status === 'COMPLETED' || input.status === 'FAILED' ? new Date().toISOString() : null
+    ...input, uploaded_by: auth.user.id, status: 'VALIDATING', imported_rows: 0, error_rows: 0, finished_at: null
   }).select('id').single()
   if (error || !data) throw new Error(error?.message ?? 'import_batch_create_failed')
   return data.id
@@ -291,14 +291,16 @@ export async function recordImportErrors(batchId: string, errors: Array<{ sheet:
   if (!errors.length) return
   const { error } = await supabase.from('content_import_errors').upsert(errors.map((item) => ({
     batch_id: batchId, sheet_name: item.sheet.slice(0, 80), row_number: Math.max(1, item.row),
-    field_name: item.field?.slice(0, 80) || null, error_code: item.code.slice(0, 80), message: item.message.slice(0, 1000)
+    field_name: item.field?.slice(0, 80) || '', error_code: item.code.slice(0, 80), message: item.message.slice(0, 1000)
   })), { onConflict: 'batch_id,sheet_name,row_number,field_name,error_code' })
   if (error) throw new Error(error.message)
 }
 
-export async function updateImportBatch(batchId: string, patch: { status?: string; imported_rows?: number; error_rows?: number; finished_at?: string | null }): Promise<void> {
-  const { error } = await supabase.from('content_import_batches').update(patch).eq('id', batchId)
+export async function updateImportBatch(batchId: string, patch: { status: 'READY' | 'IMPORTING' | 'COMPLETED' | 'PARTIAL' | 'FAILED' }): Promise<string> {
+  const { data, error } = await supabase.rpc('transition_content_import_batch', { p_batch: batchId, p_status: patch.status })
   if (error) throw new Error(error.message)
+  if (typeof data !== 'string') throw new Error('import_batch_transition_failed')
+  return data
 }
 
 export async function importContentStory(batchId: string, story: Record<string, unknown>, images: Array<Record<string, unknown>>, questions: Array<Record<string, unknown>>, tags: string[]): Promise<string> {

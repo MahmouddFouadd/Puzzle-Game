@@ -4,7 +4,8 @@ React + TypeScript + Tailwind + Supabase. Arabic/English with RTL, story authori
 
 ## Setup
 1. Create a Supabase project.
-2. SQL Editor: run `supabase/migrations/0001_foundation.sql`, `0002_admin_dashboard.sql`, `0003_story_storage.sql`, then `0004_questions_publish.sql`, then `0005_story_rules.sql`, `0006_rooms.sql`, `0007_engine_schema.sql`, `0008_game_engine.sql`.
+2. For a **new, empty project only**, apply every file in `supabase/migrations/` in numeric order: `0001`–`0008` (game engine), `0009_users_reports.sql` (admin/report tools), `0010_configurable_limits.sql` (platform limits), and `0011_content_studio.sql` (editorial/import/AI content tables and functions).
+   **Do not replay these files into an existing production project** until its migration history and schema have been reconciled; inspect `docs/MIGRATION_PREFLIGHT.md` and use a disposable database first.
 3. Auth > Providers/Settings: turn ON **Anonymous sign-ins** (players join without accounts). Then Auth > Users > Add user (your admin email + password).
 4. Edit the email in `supabase/bootstrap_first_admin.sql` and run it once.
 5. `cp .env.example .env` and fill in the project URL and **anon** key (never the service-role key).
