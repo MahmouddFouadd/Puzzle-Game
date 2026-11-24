@@ -16,13 +16,15 @@ const Auth = createContext<AuthCtx | null>(null)
 
 async function loadPermissions(userId: string): Promise<Set<string>> {
   const { data: roles, error } = await supabase.from('user_roles').select('role').eq('user_id', userId)
-  if (error || !roles?.length) return new Set()
+  const result = new Set<string>()
   // SUPER_ADMIN is a database-defined wildcard role. Keep the UI gate aligned
   // with that authoritative rule even if the secondary permission query is
   // delayed or filtered by a temporary RLS/session refresh.
-  if (roles.some((r) => r.role === 'SUPER_ADMIN')) return new Set(['*'])
-  const { data: perms } = await supabase.from('role_permissions').select('permission').in('role', roles.map((r) => r.role))
-  const result = new Set((perms ?? []).map((p) => p.permission as string))
+  if (!error && roles?.some((r) => r.role === 'SUPER_ADMIN')) result.add('*')
+  if (!error && roles?.length) {
+    const { data: perms } = await supabase.from('role_permissions').select('permission').in('role', roles.map((r) => r.role))
+    for (const permission of (perms ?? []).map((p) => p.permission as string)) result.add(permission)
+  }
   // The RPC is SECURITY DEFINER and evaluates the same server-side rule used
   // by RLS and protected mutations. It keeps the UI usable if the public
   // permission lookup is temporarily unavailable after a fresh login.
