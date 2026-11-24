@@ -1,0 +1,61 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import type { Session } from '@supabase/supabase-js'
+import { supabase } from '../lib/supabase'
+import { can } from './permissions'
+
+interface AuthCtx {
+  session: Session | null
+  loading: boolean
+  permissions: ReadonlySet<string>
+  can: (p: string) => boolean
+  signIn: (email: string, password: string) => Promise<string | null>
+  signInAnonymously: (displayName: string) => Promise<string | null>
+  signOut: () => Promise<void>
+}
+const Auth = createContext<AuthCtx | null>(null)
+
+async function loadPermissions(userId: string): Promise<Set<string>> {
+  const { data: roles, error } = await supabase.from('user_roles').select('role').eq('user_id', userId)
+  if (error || !roles?.length) return new Set()
+  const { data: perms } = await supabase.from('role_permissions').select('permission').in('role', roles.map((r) => r.role))
+  return new Set((perms ?? []).map((p) => p.permission as string))
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [permissions, setPermissions] = useState<ReadonlySet<string>>(new Set())
+
+  useEffect(() => {
+    let active = true
+    const apply = async (s: Session | null) => {
+      const perms = s ? await loadPermissions(s.user.id) : new Set<string>()
+      if (!active) return
+      setSession(s); setPermissions(perms); setLoading(false)
+    }
+    supabase.auth.getSession().then(({ data }) => apply(data.session))
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => { void apply(s) })
+    return () => { active = false; sub.subscription.unsubscribe() }
+  }, [])
+
+  const value: AuthCtx = {
+    session, loading, permissions,
+    can: (p) => can(permissions, p),
+    signIn: async (email, password) => {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      return error ? error.message : null
+    },
+    signInAnonymously: async (displayName) => {
+      const { error } = await supabase.auth.signInAnonymously({ options: { data: { display_name: displayName.slice(0, 60) } } })
+      return error ? error.message : null
+    },
+    signOut: async () => { await supabase.auth.signOut() }
+  }
+  return <Auth.Provider value={value}>{children}</Auth.Provider>
+}
+
+export function useAuth(): AuthCtx {
+  const c = useContext(Auth)
+  if (!c) throw new Error('useAuth outside provider')
+  return c
+}
