@@ -4,7 +4,7 @@ export type Lang = 'en' | 'ar'
 
 const dict = {
   en: {
-    appName: 'Story Puzzle', signIn: 'Sign in', signOut: 'Sign out', email: 'Email', password: 'Password',
+    appName: 'Story Puzzle', installApp: 'Install app', signIn: 'Sign in', signOut: 'Sign out', email: 'Email', password: 'Password',
     dashboard: 'Dashboard', stories: 'Stories', rooms: 'Rooms', users: 'Users', reports: 'Reports',
     totalStories: 'Total stories', publishedStories: 'Published', draftStories: 'Drafts', activeRooms: 'Active rooms',
     totalUsers: 'Registered users', totalTeams: 'Teams', completedGames: 'Completed games',
@@ -85,7 +85,7 @@ const dict = {
     err_invalid_settings: 'Some room settings are not valid.'
   },
   ar: {
-    appName: 'لغز الحكاية', signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', email: 'البريد الإلكتروني', password: 'كلمة المرور',
+    appName: 'لغز الحكاية', installApp: 'تثبيت التطبيق', signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', email: 'البريد الإلكتروني', password: 'كلمة المرور',
     dashboard: 'لوحة التحكم', stories: 'القصص', rooms: 'الغرف', users: 'المستخدمون', reports: 'التقارير',
     totalStories: 'إجمالي القصص', publishedStories: 'منشورة', draftStories: 'مسودات', activeRooms: 'الغرف النشطة',
     totalUsers: 'المستخدمون المسجلون', totalTeams: 'الفرق', completedGames: 'الألعاب المكتملة',
