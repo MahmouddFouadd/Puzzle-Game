@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { MAX_REQUEST_BYTES, readRequestTextLimited } from './request-limits.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -79,16 +80,20 @@ Deno.serve(async (request) => {
   const { data: allowed, error: permissionError } = await userClient.rpc('has_permission', { p: 'story.manage' })
   if (permissionError || allowed !== true) return json(403, { error: 'forbidden' })
 
-  const requestLength = Number(request.headers.get('Content-Length') ?? 0)
-  if (requestLength > 8192) return json(413, { error: 'request_too_large' })
+  const contentLength = request.headers.get('Content-Length')
+  if (contentLength !== null && !/^\d+$/.test(contentLength)) return json(400, { error: 'invalid_content_length' })
+  if (contentLength !== null && Number(contentLength) > MAX_REQUEST_BYTES) return json(413, { error: 'request_too_large' })
   let input: Record<string, unknown>
   try {
-    const raw = await request.text()
-    if (new TextEncoder().encode(raw).byteLength > 8192) return json(413, { error: 'request_too_large' })
+    const raw = await readRequestTextLimited(request.body)
     const parsed: unknown = JSON.parse(raw)
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return json(400, { error: 'invalid_json' })
     input = parsed as Record<string, unknown>
-  } catch { return json(400, { error: 'invalid_json' }) }
+  } catch (error) {
+    if (error instanceof Error && error.message === 'request_too_large') return json(413, { error: 'request_too_large' })
+    if (error instanceof TypeError) return json(400, { error: 'invalid_utf8' })
+    return json(400, { error: 'invalid_json' })
+  }
   const topic = typeof input.topic === 'string' ? input.topic.trim() : ''
   const requestedSubject = typeof input.subject === 'string' ? input.subject.trim() : ''
   const ageMin = Number(input.age_min); const ageMax = Number(input.age_max)

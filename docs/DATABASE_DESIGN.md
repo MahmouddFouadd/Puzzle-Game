@@ -1,7 +1,9 @@
 # Database design
 
 ## Migrations (apply in order, never edit applied ones)
-0001 foundation (identity, stories, questions, rooms, game tables, RLS) · 0002 dashboard + `grant_role` · 0003 storage buckets, `save_image_pieces`, `reorder_story_images` · 0004 questions, mappings, validation, publish · 0005 story rules + settings guard · 0006 rooms, teams, captains, image selection, start · 0007 engine schema, full snapshot, `create_room` v2 · 0008 game engine functions.
+0001 foundation (identity, stories, questions, rooms, game tables, RLS) · 0002 dashboard + `grant_role` · 0003 storage buckets, `save_image_pieces`, `reorder_story_images` · 0004 questions, mappings, validation, publish · 0005 story rules + settings guard · 0006 rooms, teams, captains, image selection, start · 0007 engine schema, full snapshot, `create_room` v2 · 0008 game engine functions · 0009 admin user/report RPCs · 0010 configurable platform limits · 0011 Content Studio categories, editorial metadata, assets, import, AI-generation and review/version tables/RPCs.
+
+Live-project note (2026-11-25): Supabase catalog inspection found 0009/0010 objects but no 0011 objects; migration history is unavailable and no staging branch exists. The local 0011 source is hardened and passed the sandbox-local PostgreSQL 16 migration/test suite, but has not been applied to production. Never edit a migration already applied in an environment; use a new forward migration there.
 
 ## Logical tables from the V2 list → what exists
 | V2 name | Implementation |

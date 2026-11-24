@@ -159,7 +159,7 @@ create table content_import_batches (
   status text not null default 'VALIDATING' check (status in ('VALIDATING','READY','IMPORTING','COMPLETED','PARTIAL','FAILED','CANCELLED')),
   dry_run boolean not null default true,
   total_rows integer not null default 0 check (total_rows >= 0),
-  valid_rows integer not null default 0 check (valid_rows >= 0),
+  valid_rows integer not null default 0 check (valid_rows >= 0 and valid_rows <= total_rows),
   imported_rows integer not null default 0 check (imported_rows >= 0),
   error_rows integer not null default 0 check (error_rows >= 0),
   created_at timestamptz not null default now(),
@@ -172,7 +172,7 @@ create table content_import_errors (
   batch_id uuid not null references content_import_batches(id) on delete cascade,
   sheet_name text not null,
   row_number integer not null check (row_number >= 1),
-  field_name text,
+  field_name text not null default '',
   error_code text not null,
   message text not null,
   created_at timestamptz not null default now(),
@@ -262,6 +262,13 @@ insert into content_studio_settings (id) values (true) on conflict (id) do nothi
 create or replace function guard_content_import_batch() returns trigger
 language plpgsql set search_path = public as $$
 begin
+  if tg_op = 'INSERT' then
+    if new.uploaded_by is distinct from auth.uid() or new.status <> 'VALIDATING'
+       or new.imported_rows <> 0 or new.error_rows <> 0 or new.finished_at is not null then
+      raise exception 'import_batch_must_start_validating';
+    end if;
+    return new;
+  end if;
   if new.id is distinct from old.id or new.filename is distinct from old.filename
      or new.uploaded_by is distinct from old.uploaded_by or new.dry_run is distinct from old.dry_run
      or new.total_rows is distinct from old.total_rows or new.valid_rows is distinct from old.valid_rows
@@ -272,9 +279,14 @@ begin
      and coalesce(current_setting('app.content_import_count',true),'') <> 'on' then
     raise exception 'import_counts_are_server_managed';
   end if;
+  if (new.status is distinct from old.status or new.error_rows is distinct from old.error_rows
+      or new.finished_at is distinct from old.finished_at)
+     and coalesce(current_setting('app.content_import_batch_transition',true),'') <> 'on' then
+    raise exception 'import_batch_state_is_server_managed';
+  end if;
   return new;
 end $$;
-create trigger content_import_batch_guard before update on content_import_batches
+create trigger content_import_batch_guard before insert or update on content_import_batches
   for each row execute function guard_content_import_batch();
 
 -- RLS: editorial metadata and operational records are staff-only. Writes that change
@@ -301,9 +313,6 @@ create policy content_assets_staff_write on content_assets for all using (has_pe
 create policy content_asset_usages_staff_read on content_asset_usages for select using (has_permission('story.manage'));
 create policy content_import_batches_owner_read on content_import_batches for select using (uploaded_by = auth.uid() or has_permission('content.review'));
 create policy content_import_batches_owner_insert on content_import_batches for insert with check (uploaded_by = auth.uid() and has_permission('story.manage'));
-create policy content_import_batches_owner_update on content_import_batches for update
-  using (uploaded_by = auth.uid() and has_permission('story.manage'))
-  with check (uploaded_by = auth.uid() and has_permission('story.manage'));
 create policy content_import_errors_owner_read on content_import_errors for select
   using (exists (select 1 from content_import_batches b where b.id = batch_id and (b.uploaded_by = auth.uid() or has_permission('content.review'))));
 create policy content_import_errors_owner_write on content_import_errors for all
@@ -323,6 +332,65 @@ create trigger content_categories_touch before update on content_categories for 
 create trigger story_content_metadata_touch before update on story_content_metadata for each row execute function touch_updated_at();
 create trigger content_import_items_touch before update on content_import_items for each row execute function touch_updated_at();
 create trigger ai_generation_jobs_touch before update on ai_generation_jobs for each row execute function touch_updated_at();
+
+-- Batch lifecycle and error counts are only changed through this owner-checked RPC.
+-- Counts are derived from the server-owned import item/error tables, not client payloads.
+create or replace function transition_content_import_batch(p_batch uuid, p_status text) returns text
+language plpgsql security definer set search_path = public as $$
+declare
+  v_batch content_import_batches%rowtype;
+  v_error_rows integer := 0;
+  v_next_status text;
+  v_finished_at timestamptz;
+begin
+  if not has_permission('story.manage') then raise exception 'forbidden' using errcode = '42501'; end if;
+  if p_status not in ('READY','IMPORTING','COMPLETED','PARTIAL','FAILED') then
+    raise exception 'invalid_import_batch_status';
+  end if;
+  select * into v_batch from content_import_batches
+    where id=p_batch and uploaded_by=auth.uid() for update;
+  if not found then raise exception 'import_batch_not_found' using errcode = '42501'; end if;
+  select count(*) into v_error_rows from content_import_errors where batch_id=p_batch;
+
+  if p_status='READY' then
+    if v_batch.status <> 'VALIDATING' or v_batch.dry_run or v_batch.valid_rows=0 then
+      raise exception 'invalid_import_batch_transition';
+    end if;
+    v_next_status := 'READY';
+  elsif p_status='IMPORTING' then
+    if v_batch.status not in ('READY','PARTIAL','FAILED') or v_batch.dry_run then
+      raise exception 'invalid_import_batch_transition';
+    end if;
+    v_next_status := 'IMPORTING';
+  elsif v_batch.status='VALIDATING' and v_batch.dry_run and p_status='COMPLETED' then
+    v_next_status := 'COMPLETED';
+  elsif v_batch.status='VALIDATING' and not v_batch.dry_run and p_status='FAILED' and v_batch.valid_rows=0 then
+    v_next_status := 'FAILED';
+  elsif v_batch.status in ('READY','PARTIAL','FAILED','IMPORTING') and not v_batch.dry_run then
+    if v_batch.imported_rows=0 then
+      v_next_status := 'FAILED';
+    elsif v_error_rows>0 or v_batch.imported_rows<v_batch.valid_rows then
+      v_next_status := 'PARTIAL';
+    else
+      v_next_status := 'COMPLETED';
+    end if;
+  else
+    raise exception 'invalid_import_batch_transition';
+  end if;
+
+  if v_next_status in ('READY','IMPORTING') then
+    v_finished_at := null;
+  else
+    v_finished_at := now();
+  end if;
+  perform set_config('app.content_import_batch_transition','on',true);
+  update content_import_batches
+    set status=v_next_status, error_rows=v_error_rows, finished_at=v_finished_at
+    where id=p_batch;
+  return v_next_status;
+end $$;
+revoke all on function transition_content_import_batch(uuid,text) from public, anon;
+grant execute on function transition_content_import_batch(uuid,text) to authenticated;
 
 create or replace function content_story_snapshot(p_story uuid) returns jsonb
 language sql stable security definer set search_path = public as $$
