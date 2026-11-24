@@ -5,4 +5,5 @@ body { @apply bg-ink-900 text-parchment-100 font-body antialiased; }
 .btn-ghost { @apply btn border border-parchment-200/30 hover:bg-ink-700; }
 .card { @apply rounded-card border border-parchment-200/15 bg-ink-800 p-4; }
 .input { @apply w-full rounded-xl border border-parchment-200/30 bg-ink-900 px-3 py-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-400; }
+@media print { body { background: white !important; color: #111827 !important; } aside, nav, button, select, input { display: none !important; } .card { background: white !important; border-color: #d1d5db !important; break-inside: avoid; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

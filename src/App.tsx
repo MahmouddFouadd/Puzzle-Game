@@ -16,7 +16,8 @@ import Rooms from './pages/admin/Rooms'
 import RoomControl from './pages/admin/RoomControl'
 import Join from './pages/Join'
 import Lobby from './pages/Lobby'
-import Placeholder from './pages/admin/Placeholder'
+import Users from './pages/admin/Users'
+import Reports from './pages/admin/Reports'
 
 export default function App() {
   const { t } = useI18n()
@@ -38,8 +39,8 @@ export default function App() {
         <Route path="rooms/:id" element={<RequireAuth permission="room.manage"><RoomControl /></RequireAuth>} />
         <Route path="puzzle-lab" element={<RequireAuth permission="story.manage"><PuzzleLab /></RequireAuth>} />
         <Route path="rooms" element={<RequireAuth permission="room.manage"><Rooms /></RequireAuth>} />
-        <Route path="users" element={<RequireAuth permission="user.manage"><Placeholder titleKey="users" /></RequireAuth>} />
-        <Route path="reports" element={<RequireAuth permission="report.view"><Placeholder titleKey="reports" /></RequireAuth>} />
+        <Route path="users" element={<RequireAuth permission="user.manage"><Users /></RequireAuth>} />
+        <Route path="reports" element={<RequireAuth permission="report.view"><Reports /></RequireAuth>} />
       </Route>
       <Route path="*" element={<Navigate to="/join" replace />} />
     </Routes>

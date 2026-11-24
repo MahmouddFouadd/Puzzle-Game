@@ -33,7 +33,8 @@ Scale: NOT STARTED · IN PROGRESS · IMPLEMENTED (code exists, not exercised) ·
 | Gameplay screen | IMPLEMENTED | not run in a browser |
 | Realtime | IMPLEMENTED | `postgres_changes` + 4-5 s polling fallback; not exercised live, no subscription-isolation test yet |
 | Completion, ranking, leaderboard (data) | TESTED (DB) | |
-| Final story reveal, reports, PDF/Excel export | NOT STARTED | Milestone 5 |
+| Final story reveal | NOT STARTED | Milestone 5 leftover |
+| Admin users, roles, reports, CSV/PDF print export | IMPLEMENTED | Migration 0009 + `/admin/users` and `/admin/reports`; deployed to Cloudflare |
 | Recovery codes for lost sessions, PWA, Cloudflare config, stress tests | NOT STARTED | Milestone 6 |
 
 ## Milestone 4 report
