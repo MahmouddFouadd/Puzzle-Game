@@ -21,6 +21,15 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: Verify Supabase build secrets
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
+            echo "::error::Missing repository Actions secrets: VITE_SUPABASE_URL and/or VITE_SUPABASE_ANON_KEY. Add both before building the Android APK."
+            exit 1
+          fi
       - name: Install dependencies
         run: npm ci
       - name: Build web app

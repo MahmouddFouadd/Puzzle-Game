@@ -22,7 +22,15 @@ import PlatformSettings from './pages/admin/PlatformSettings'
 
 export default function App() {
   const { t } = useI18n()
-  if (!isConfigured) return <p className="p-6 text-danger" role="alert">{t('configMissing')}</p>
+  if (!isConfigured) return (
+    <main className="grid min-h-screen place-items-center bg-ink-900 p-6 text-parchment-100">
+      <section className="card w-full max-w-xl space-y-4 text-center" role="alert">
+        <h1 className="font-display text-3xl text-gold-400">{t('appName')}</h1>
+        <p className="text-lg">{t('configMissing')}</p>
+        <p className="text-sm opacity-80">{t('configMissingMobile')}</p>
+      </section>
+    </main>
+  )
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
