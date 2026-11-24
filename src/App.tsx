@@ -19,6 +19,15 @@ import Lobby from './pages/Lobby'
 import Users from './pages/admin/Users'
 import Reports from './pages/admin/Reports'
 import PlatformSettings from './pages/admin/PlatformSettings'
+import ContentStudio from './pages/admin/ContentStudio'
+import ContentLibrary from './pages/admin/ContentLibrary'
+import ContentImages from './pages/admin/ContentImages'
+import ContentQuestions from './pages/admin/ContentQuestions'
+import ContentAI from './pages/admin/ContentAI'
+import ContentImport from './pages/admin/ContentImport'
+import ContentReview from './pages/admin/ContentReview'
+import ContentAnalytics from './pages/admin/ContentAnalytics'
+import ContentCategories from './pages/admin/ContentCategories'
 
 export default function App() {
   const { t } = useI18n()
@@ -45,6 +54,16 @@ export default function App() {
         <Route path="stories/:id/assign" element={<RequireAuth permission="story.manage"><Assignments /></RequireAuth>} />
         <Route path="stories/:id/rules" element={<RequireAuth permission="story.manage"><RulesPanel /></RequireAuth>} />
         <Route path="stories/:id/publish" element={<RequireAuth permission="story.manage"><PublishPanel /></RequireAuth>} />
+        <Route path="content-library" element={<RequireAuth permission="story.manage"><ContentStudio /></RequireAuth>}>
+          <Route index element={<ContentLibrary />} />
+          <Route path="images" element={<ContentImages />} />
+          <Route path="questions" element={<ContentQuestions />} />
+          <Route path="ai" element={<ContentAI />} />
+          <Route path="import" element={<ContentImport />} />
+          <Route path="review" element={<RequireAuth permission="content.review"><ContentReview /></RequireAuth>} />
+          <Route path="analytics" element={<ContentAnalytics />} />
+          <Route path="categories" element={<ContentCategories />} />
+        </Route>
         <Route path="rooms/:id" element={<RequireAuth permission="room.manage"><RoomControl /></RequireAuth>} />
         <Route path="puzzle-lab" element={<RequireAuth permission="story.manage"><PuzzleLab /></RequireAuth>} />
         <Route path="rooms" element={<RequireAuth permission="room.manage"><Rooms /></RequireAuth>} />

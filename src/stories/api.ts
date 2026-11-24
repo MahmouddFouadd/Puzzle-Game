@@ -1,9 +1,9 @@
 import { supabase } from '../lib/supabase'
 import { generatePuzzle, type PieceGeometry } from '../puzzle/engine'
+import { uploadContentAsset } from '../content/api'
 import type { Story, StoryImage } from './types'
 
 const MAX_BYTES = 15 * 1024 * 1024
-const TYPES: Record<string, string> = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }
 
 function must<T>(r: { data: T | null; error: { message: string } | null }): T {
   if (r.error) throw new Error(r.error.message)
@@ -39,20 +39,20 @@ export async function signedOriginalUrl(path: string): Promise<string> {
 }
 
 export async function uploadImage(storyId: string, file: File, nextPosition: number): Promise<void> {
-  const ext = TYPES[file.type]
-  if (!ext) throw new Error('unsupported_type')
+  if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) throw new Error('unsupported_type')
   if (file.size > MAX_BYTES) throw new Error('file_too_large')
-  const bmp = await createImageBitmap(file)
-  const { width, height } = bmp
-  bmp.close()
-  const path = `${storyId}/${crypto.randomUUID()}.${ext}`
-  const up = await supabase.storage.from('story-originals').upload(path, file, { contentType: file.type, upsert: false })
-  if (up.error) throw new Error(up.error.message)
+  const uploaded = await uploadContentAsset(file, { license_type: 'UNKNOWN', source_type: 'UPLOAD' })
+  const asset = uploaded.asset
   const ins = await supabase.from('story_images').insert({
     story_id: storyId, position: nextPosition, title: file.name.replace(/\.[^.]+$/, '').slice(0, 80),
-    storage_path: path, width, height, piece_count: 12, puzzle_seed: Math.floor(Math.random() * 1_000_000)
-  })
-  if (ins.error) { await supabase.storage.from('story-originals').remove([path]); throw new Error(ins.error.message) }
+    storage_path: asset.storage_path, width: asset.width, height: asset.height, piece_count: 12, puzzle_seed: Math.floor(Math.random() * 1_000_000)
+  }).select('id').single()
+  if (ins.error || !ins.data) throw new Error(ins.error?.message ?? 'image_insert_failed')
+  const usage = await supabase.rpc('register_story_image_asset', { p_asset: asset.id, p_image: ins.data.id })
+  if (usage.error) {
+    await supabase.from('story_images').delete().eq('id', ins.data.id)
+    throw new Error(usage.error.message)
+  }
 }
 
 export async function updateImage(id: string, patch: Partial<Pick<StoryImage, 'title' | 'description' | 'hint'>>): Promise<void> {
@@ -64,7 +64,8 @@ export async function deleteImage(img: StoryImage): Promise<void> {
   const { error } = await supabase.from('story_images').delete().eq('id', img.id)
   if (error) throw new Error(error.message)
   const masks = ((old.data ?? []) as { mask_path: string | null }[]).map((r) => r.mask_path).filter((p): p is string => !!p)
-  await supabase.storage.from('story-originals').remove([img.storage_path])
+  // Keep source originals in the reusable asset library; deleting a story-image
+  // relationship must not delete a file shared by another story or still catalogued.
   if (masks.length) await supabase.storage.from('story-pieces').remove(masks)
 }
 export async function reorderImages(storyId: string, ids: string[]): Promise<void> {
