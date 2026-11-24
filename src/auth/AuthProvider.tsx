@@ -22,7 +22,17 @@ async function loadPermissions(userId: string): Promise<Set<string>> {
   // delayed or filtered by a temporary RLS/session refresh.
   if (roles.some((r) => r.role === 'SUPER_ADMIN')) return new Set(['*'])
   const { data: perms } = await supabase.from('role_permissions').select('permission').in('role', roles.map((r) => r.role))
-  return new Set((perms ?? []).map((p) => p.permission as string))
+  const result = new Set((perms ?? []).map((p) => p.permission as string))
+  // The RPC is SECURITY DEFINER and evaluates the same server-side rule used
+  // by RLS and protected mutations. It keeps the UI usable if the public
+  // permission lookup is temporarily unavailable after a fresh login.
+  const candidates = ['report.view', 'story.manage', 'room.manage', 'user.manage', 'game.control']
+  const checks = await Promise.all(candidates.map(async (permission) => {
+    const { data } = await supabase.rpc('has_permission', { p: permission })
+    return data === true ? permission : null
+  }))
+  for (const permission of checks) if (permission) result.add(permission)
+  return result
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
