@@ -18,6 +18,7 @@ import Join from './pages/Join'
 import Lobby from './pages/Lobby'
 import Users from './pages/admin/Users'
 import Reports from './pages/admin/Reports'
+import PlatformSettings from './pages/admin/PlatformSettings'
 
 export default function App() {
   const { t } = useI18n()
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="rooms" element={<RequireAuth permission="room.manage"><Rooms /></RequireAuth>} />
         <Route path="users" element={<RequireAuth permission="user.manage"><Users /></RequireAuth>} />
         <Route path="reports" element={<RequireAuth permission="report.view"><Reports /></RequireAuth>} />
+        <Route path="settings" element={<RequireAuth permission="*"><PlatformSettings /></RequireAuth>} />
       </Route>
       <Route path="*" element={<Navigate to="/join" replace />} />
     </Routes>

@@ -5,5 +5,19 @@ body { @apply bg-ink-900 text-parchment-100 font-body antialiased; }
 .btn-ghost { @apply btn border border-parchment-200/30 hover:bg-ink-700; }
 .card { @apply rounded-card border border-parchment-200/15 bg-ink-800 p-4; }
 .input { @apply w-full rounded-xl border border-parchment-200/30 bg-ink-900 px-3 py-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-400; }
+.dashboard-hero { position: relative; background: radial-gradient(circle at 80% 15%, rgba(224,179,74,.22), transparent 28%), linear-gradient(135deg, #24202b 0%, #172f3a 52%, #162026 100%); box-shadow: 0 24px 80px rgba(0,0,0,.2); }
+.dashboard-orbit { position: absolute; inset-inline-end: 5%; top: 50%; width: 190px; height: 190px; transform: translateY(-50%); border: 1px solid rgba(232,215,170,.22); border-radius: 50%; opacity: .8; }
+.dashboard-orbit::before, .dashboard-orbit::after { content: ''; position: absolute; inset: 18px; border: 1px solid rgba(224,179,74,.22); border-radius: 50%; }
+.dashboard-orbit::after { inset: 52px; background: rgba(224,179,74,.12); border: 0; }
+.dashboard-orbit span { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #e0b34a; box-shadow: 0 0 20px #e0b34a; }
+.dashboard-orbit span:nth-child(1) { top: 8px; inset-inline-start: 50%; } .dashboard-orbit span:nth-child(2) { bottom: 25px; inset-inline-end: 5px; background: #1f7a8c; box-shadow: 0 0 20px #1f7a8c; } .dashboard-orbit span:nth-child(3) { bottom: 24px; inset-inline-start: 20px; background: #f4ead2; box-shadow: 0 0 20px #f4ead2; }
+.metric-card { @apply rounded-card border border-parchment-200/15 p-4; box-shadow: 0 12px 30px rgba(0,0,0,.12); }
+.metric-dot { @apply h-2.5 w-2.5 rounded-full bg-gold-400; box-shadow: 0 0 14px rgba(224,179,74,.8); }
+.activity-row { @apply flex items-center gap-3 rounded-xl border border-parchment-200/10 bg-ink-900/25 p-3; }
+.activity-line { @apply h-2 w-2 shrink-0 rounded-full bg-gold-400; box-shadow: 0 0 12px rgba(224,179,74,.9); }
+.progress-ring { display: grid; place-items: center; width: 94px; height: 94px; border-radius: 50%; background: conic-gradient(#e0b34a var(--progress), rgba(232,215,170,.12) 0deg); position: relative; }
+.progress-ring::before { content: ''; position: absolute; inset: 8px; border-radius: 50%; background: #1d1c24; }
+.progress-ring span { position: relative; z-index: 1; font-size: 1.25rem; font-weight: 700; }
+.quick-link { @apply rounded-xl border border-parchment-200/15 px-3 py-2 text-center text-sm transition hover:border-gold-400 hover:bg-gold-500/10; }
 @media print { body { background: white !important; color: #111827 !important; } aside, nav, button, select, input { display: none !important; } .card { background: white !important; border-color: #d1d5db !important; break-inside: avoid; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

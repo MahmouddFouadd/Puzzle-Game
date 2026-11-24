@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { useI18n } from '../../lib/i18n'
+import { supabase } from '../../lib/supabase'
 import { generatePuzzle } from '../../puzzle/engine'
 import { PuzzlePreview } from '../../puzzle/PuzzlePreview'
 
 interface Loaded { url: string; width: number; height: number }
+const defaultPieceLimits = { min: 4, max: 100 }
 
 /** Admin tool: pick a local image, choose piece count + seed, inspect the real generated jigsaw. Nothing is uploaded. */
 export default function PuzzleLab() {
@@ -14,6 +16,16 @@ export default function PuzzleLab() {
   const [outlines, setOutlines] = useState(true)
   const [revealed, setRevealed] = useState<ReadonlySet<number>>(new Set())
   const [selected, setSelected] = useState<number | null>(null)
+  const [limits, setLimits] = useState(defaultPieceLimits)
+
+  useEffect(() => {
+    supabase.from('platform_settings').select('min_piece_count,max_piece_count').single().then(({ data }) => {
+      if (!data) return
+      const min = Math.max(1, Number(data.min_piece_count) || defaultPieceLimits.min)
+      const max = Math.max(min, Number(data.max_piece_count) || defaultPieceLimits.max)
+      setLimits({ min, max }); setCount((value) => Math.min(max, Math.max(min, value)))
+    })
+  }, [])
 
   useEffect(() => () => { if (img) URL.revokeObjectURL(img.url) }, [img])
 
@@ -43,8 +55,8 @@ export default function PuzzleLab() {
           <input className="input mt-1" type="file" accept="image/png,image/jpeg,image/webp" onChange={onFile} />
         </label>
         <label className="block">{t('pieceCount')}
-          <input className="input mt-1" type="number" min={4} max={100} value={count}
-            onChange={(e) => setCount(Math.min(100, Math.max(4, Math.floor(Number(e.target.value)) || 4)))} />
+          <input className="input mt-1" type="number" min={limits.min} max={limits.max} value={count}
+            onChange={(e) => setCount(Math.min(limits.max, Math.max(limits.min, Math.floor(Number(e.target.value)) || limits.min)))} />
         </label>
         <label className="block">{t('seed')}
           <div className="flex gap-2 mt-1">

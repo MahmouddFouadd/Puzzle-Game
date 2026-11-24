@@ -1,57 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useI18n, type Key } from '../../lib/i18n'
-
-interface Stats {
-  total_stories: number; published_stories: number; draft_stories: number; active_rooms: number
-  total_users: number; total_teams: number; completed_games: number
-  recent_activity: { id: number; action: string; created_at: string }[]
-}
-
-const tiles: { field: keyof Omit<Stats, 'recent_activity'>; key: Key }[] = [
-  { field: 'total_stories', key: 'totalStories' }, { field: 'published_stories', key: 'publishedStories' },
-  { field: 'draft_stories', key: 'draftStories' }, { field: 'active_rooms', key: 'activeRooms' },
-  { field: 'total_users', key: 'totalUsers' }, { field: 'total_teams', key: 'totalTeams' },
-  { field: 'completed_games', key: 'completedGames' }
+interface Stats { total_stories: number; published_stories: number; draft_stories: number; active_rooms: number; total_users: number; total_teams: number; completed_games: number; recent_activity: { id: number; action: string; created_at: string }[] }
+const tiles: { field: keyof Omit<Stats, 'recent_activity'>; key: Key; tone: string }[] = [
+  { field: 'total_stories', key: 'totalStories', tone: 'from-sea-600/35 to-sea-500/5' }, { field: 'published_stories', key: 'publishedStories', tone: 'from-gold-600/35 to-gold-500/5' }, { field: 'active_rooms', key: 'activeRooms', tone: 'from-ok/35 to-ok/5' }, { field: 'total_users', key: 'totalUsers', tone: 'from-purple-500/30 to-purple-500/5' }, { field: 'total_teams', key: 'totalTeams', tone: 'from-orange-500/30 to-orange-500/5' }, { field: 'completed_games', key: 'completedGames', tone: 'from-pink-500/25 to-pink-500/5' }
 ]
-
 export default function Dashboard() {
-  const { t } = useI18n()
-  const [stats, setStats] = useState<Stats | null>(null)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    supabase.rpc('admin_dashboard_stats').then(({ data, error: err }) => {
-      if (err || !data) setError(true); else setStats(data as Stats)
-    })
-  }, [])
-
+  const { t, lang } = useI18n(); const [stats, setStats] = useState<Stats | null>(null); const [error, setError] = useState(false)
+  useEffect(() => { supabase.rpc('admin_dashboard_stats').then(({ data, error: err }) => { if (err || !data) setError(true); else setStats(data as Stats) }) }, [])
+  const completion = useMemo(() => stats && stats.total_stories ? Math.round(stats.published_stories / stats.total_stories * 100) : 0, [stats])
   if (error) return <p role="alert" className="text-danger">{t('loadFailed')}</p>
   if (!stats) return <p role="status">{t('loading')}</p>
-
-  return (
-    <div className="space-y-6">
-      <h2 className="font-display text-3xl">{t('dashboard')}</h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {tiles.map((x) => (
-          <div key={x.field} className="card">
-            <div className="text-3xl font-bold text-gold-400">{stats[x.field]}</div>
-            <div className="text-sm opacity-80">{t(x.key)}</div>
-          </div>
-        ))}
-      </div>
-      <section className="card">
-        <h3 className="font-semibold mb-2">{t('recentActivity')}</h3>
-        {stats.recent_activity.length === 0 ? <p className="opacity-70">{t('noActivity')}</p> : (
-          <ul className="space-y-1">
-            {stats.recent_activity.map((a) => (
-              <li key={a.id} className="flex justify-between gap-2 text-sm">
-                <span>{a.action}</span><time className="opacity-60">{new Date(a.created_at).toLocaleString()}</time>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </div>
-  )
+  return <div className="space-y-7">
+    <section className="dashboard-hero overflow-hidden rounded-[1.5rem] border border-parchment-200/15 p-6 md:p-8"><div className="relative z-10 max-w-2xl"><p className="mb-2 text-sm font-semibold uppercase tracking-[0.22em] text-gold-400">{t('appName')}</p><h2 className="font-display text-3xl leading-tight md:text-5xl">{t('dashboard')}</h2><p className="mt-3 max-w-xl text-sm leading-7 text-parchment-100/70">{lang === 'ar' ? 'نظرة سريعة على القصص والغرف واللاعبين، مع أدوات الإدارة في مكان واحد.' : 'A clear command center for your stories, rooms, players, and live game operations.'}</p><div className="mt-6 flex flex-wrap gap-2"><Link className="btn-primary" to="/admin/rooms">{t('newRoom')}</Link><Link className="btn-ghost bg-ink-900/30" to="/admin/stories">{t('stories')}</Link></div></div><div className="dashboard-orbit" aria-hidden="true"><span /><span /><span /></div></section>
+    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">{tiles.map((tile) => <div className={`metric-card bg-gradient-to-br ${tile.tone}`} key={tile.field}><div className="flex items-start justify-between"><span className="text-sm text-parchment-100/70">{t(tile.key)}</span><span className="metric-dot" /></div><div className="mt-4 text-4xl font-bold tracking-tight">{stats[tile.field]}</div><div className="mt-3 h-1 rounded-full bg-parchment-100/10"><div className="h-1 w-2/3 rounded-full bg-gold-400/80" /></div></div>)}</div>
+    <div className="grid gap-4 xl:grid-cols-[1.2fr_.8fr]"><section className="card"><div className="mb-5 flex items-center justify-between"><div><h3 className="text-lg font-semibold">{t('recentActivity')}</h3><p className="text-sm opacity-60">{lang === 'ar' ? 'آخر الأحداث المسجلة في المنصة' : 'Latest recorded platform events'}</p></div><Link className="text-sm text-gold-400 hover:underline" to="/admin/reports">{t('reports')}</Link></div>{stats.recent_activity.length === 0 ? <p className="opacity-70">{t('noActivity')}</p> : <ul className="space-y-3">{stats.recent_activity.map((a) => <li key={a.id} className="activity-row"><span className="activity-line" /><div className="min-w-0 flex-1"><div className="truncate font-medium">{a.action}</div><time className="text-xs opacity-55">{new Date(a.created_at).toLocaleString()}</time></div></li>)}</ul>}</section><section className="card"><h3 className="text-lg font-semibold">{lang === 'ar' ? 'صحة المنصة' : 'Platform health'}</h3><div className="mt-5 flex items-center gap-5"><div className="progress-ring" style={{ '--progress': `${completion * 3.6}deg` } as CSSProperties}><span>{completion}%</span></div><div><p className="font-semibold">{lang === 'ar' ? 'نسبة نشر القصص' : 'Story publishing rate'}</p><p className="mt-1 text-sm opacity-60">{stats.published_stories} / {stats.total_stories} {t('stories')}</p></div></div><div className="mt-7 grid grid-cols-2 gap-2"><Link className="quick-link" to="/admin/users">{t('users')}</Link><Link className="quick-link" to="/admin/settings">{t('platformSettings')}</Link></div></section></div>
+  </div>
 }

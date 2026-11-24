@@ -10,9 +10,13 @@ import type { Story, StoryImage } from '../../stories/types'
 import { generatePuzzle } from '../../puzzle/engine'
 import { StoryTabs } from '../../components/StoryTabs'
 import { PuzzlePreview } from '../../puzzle/PuzzlePreview'
+import { supabase } from '../../lib/supabase'
+
+interface PieceLimits { min: number; max: number }
+const defaultPieceLimits: PieceLimits = { min: 4, max: 100 }
 
 interface CardProps {
-  image: StoryImage; url: string | undefined; saved: number; first: boolean; last: boolean; locked: boolean
+  image: StoryImage; url: string | undefined; saved: number; first: boolean; last: boolean; locked: boolean; limits: PieceLimits
   progress: string | undefined
   onMeta: (id: string, patch: { title: string; description: string; hint: string }) => void
   onMove: (id: string, dir: -1 | 1) => void
@@ -20,7 +24,7 @@ interface CardProps {
   onGenerate: (img: StoryImage, count: number, seed: number) => void
 }
 
-function ImageCard({ image, url, saved, first, last, locked, progress, onMeta, onMove, onDelete, onGenerate }: CardProps) {
+function ImageCard({ image, url, saved, first, last, locked, progress, limits, onMeta, onMove, onDelete, onGenerate }: CardProps) {
   const { t } = useI18n()
   const [title, setTitle] = useState(image.title)
   const [description, setDescription] = useState(image.description ?? '')
@@ -48,8 +52,8 @@ function ImageCard({ image, url, saved, first, last, locked, progress, onMeta, o
         onChange={(e) => setHint(e.target.value)} onBlur={commit} disabled={locked} />
       <div className="flex flex-wrap gap-2 items-end">
         <label className="block text-sm">{t('pieceCount')}
-          <input className="input mt-1 w-24" type="number" min={4} max={100} value={count} disabled={locked}
-            onChange={(e) => setCount(Math.min(100, Math.max(4, Math.floor(Number(e.target.value)) || 4)))} />
+          <input className="input mt-1 w-24" type="number" min={limits.min} max={limits.max} value={count} disabled={locked}
+            onChange={(e) => setCount(Math.min(limits.max, Math.max(limits.min, Math.floor(Number(e.target.value)) || limits.min)))} />
         </label>
         <label className="block text-sm">{t('seed')}
           <input className="input mt-1 w-32" type="number" value={seed} disabled={locked} onChange={(e) => setSeed(Math.floor(Number(e.target.value)) || 0)} />
@@ -86,6 +90,7 @@ export default function StoryEditor() {
   const [notice, setNotice] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [form, setForm] = useState({ title: '', description: '', category: '', subject: '', difficulty: 1, language: 'en' as 'en' | 'ar' })
+  const [pieceLimits, setPieceLimits] = useState<PieceLimits>(defaultPieceLimits)
 
   const fail = useCallback((e: unknown) => { setNotice(null); setError(t(errorKey(e))) }, [t])
 
@@ -101,6 +106,14 @@ export default function StoryEditor() {
   }, [id])
 
   useEffect(() => { reload().catch(fail) }, [reload, fail])
+  useEffect(() => {
+    supabase.from('platform_settings').select('min_piece_count,max_piece_count').single().then(({ data }) => {
+      if (!data) return
+      const min = Math.max(1, Number(data.min_piece_count) || defaultPieceLimits.min)
+      const max = Math.max(min, Number(data.max_piece_count) || defaultPieceLimits.max)
+      setPieceLimits({ min, max })
+    })
+  }, [])
 
   const locked = story?.status === 'PUBLISHED'
 
@@ -195,7 +208,7 @@ export default function StoryEditor() {
         </label>
         <ul className="space-y-3">
           {images.map((img, i) => (
-            <ImageCard key={`${img.id}-${img.position}`} image={img} url={urls[img.id]} saved={counts[img.id] ?? 0}
+            <ImageCard key={`${img.id}-${img.position}`} image={img} url={urls[img.id]} saved={counts[img.id] ?? 0} limits={pieceLimits}
               first={i === 0} last={i === images.length - 1} locked={!!locked} progress={progress[img.id]}
               onMeta={onMeta} onMove={onMove} onDelete={onDelete} onGenerate={onGenerate} />
           ))}

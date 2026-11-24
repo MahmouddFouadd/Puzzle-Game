@@ -9,7 +9,8 @@ const nav: { to: string; key: Key; perm: string; end?: boolean }[] = [
   { to: '/admin/puzzle-lab', key: 'puzzleLab', perm: 'story.manage' },
   { to: '/admin/rooms', key: 'rooms', perm: 'room.manage' },
   { to: '/admin/users', key: 'users', perm: 'user.manage' },
-  { to: '/admin/reports', key: 'reports', perm: 'report.view' }
+  { to: '/admin/reports', key: 'reports', perm: 'report.view' },
+  { to: '/admin/settings', key: 'platformSettings', perm: '*' }
 ]
 
 export default function AdminLayout() {

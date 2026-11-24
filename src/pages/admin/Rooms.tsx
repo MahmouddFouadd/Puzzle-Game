@@ -18,6 +18,7 @@ export default function Rooms() {
   const [busy, setBusy] = useState(false)
   const [f, setF] = useState({ story: '', teams: 2, members: 4, isPrivate: false, pin: '', adminJoining: false, playersCreate: true, names: '' })
   const [imageCount, setImageCount] = useState(0)
+  const [limits, setLimits] = useState({ min_team_count: 2, max_team_count: 12, min_team_members: 1, max_team_members: 12 })
 
   useEffect(() => {
     listRooms().then(setRooms).catch((e) => { setError(t(errorKey(e))); setRooms([]) })
@@ -26,6 +27,7 @@ export default function Rooms() {
       setStories(pub)
       if (pub[0]) setF((x) => ({ ...x, story: pub[0].id }))
     }).catch(() => undefined)
+    supabase.from('platform_settings').select('min_team_count,max_team_count,min_team_members,max_team_members').single().then(({ data }) => { if (data) setLimits(data as typeof limits) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -34,9 +36,9 @@ export default function Rooms() {
     supabase.from('story_images').select('id', { count: 'exact', head: true }).eq('story_id', f.story).then(({ count }) => {
       const n = count ?? 0
       setImageCount(n)
-      setF((x) => ({ ...x, teams: Math.min(Math.max(2, n), Math.max(2, x.teams > n ? n : x.teams)) }))
+      setF((x) => ({ ...x, teams: Math.min(Math.max(limits.min_team_count, n), Math.max(limits.min_team_count, x.teams > n ? n : x.teams)) }))
     })
-  }, [f.story])
+  }, [f.story, limits.min_team_count])
 
   const submit = async (e: FormEvent) => {
     e.preventDefault()
@@ -63,10 +65,10 @@ export default function Rooms() {
             </select>
           </label>
           <label className="block">{t('maxTeams')}
-            <input className="input mt-1" type="number" min={2} max={Math.max(2, imageCount)} value={f.teams} onChange={(e) => set('teams', Math.trunc(Number(e.target.value)) || 2)} />
+            <input className="input mt-1" type="number" min={limits.min_team_count} max={Math.min(limits.max_team_count, imageCount || limits.max_team_count)} value={f.teams} onChange={(e) => set('teams', Math.trunc(Number(e.target.value)) || limits.min_team_count)} />
           </label>
           <label className="block">{t('maxMembers')}
-            <input className="input mt-1" type="number" min={1} max={12} value={f.members} onChange={(e) => set('members', Math.trunc(Number(e.target.value)) || 1)} />
+            <input className="input mt-1" type="number" min={limits.min_team_members} max={limits.max_team_members} value={f.members} onChange={(e) => set('members', Math.trunc(Number(e.target.value)) || limits.min_team_members)} />
           </label>
           <label className="flex items-center gap-2"><input type="checkbox" checked={f.isPrivate} onChange={(e) => set('isPrivate', e.target.checked)} />{t('privateRoom')}</label>
           <label className="block">{t('pinLabel')}
