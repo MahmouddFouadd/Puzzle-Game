@@ -6,6 +6,7 @@ import { LangToggle } from '../../components/LangToggle'
 const nav: { to: string; key: Key; perm: string; end?: boolean }[] = [
   { to: '/admin', key: 'dashboard', perm: 'report.view', end: true },
   { to: '/admin/stories', key: 'stories', perm: 'story.manage' },
+  { to: '/admin/detective', key: 'detectiveStudio', perm: 'story.manage' },
   { to: '/admin/content-library', key: 'contentStudio', perm: 'story.manage' },
   { to: '/admin/puzzle-lab', key: 'puzzleLab', perm: 'story.manage' },
   { to: '/admin/rooms', key: 'rooms', perm: 'room.manage' },

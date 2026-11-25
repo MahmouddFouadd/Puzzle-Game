@@ -29,6 +29,10 @@ import ContentImport from './pages/admin/ContentImport'
 import ContentReview from './pages/admin/ContentReview'
 import ContentAnalytics from './pages/admin/ContentAnalytics'
 import ContentCategories from './pages/admin/ContentCategories'
+import DetectiveCatalog from './pages/DetectiveCatalog'
+import DetectiveSession from './pages/DetectiveSession'
+import DetectiveStudio from './pages/admin/DetectiveStudio'
+import DetectiveCaseEditor from './pages/admin/DetectiveCaseEditor'
 
 export default function App() {
   const { t } = useI18n()
@@ -44,6 +48,12 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      {canAccessPlayerRoutes(APP_VARIANT) && (
+        <>
+          <Route path="/detective" element={<RequireAuth><DetectiveCatalog /></RequireAuth>} />
+          <Route path="/detective/session/:sessionId" element={<RequireAuth><DetectiveSession /></RequireAuth>} />
+        </>
+      )}
       {canAccessPlayerRoutes(APP_VARIANT) && (
         <>
           <Route path="/join" element={<Join />} />
@@ -70,6 +80,8 @@ export default function App() {
             <Route path="analytics" element={<ContentAnalytics />} />
             <Route path="categories" element={<ContentCategories />} />
           </Route>
+          <Route path="detective" element={<RequireAuth permission="story.manage"><DetectiveStudio /></RequireAuth>} />
+          <Route path="detective/:id" element={<RequireAuth permission="story.manage"><DetectiveCaseEditor /></RequireAuth>} />
           <Route path="rooms/:id" element={<RequireAuth permission="room.manage"><RoomControl /></RequireAuth>} />
           <Route path="puzzle-lab" element={<RequireAuth permission="story.manage"><PuzzleLab /></RequireAuth>} />
           <Route path="rooms" element={<RequireAuth permission="room.manage"><Rooms /></RequireAuth>} />
