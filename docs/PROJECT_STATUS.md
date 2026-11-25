@@ -1,14 +1,20 @@
 # Project status
 
 Scale: NOT STARTED · IN PROGRESS · IMPLEMENTED (code exists, not exercised) · TESTED (automated test evidence) · VERIFIED (tested against real Supabase + real devices) · BLOCKED.
-**Nothing is VERIFIED yet**: no check below was run against a real Supabase project or a real phone. "TESTED (DB)" means plain PostgreSQL 16 with a minimal stand-in for Supabase's `auth`/`storage` schemas.
+**Scope note:** HTTP route availability and the Detective migration have been verified against the real deployment/Supabase project. Authenticated browser gameplay, live Realtime multiplayer, and a physical Android device still require dedicated credentials/devices and are not claimed here.
 
 ## Evidence (last run)
 | Check | Result |
 |---|---|
-| `npm run typecheck` | pass |
-| `npm test` (Vitest, 6 files) | 65 tests pass |
-| `npm run build` | pass |
+| `npm run typecheck` | pass — 2026-11-26 |
+| `npm test -- --run` | pass — 11 files, 96 tests |
+| `npm run build` | pass — Vite production build |
+| `npm run check:routes` local | pass — 26 manifest routes, HTTP 200 |
+| `npm run check:routes` Cloudflare | pass — 26 manifest routes, HTTP 200 |
+| Supabase Detective migration | applied to `Puzzle-Game` (`zrbvgtqspekxrnnzegwh`) |
+| GitHub merge | `main`, merge commit `4f59245ffd87543c342999764b2081be83bb4c85` |
+| Cloudflare production deployment | success on the merge commit |
+| Android Debug Admin/User builds | success in GitHub Actions |
 | `sh supabase/tests/run_all.sh <db>` (all 8 migrations on a fresh DB) | applies with no errors |
 | `supabase/tests/game_engine.sql` (self-grading) | 94 checks `ok`, 0 `FAIL`, three consecutive runs (draws are random) |
 | earlier SQL suites (lifecycle, rules, rooms) | print results for human review (expected errors included); reviewed, all as designed. Not self-grading. |

@@ -1,0 +1,21 @@
+{
+  "capturedAt": "2026-11-25",
+  "source": "Supabase read-only inventory",
+  "warning": "Snapshot only. Do not import or publish from this file.",
+  "stories": [
+    {"id":"da9c88c6-7ca1-410f-902c-c256eade8046","title":"Test","status":"DRAFT","language":"en","difficulty":1},
+    {"id":"53a8c06c-579c-4a63-b6ab-20c902372d77","title":"Tese","status":"PUBLISHED","language":"en","difficulty":1},
+    {"id":"f9eee5fc-d89d-4247-94eb-2c326f55bb62","title":"علي بابا والكنز المخبأ وجحا والحمار","status":"DRAFT","language":"ar","difficulty":2},
+    {"id":"d7055478-c449-418e-851c-3240b1f9b3a4","title":"جحا والحمار ورأي الناس","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"beed3e5f-dfbc-537e-8488-ab0151424880","title":"الأمانة كنز لا يفنى","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"5b130193-3176-5622-9280-b498f25efb29","title":"النملة التي طلبت المساعدة","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"7b62dc8e-787b-5bc1-bc78-694f47a272b1","title":"السلحفاة والصبر الجميل","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"cab7818d-fd5d-584a-875a-ec7c331069bd","title":"سليم والشجرة العطشى","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"195a4f79-1603-5bf5-befa-22f4b4f0e4fd","title":"هدية ليلى الصغيرة","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"6f4baa47-766c-56e8-b95e-ffd42984d0a2","title":"مروان ومفتاح المكتبة","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"9b999430-e4b1-5e94-a8be-a2a57716a548","title":"نور تختار بحكمة","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"af3fab92-b8a7-5dfa-ab85-a530197a554b","title":"صديقان في يوم المطر","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"c5838cee-3f95-5209-a28a-7b84e22b0142","title":"رحلة فهد إلى النشاط","status":"DRAFT","language":"ar","difficulty":1},
+    {"id":"4afc2af2-8912-5d6c-b2c7-82671d690053","title":"آدم يحترم الاختلاف","status":"DRAFT","language":"ar","difficulty":1}
+  ]
+}
