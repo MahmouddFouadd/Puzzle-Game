@@ -14,7 +14,10 @@ Scale: NOT STARTED · IN PROGRESS · IMPLEMENTED (code exists, not exercised) ·
 | `npm run check:routes` local | pass — 30 manifest routes, HTTP 200 |
 | Supabase Detective migrations | applied to `Puzzle-Game` (`zrbvgtqspekxrnnzegwh`), including runtime and publish validator |
 | Supabase Detective functions | verified: session start, safe payload, answer submission, case validation, publishing |
-| Previous GitHub/Cloudflare/Android evidence | retained in repository history; new commit must complete fresh deployment verification |
+| GitHub commit | `88f93113364de76482f57b857a0684da3a1aec35` pushed to `main` |
+| Cloudflare production workflow | success — run `45712724855` |
+| Android Debug Admin/User workflow | success — run `45712724685` |
+| Production route/assets check | pass — 30 routes and both Detective SVG assets returned HTTP 200 |
 
 ## Detective Mode
 
