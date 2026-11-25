@@ -1,0 +1,106 @@
+name: Build Android Release APKs
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_release:
+        description: Explicitly confirm a signed Admin and User release build from main.
+        type: choice
+        required: true
+        default: NO
+        options:
+          - NO
+          - BUILD RELEASE APKS
+permissions:
+  contents: read
+concurrency:
+  group: android-release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build-release-apks:
+    if: github.ref == 'refs/heads/main' && inputs.confirm_release == 'BUILD RELEASE APKS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout release source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Verify required Actions secrets
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          missing=0
+          for name in VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing required GitHub Actions secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm test
+      - name: Decode and validate release keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          keystore="$RUNNER_TEMP/story-puzzle-release.jks"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          test -s "$keystore"
+          keytool -list -keystore "$keystore" -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null 2>&1
+      - name: Build signed Admin release APK
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_APP_VARIANT: admin
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/story-puzzle-release.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          npm run build
+          npx cap sync android
+          (cd android && ./gradlew assembleAdminRelease --no-daemon)
+          mkdir -p release-apks
+          admin_apk=$(find android/app/build/outputs/apk/admin/release -maxdepth 1 -type f -name '*.apk' -print -quit)
+          test -n "$admin_apk"
+          cp "$admin_apk" release-apks/Story-Puzzle-Admin-release.apk
+      - name: Build signed User release APK
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_APP_VARIANT: user
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/story-puzzle-release.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          npm run build
+          npx cap sync android
+          (cd android && ./gradlew assembleUserRelease --no-daemon)
+          user_apk=$(find android/app/build/outputs/apk/user/release -maxdepth 1 -type f -name '*.apk' -print -quit)
+          test -n "$user_apk"
+          cp "$user_apk" release-apks/Story-Puzzle-User-release.apk
+      - name: Upload signed release APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: story-puzzle-release-apks
+          path: release-apks/*.apk
+          if-no-files-found: error
+          retention-days: 30

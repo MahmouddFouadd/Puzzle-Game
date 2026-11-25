@@ -16,6 +16,19 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    flavorDimensions "edition"
+    productFlavors {
+        admin {
+            dimension "edition"
+            applicationIdSuffix ".admin"
+            manifestPlaceholders = [appLabel: "Story Puzzle Admin"]
+        }
+        user {
+            dimension "edition"
+            // Preserve the existing package id for player app upgrades.
+            manifestPlaceholders = [appLabel: "Story Puzzle Player"]
+        }
+    }
     // Release signing is read from environment variables set by CI (GitHub Secrets).
     // Nothing secret is stored in this repository.
     signingConfigs {

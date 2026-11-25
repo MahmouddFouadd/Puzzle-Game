@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { RequireAuth } from './auth/RequireAuth'
 import { isConfigured } from './lib/supabase'
 import { useI18n } from './lib/i18n'
+import { APP_VARIANT, canAccessAdminRoutes, canAccessPlayerRoutes, defaultLandingPath } from './lib/appVariant'
 import Login from './pages/Login'
 import AdminLayout from './pages/admin/AdminLayout'
 import Dashboard from './pages/admin/Dashboard'
@@ -43,35 +44,41 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/join" element={<Join />} />
-      <Route path="/join/:code" element={<Join />} />
-      <Route path="/play/:roomId" element={<Lobby />} />
-      <Route path="/admin" element={<RequireAuth><AdminLayout /></RequireAuth>}>
-        <Route index element={<RequireAuth permission="report.view"><Dashboard /></RequireAuth>} />
-        <Route path="stories" element={<RequireAuth permission="story.manage"><Stories /></RequireAuth>} />
-        <Route path="stories/:id" element={<RequireAuth permission="story.manage"><StoryEditor /></RequireAuth>} />
-        <Route path="stories/:id/questions" element={<RequireAuth permission="story.manage"><QuestionBank /></RequireAuth>} />
-        <Route path="stories/:id/assign" element={<RequireAuth permission="story.manage"><Assignments /></RequireAuth>} />
-        <Route path="stories/:id/rules" element={<RequireAuth permission="story.manage"><RulesPanel /></RequireAuth>} />
-        <Route path="stories/:id/publish" element={<RequireAuth permission="story.manage"><PublishPanel /></RequireAuth>} />
-        <Route path="content-library" element={<RequireAuth permission="story.manage"><ContentStudio /></RequireAuth>}>
-          <Route index element={<ContentLibrary />} />
-          <Route path="images" element={<ContentImages />} />
-          <Route path="questions" element={<ContentQuestions />} />
-          <Route path="ai" element={<ContentAI />} />
-          <Route path="import" element={<ContentImport />} />
-          <Route path="review" element={<RequireAuth permission="content.review"><ContentReview /></RequireAuth>} />
-          <Route path="analytics" element={<ContentAnalytics />} />
-          <Route path="categories" element={<ContentCategories />} />
+      {canAccessPlayerRoutes(APP_VARIANT) && (
+        <>
+          <Route path="/join" element={<Join />} />
+          <Route path="/join/:code" element={<Join />} />
+          <Route path="/play/:roomId" element={<Lobby />} />
+        </>
+      )}
+      {canAccessAdminRoutes(APP_VARIANT) && (
+        <Route path="/admin" element={<RequireAuth><AdminLayout /></RequireAuth>}>
+          <Route index element={APP_VARIANT === 'admin' ? <Navigate to="stories" replace /> : <RequireAuth permission="report.view"><Dashboard /></RequireAuth>} />
+          <Route path="stories" element={<RequireAuth permission="story.manage"><Stories /></RequireAuth>} />
+          <Route path="stories/:id" element={<RequireAuth permission="story.manage"><StoryEditor /></RequireAuth>} />
+          <Route path="stories/:id/questions" element={<RequireAuth permission="story.manage"><QuestionBank /></RequireAuth>} />
+          <Route path="stories/:id/assign" element={<RequireAuth permission="story.manage"><Assignments /></RequireAuth>} />
+          <Route path="stories/:id/rules" element={<RequireAuth permission="story.manage"><RulesPanel /></RequireAuth>} />
+          <Route path="stories/:id/publish" element={<RequireAuth permission="story.manage"><PublishPanel /></RequireAuth>} />
+          <Route path="content-library" element={<RequireAuth permission="story.manage"><ContentStudio /></RequireAuth>}>
+            <Route index element={<ContentLibrary />} />
+            <Route path="images" element={<ContentImages />} />
+            <Route path="questions" element={<ContentQuestions />} />
+            <Route path="ai" element={<ContentAI />} />
+            <Route path="import" element={<ContentImport />} />
+            <Route path="review" element={<RequireAuth permission="content.review"><ContentReview /></RequireAuth>} />
+            <Route path="analytics" element={<ContentAnalytics />} />
+            <Route path="categories" element={<ContentCategories />} />
+          </Route>
+          <Route path="rooms/:id" element={<RequireAuth permission="room.manage"><RoomControl /></RequireAuth>} />
+          <Route path="puzzle-lab" element={<RequireAuth permission="story.manage"><PuzzleLab /></RequireAuth>} />
+          <Route path="rooms" element={<RequireAuth permission="room.manage"><Rooms /></RequireAuth>} />
+          <Route path="users" element={<RequireAuth permission="user.manage"><Users /></RequireAuth>} />
+          <Route path="reports" element={<RequireAuth permission="report.view"><Reports /></RequireAuth>} />
+          <Route path="settings" element={<RequireAuth permission="*"><PlatformSettings /></RequireAuth>} />
         </Route>
-        <Route path="rooms/:id" element={<RequireAuth permission="room.manage"><RoomControl /></RequireAuth>} />
-        <Route path="puzzle-lab" element={<RequireAuth permission="story.manage"><PuzzleLab /></RequireAuth>} />
-        <Route path="rooms" element={<RequireAuth permission="room.manage"><Rooms /></RequireAuth>} />
-        <Route path="users" element={<RequireAuth permission="user.manage"><Users /></RequireAuth>} />
-        <Route path="reports" element={<RequireAuth permission="report.view"><Reports /></RequireAuth>} />
-        <Route path="settings" element={<RequireAuth permission="*"><PlatformSettings /></RequireAuth>} />
-      </Route>
-      <Route path="*" element={<Navigate to="/join" replace />} />
+      )}
+      <Route path="*" element={<Navigate to={defaultLandingPath(APP_VARIANT)} replace />} />
     </Routes>
   )
 }

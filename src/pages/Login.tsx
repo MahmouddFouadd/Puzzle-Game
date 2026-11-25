@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useI18n } from '../lib/i18n'
+import { APP_VARIANT, defaultAuthenticatedPath } from '../lib/appVariant'
 import { LangToggle } from '../components/LangToggle'
 
 export default function Login() {
@@ -13,14 +14,14 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
-  if (session) return <Navigate to="/admin" replace />
+  if (session) return <Navigate to={defaultAuthenticatedPath(APP_VARIANT)} replace />
 
   const submit = async (e: FormEvent) => {
     e.preventDefault()
     setBusy(true); setError(null)
     const err = await signIn(email.trim(), password)
     setBusy(false)
-    if (err) setError(t('loginFailed')); else nav('/admin', { replace: true })
+    if (err) setError(t('loginFailed')); else nav(defaultAuthenticatedPath(APP_VARIANT), { replace: true })
   }
 
   return (
