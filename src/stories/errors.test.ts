@@ -9,6 +9,8 @@ describe('errorKey', () => {
     expect(errorKey(new Error('invalid_question'))).toBe('errInvalidQuestion')
     expect(errorKey(new Error('piece_taken'))).toBe('errPieceTaken')
     expect(errorKey(new Error('validation_failed'))).toBe('errValidation')
+    expect(errorKey(new Error('image_download_failed'))).toBe('errImageUnavailable')
+    expect(errorKey(new Error('invalid_image_response'))).toBe('errImageUnavailable')
   })
   it('hides unknown technical errors behind a generic message', () => {
     expect(errorKey(new Error('duplicate key value violates unique constraint'))).toBe('errGeneric')

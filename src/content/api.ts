@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { resolveImageUrl } from '../storage/imageUrl'
 
 export type ReviewStatus = 'DRAFT' | 'IN_REVIEW' | 'APPROVED' | 'REJECTED' | 'ARCHIVED'
 export type ContentSource = 'MANUAL' | 'AI' | 'IMPORT'
@@ -207,16 +208,15 @@ export async function uploadContentAsset(file: File, details: { license_type: st
       const retry = await supabase.from('content_assets').select('*').eq('sha256', sha256).maybeSingle()
       if (retry.data) return { asset: { ...(retry.data as Omit<ContentAsset, 'usageCount'>), usageCount: 0 }, duplicate: true }
     }
-    await supabase.storage.from('story-originals').remove([path])
+    // Keep the content-addressed object on uncertain DB failures: another concurrent upload
+    // may already reference the same hash path, so deleting it here could break a valid asset.
     throw new Error(inserted.error.message)
   }
   return { asset: { ...(inserted.data as Omit<ContentAsset, 'usageCount'>), usageCount: 0 }, duplicate: false }
 }
 
 export async function assetPreviewUrl(path: string): Promise<string> {
-  const { data, error } = await supabase.storage.from('story-originals').createSignedUrl(path, 600)
-  if (error || !data) throw new Error(error?.message ?? 'signed_url_failed')
-  return data.signedUrl
+  return resolveImageUrl(path, 'story-originals', 600)
 }
 
 export async function attachAssetToStory(storyId: string, assetId: string, title?: string): Promise<string> {

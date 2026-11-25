@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ChangeEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useI18n } from '../../lib/i18n'
 import {
@@ -22,9 +22,11 @@ interface CardProps {
   onMove: (id: string, dir: -1 | 1) => void
   onDelete: (img: StoryImage) => void
   onGenerate: (img: StoryImage, count: number, seed: number) => void
+  onImageError: (id: string) => void
+  onImageLoad: (id: string) => void
 }
 
-function ImageCard({ image, url, saved, first, last, locked, progress, limits, onMeta, onMove, onDelete, onGenerate }: CardProps) {
+function ImageCard({ image, url, saved, first, last, locked, progress, limits, onMeta, onMove, onDelete, onGenerate, onImageError, onImageLoad }: CardProps) {
   const { t } = useI18n()
   const [title, setTitle] = useState(image.title)
   const [description, setDescription] = useState(image.description ?? '')
@@ -35,11 +37,12 @@ function ImageCard({ image, url, saved, first, last, locked, progress, limits, o
   const [revealed, setRevealed] = useState<ReadonlySet<number>>(new Set())
   const layout = useMemo(() => (showPreview ? generatePuzzle({ width: image.width, height: image.height, pieceCount: count, seed }) : null), [showPreview, image.width, image.height, count, seed])
   const commit = () => onMeta(image.id, { title: title.trim() || image.title, description, hint })
+  useEffect(() => { setCount(image.piece_count); setSeed(image.puzzle_seed) }, [image.piece_count, image.puzzle_seed])
 
   return (
     <li className="card space-y-3">
       <div className="flex gap-3">
-        {url ? <img src={url} alt={image.title} className="w-24 h-24 object-cover rounded-xl" /> : <div className="w-24 h-24 rounded-xl bg-ink-700" />}
+        {url ? <img src={url} alt={image.title} onError={() => onImageError(image.id)} onLoad={() => onImageLoad(image.id)} className="w-24 h-24 object-cover rounded-xl" /> : <div className="grid w-24 h-24 place-items-center rounded-xl bg-ink-700 text-center text-xs">{t('imageUnavailable')}</div>}
         <div className="flex-1 space-y-2">
           <div className="text-sm opacity-70">{t('position')} {image.position} · {image.width}×{image.height}</div>
           <input className="input" aria-label={t('imageTitle')} placeholder={t('imageTitle')} maxLength={80} value={title}
@@ -72,6 +75,7 @@ function ImageCard({ image, url, saved, first, last, locked, progress, limits, o
       </div>
       {layout && url && (
         <PuzzlePreview imageUrl={url} width={image.width} height={image.height} layout={layout} revealed={revealed} showOutlines selected={null}
+          onImageError={() => onImageError(image.id)} onImageLoad={() => onImageLoad(image.id)}
           onPieceClick={(i) => setRevealed((p) => { const n = new Set(p); if (n.has(i)) n.delete(i); else n.add(i); return n })} />
       )}
     </li>
@@ -89,6 +93,9 @@ export default function StoryEditor() {
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null)
+  const [failedUploads, setFailedUploads] = useState<File[]>([])
+  const retryingImageUrls = useRef(new Set<string>())
   const [form, setForm] = useState({ title: '', description: '', category: '', subject: '', difficulty: 1, language: 'en' as 'en' | 'ar' })
   const [pieceLimits, setPieceLimits] = useState<PieceLimits>(defaultPieceLimits)
 
@@ -101,7 +108,10 @@ export default function StoryEditor() {
     setForm({ title: s.title, description: s.description ?? '', category: s.category ?? '', subject: s.subject ?? '', difficulty: s.difficulty, language: s.language })
     setImages(imgs)
     setCounts(await pieceCounts(imgs.map((i) => i.id)))
-    const entries = await Promise.all(imgs.map(async (i) => [i.id, await signedOriginalUrl(i.storage_path)] as const))
+    const entries = await Promise.all(imgs.map(async (i) => {
+      try { return [i.id, await signedOriginalUrl(i.storage_path)] as const }
+      catch { return [i.id, ''] as const }
+    }))
     setUrls(Object.fromEntries(entries))
   }, [id])
 
@@ -126,18 +136,44 @@ export default function StoryEditor() {
     } catch (e) { fail(e) }
   }
 
+  const processUploads = async (files: File[]) => {
+    if (!id || !files.length) return
+    setUploading(true); setError(null); setNotice(null); setUploadProgress(`0/${files.length}`)
+    const failed: File[] = []
+    let pos = Math.max(0, ...images.map((image) => image.position)) + 1
+    try {
+      for (let index = 0; index < files.length; index++) {
+        try { await uploadImage(id, files[index], pos); pos++ }
+        catch (err) { failed.push(files[index]); setError((previous) => [previous, `${files[index].name}: ${t(errorKey(err))}`].filter(Boolean).join('\n')) }
+        setUploadProgress(`${index + 1}/${files.length}`)
+      }
+      setFailedUploads(failed)
+      if (!failed.length) setNotice(t('uploadComplete'))
+      await reload().catch(fail)
+    } finally { setUploading(false); setUploadProgress(null) }
+  }
+
   const onUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? [])
     e.target.value = ''
-    if (!id || !files.length) return
-    setUploading(true); setError(null)
-    try {
-      let pos = images.length + 1
-      for (const f of files) await uploadImage(id, f, pos++)
-      await reload()
-    } catch (err) { fail(err); await reload().catch(() => undefined) }
-    setUploading(false)
+    await processUploads(files)
   }
+
+  const retryUploads = () => { if (failedUploads.length) void processUploads(failedUploads) }
+
+  const onImageError = useCallback(async (imageId: string) => {
+    if (retryingImageUrls.current.has(imageId)) return
+    retryingImageUrls.current.add(imageId)
+    const image = images.find((item) => item.id === imageId)
+    if (!image) return
+    try {
+      const url = await signedOriginalUrl(image.storage_path)
+      setUrls((previous) => ({ ...previous, [imageId]: url }))
+    }
+    catch { setUrls((previous) => ({ ...previous, [imageId]: '' })) }
+  }, [images])
+
+  const onImageLoad = useCallback((imageId: string) => { retryingImageUrls.current.delete(imageId) }, [])
 
   const onMeta = async (imgId: string, patch: { title: string; description: string; hint: string }) => {
     try { await updateImage(imgId, { title: patch.title, description: patch.description || null, hint: patch.hint || null }) } catch (e) { fail(e) }
@@ -203,14 +239,15 @@ export default function StoryEditor() {
       <section className="space-y-3">
         <h3 className="font-display text-2xl">{t('images')}</h3>
         <label className="btn-ghost cursor-pointer">
-          {uploading ? t('uploading') : t('uploadImages')}
+          {uploading ? `${t('uploading')} ${uploadProgress ?? ''}` : t('uploadImages')}
           <input className="sr-only" type="file" accept="image/png,image/jpeg,image/webp" multiple disabled={locked || uploading} onChange={(e) => void onUpload(e)} />
         </label>
+        {failedUploads.length > 0 && <button className="btn-ghost" type="button" disabled={uploading || locked} onClick={retryUploads}>{t('retryFailedUploads')} ({failedUploads.length})</button>}
         <ul className="space-y-3">
           {images.map((img, i) => (
             <ImageCard key={`${img.id}-${img.position}`} image={img} url={urls[img.id]} saved={counts[img.id] ?? 0} limits={pieceLimits}
               first={i === 0} last={i === images.length - 1} locked={!!locked} progress={progress[img.id]}
-              onMeta={onMeta} onMove={onMove} onDelete={onDelete} onGenerate={onGenerate} />
+              onMeta={onMeta} onMove={onMove} onDelete={onDelete} onGenerate={onGenerate} onImageError={onImageError} onImageLoad={onImageLoad} />
           ))}
         </ul>
       </section>

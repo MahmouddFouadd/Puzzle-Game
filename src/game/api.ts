@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { resolveImageUrl } from '../storage/imageUrl'
 import type { AnswerResult, DecisionResult, DrawResult, LeaderRow, TeamState } from './types'
 
 async function rpc<T>(fn: string, args: Record<string, unknown>): Promise<T> {
@@ -19,7 +20,5 @@ export const setTeamState = (team: string, state: 'ABANDONED' | 'DISQUALIFIED' |
 export const adjustScore = (team: string, delta: number, reason: string) => rpc<number>('adjust_score', { p_team: team, p_delta: delta, p_reason: reason })
 
 export async function signedPieceUrl(path: string): Promise<string> {
-  const { data, error } = await supabase.storage.from('story-pieces').createSignedUrl(path, 3600)
-  if (error || !data) throw new Error(error?.message ?? 'signed url failed')
-  return data.signedUrl
+  return resolveImageUrl(path, 'story-pieces', 3600)
 }

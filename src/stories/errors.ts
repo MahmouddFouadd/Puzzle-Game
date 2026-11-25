@@ -19,6 +19,7 @@ export function errorKey(e: unknown): Key {
   for (const [code, key] of ROOM_ERRORS) if (m.includes(code)) return key
   if (m.includes('unsupported_type')) return 'errUnsupported'
   if (m.includes('file_too_large')) return 'errTooLarge'
+  if (['image_download_failed', 'invalid_image_response', 'image_size_mismatch', 'image_decode_failed', 'image_sign_failed', 'invalid_image_reference', 'invalid_storage_path'].some((code) => m.includes(code))) return 'errImageUnavailable'
   if (m.includes('story_published')) return 'errPublished'
   if (m.includes('invalid_question')) return 'errInvalidQuestion'
   if (m.includes('piece_taken')) return 'errPieceTaken'
