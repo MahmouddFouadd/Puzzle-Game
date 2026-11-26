@@ -1,3 +1,4 @@
+import { shareUrl } from '../lib/publicUrl'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useI18n } from '../lib/i18n'
@@ -15,7 +16,7 @@ export default function GameDetail() {
   const g = gameById(id)
   if (!g) return <Navigate to="/" replace />
   const share = () => {
-    const url = `${window.location.origin}/game/${g.id}`
+    const url = shareUrl(`/game/${g.id}`)
     const n = navigator as Navigator & { share?: (d: { title: string; text: string; url: string }) => Promise<void> }
     if (n.share) { void n.share({ title: g.title[0], text: g.description[ar ? 0 : 1], url }).catch(() => undefined); return }
     void navigator.clipboard?.writeText(url).then(() => { setShared(true); window.setTimeout(() => setShared(false), 1600) }).catch(() => undefined)

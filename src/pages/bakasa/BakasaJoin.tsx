@@ -25,10 +25,15 @@ export default function BakasaJoin() {
   const [error, setError] = useState<string | null>(null)
   const valid = /^BK-[A-Z0-9]{6}$/.test(code)
 
-  const lookup = async (c: string) => {
+  const lookup = async (c: string, fromLink = false) => {
     setBusy(true); setError(null)
     try {
       const p = await previewRoom(c)
+      // Invite links go straight into the room: members are sent back in, and anyone with a saved name joins at once.
+      if (fromLink && p.found && p.already_member && p.room_id) { nav(`/bakasa/room/${p.room_id}`, { replace: true }); return }
+      if (fromLink && p.found && p.status !== 'FINISHED' && (p.players ?? 0) < (p.max_players ?? 0) && nickname.trim()) {
+        setPreview(p); setBusy(false); await doJoin(); return
+      }
       if (!p.found) setError(ar ? 'الكود ده مش موجود أو الغرفة اتقفلت. اتأكد من الكود.' : 'That code does not exist or the room is closed.')
       else if (p.status === 'FINISHED' && !p.already_member) setError(ar ? 'المباراة دي خلصت. اطلب من صاحب الغرفة يبدأ مباراة جديدة.' : 'This match has finished.')
       else if ((p.players ?? 0) >= (p.max_players ?? 0) && !p.already_member) setError(ar ? 'الغرفة كاملة.' : 'The room is full.')
@@ -36,10 +41,10 @@ export default function BakasaJoin() {
     } catch (e) { setError(bakasaError(e, ar)) }
     setBusy(false)
   }
-  useEffect(() => { if (urlCode && valid) void lookup(code) }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (urlCode && valid) void lookup(code, true) }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const join = async (e: FormEvent) => {
-    e.preventDefault()
+  const join = async (e: FormEvent) => { e.preventDefault(); await doJoin() }
+  async function doJoin() {
     if (!nickname.trim()) return
     setBusy(true); setError(null)
     try {
