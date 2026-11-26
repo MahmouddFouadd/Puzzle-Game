@@ -7,7 +7,7 @@ async function fileFromBlob(blob: Blob, name: string): Promise<File> {
   return new File([new Uint8Array(await blob.arrayBuffer())], name, { type: blob.type })
 }
 
-async function samplePackage(options: { correctCount?: number; ageMin?: number } = {}): Promise<{ workbook: File; zip: File }> {
+async function samplePackage(options: { correctCount?: number; ageMin?: number; hint?: string } = {}): Promise<{ workbook: File; zip: File }> {
   const ExcelJS = (await import('exceljs')).default
   const workbook = new ExcelJS.Workbook()
   const stories = workbook.addWorksheet('Stories')
@@ -15,8 +15,9 @@ async function samplePackage(options: { correctCount?: number; ageMin?: number }
   stories.addRow(['SCI001','رحلة علمية','قصة قصيرة','التعرف إلى الماء','science',options.ageMin ?? 7,9,2,'ar','MANUAL',''])
 
   const images = workbook.addWorksheet('Images')
-  images.addRow(['image_key','story_key','image_order','filename','title','description','image_prompt'])
-  images.addRow(['IMG001','SCI001',1,'water.png','الماء','مشهد ماء','قطرات ماء'])
+  const withHint = options.hint !== undefined
+  images.addRow(['image_key','story_key','image_order','filename','title','description','image_prompt', ...(withHint ? ['hint'] : [])])
+  images.addRow(['IMG001','SCI001',1,'water.png','الماء','مشهد ماء','قطرات ماء', ...(withHint ? [options.hint] : [])])
 
   const questions = workbook.addWorksheet('Questions')
   questions.addRow(['question_key','image_key','question_type','question_text','correct_answer','explanation','difficulty','points'])
@@ -65,6 +66,21 @@ describe('Content Studio workbook importer', () => {
     })
     expect(parsed.validStories[0].images[0].file).toBeInstanceOf(File)
     expect(parsed.validStories[0].tags).toEqual(['علوم', 'ماء'])
+    expect(parsed.validStories[0].images[0].hint).toBe('')
+  })
+
+  it('keeps the optional per-image hint column', async () => {
+    const { workbook, zip } = await samplePackage({ hint: '  ابحث عن شيء يتحرك بسهولة  ' })
+    const parsed = await parseContentPackage(workbook, zip)
+    expect(parsed.issues).toEqual([])
+    expect(parsed.validStories[0].images[0].hint).toBe('ابحث عن شيء يتحرك بسهولة')
+  })
+
+  it('rejects image hints longer than 300 characters', async () => {
+    const { workbook, zip } = await samplePackage({ hint: 'x'.repeat(301) })
+    const parsed = await parseContentPackage(workbook, zip)
+    expect(parsed.issues.some((i) => i.field === 'hint')).toBe(true)
+    expect(parsed.validStories).toHaveLength(0)
   })
 
   it('rejects multiple-choice questions without exactly one correct option', async () => {

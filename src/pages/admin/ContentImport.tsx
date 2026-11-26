@@ -96,7 +96,7 @@ export default function ContentImport() {
           for (const image of story.images) {
             if (!image.file) throw new Error(`image_missing:${image.filename}`)
             const { asset } = await uploadContentAsset(image.file, { license_type: story.license_type, attribution: story.attribution, source_type: 'IMPORT' })
-            uploadedImages.push({ image_key: image.image_key, asset_id: asset.id, title: image.title, description: image.description, image_prompt: image.image_prompt })
+            uploadedImages.push({ image_key: image.image_key, asset_id: asset.id, title: image.title, description: image.description, image_prompt: image.image_prompt, hint: image.hint })
           }
           const category = categoryFor(story.subject, categories)
           const draft = {
