@@ -1,6 +1,6 @@
 export interface ImportIssue { sheet: string; row: number; field?: string; code: string; message: string }
 export interface ImportQuestion { question_key: string; image_key: string; type: 'MULTIPLE_CHOICE' | 'TRUE_FALSE' | 'SHORT_TEXT'; text: string; explanation: string; difficulty: number; options: Array<{ text: string; correct: boolean }>; answers: string[] }
-export interface ImportImage { image_key: string; image_order: number; filename: string; title: string; description: string; image_prompt: string; file: File | null }
+export interface ImportImage { image_key: string; image_order: number; filename: string; title: string; description: string; image_prompt: string; hint: string; file: File | null }
 export interface ImportStory {
   story_key: string; title: string; description: string; educational_objective: string; subject: string;
   age_min: number; age_max: number; difficulty: number; language: 'ar' | 'en'; source_type: 'IMPORT' | 'MANUAL' | 'AI';
@@ -129,7 +129,7 @@ export async function createExcelTemplate(): Promise<Blob> {
   const workbook = new ExcelJS.Workbook()
   const sheets: Array<[string, string[]]> = [
     ['Stories',['story_key','title','description','educational_objective','subject','age_min','age_max','difficulty','language','source_type','source_reference']],
-    ['Images',['image_key','story_key','image_order','filename','title','description','image_prompt']],
+    ['Images',['image_key','story_key','image_order','filename','title','description','image_prompt','hint']],
     ['Questions',['question_key','image_key','question_type','question_text','correct_answer','explanation','difficulty','points']],
     ['Options',['question_key','option_key','option_text','is_correct']],
     ['Metadata',['story_key','tags','license_type','attribution','notes']]
@@ -224,11 +224,12 @@ export async function parseContentPackage(workbookFile: File, zipFile?: File | n
     const filename = basename(value.filename)
     if (!key || imageKeys.has(key)) { issue(issues, 'Images', row, 'image_key', 'duplicate_or_empty_key', 'Image key must be present and unique.'); continue }
     if (!filename) { issue(issues, 'Images', row, 'filename', 'required', 'Image filename is required.'); continue }
-    const image: ImportImage = { image_key: key, image_order: numberValue(value.image_order, story.images.length + 1), filename, title: value.title, description: value.description, image_prompt: value.image_prompt, file: images.get(filename) ?? null }
+    const image: ImportImage = { image_key: key, image_order: numberValue(value.image_order, story.images.length + 1), filename, title: value.title, description: value.description, image_prompt: value.image_prompt, hint: (value.hint ?? '').trim(), file: images.get(filename) ?? null }
     if (!Number.isInteger(image.image_order) || image.image_order < 1) issue(issues, 'Images', row, 'image_order', 'image_order', 'Image order must be a positive integer.')
     const orderSet = imageOrders.get(story.story_key) ?? new Set<number>()
     if (orderSet.has(image.image_order)) issue(issues, 'Images', row, 'image_order', 'duplicate_image_order', 'Image order must be unique within a story.')
     orderSet.add(image.image_order); imageOrders.set(story.story_key, orderSet)
+    if (image.hint.length > 300) issue(issues, 'Images', row, 'hint', 'too_long', 'Image hint must not exceed 300 characters.')
     if (!image.file) issue(issues, 'Images', row, 'filename', 'image_missing', `Image "${filename}" is missing from the ZIP package.`)
     imageKeys.add(key); story.images.push(image)
   }
