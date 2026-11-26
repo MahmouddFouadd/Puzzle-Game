@@ -46,3 +46,34 @@ export const startGame = (room: string, override: boolean) => rpc<void>('start_g
 export const advanceRoom = (room: string) => rpc<string>('advance_room', { p_room: room })
 export const setRoomStatus = (room: string, action: 'pause' | 'resume' | 'end' | 'cancel') => rpc<void>('set_room_status', { p_room: room, p_action: action })
 export const removePlayer = (room: string, user: string) => rpc<void>('remove_player', { p_room: room, p_user: user })
+
+// ---------- player-hosted rooms: title-only story cards ----------
+export type StoryCard = { id: string; title: string; language: 'en' | 'ar'; cover_url: string | null }
+export const listSelectableStories = () => rpc<StoryCard[]>('list_selectable_stories', {})
+export const playerCreateRoom = (story: string, name: string, teams: number) => rpc<{ id: string; code: string }>('player_create_room', { p_story: story, p_name: name, p_team_count: teams })
+export const playerSetRoomStory = (room: string, story: string) => rpc<{ title: string }>('player_set_room_story', { p_room: room, p_story: story })
+export const setStoryPlayerSelectable = (story: string, enabled: boolean) => rpc<void>('set_story_player_selectable', { p_story: story, p_enabled: enabled })
+export async function storyAvailability(): Promise<Record<string, boolean>> {
+  const r = await supabase.from('story_player_availability').select('story_id,enabled')
+  if (r.error) throw new Error(r.error.message)
+  return Object.fromEntries((r.data ?? []).map((x) => [x.story_id as string, !!x.enabled]))
+}
+/** Error codes from the player-room RPCs as Arabic/English text. */
+export function hostError(e: unknown, ar: boolean): string {
+  const m = e instanceof Error ? e.message : String(e)
+  const t: Record<string, [string, string]> = {
+    story_not_available: ['القصة دي مش متاحة دلوقتي. اختار قصة تانية.', 'That story is not available. Pick another one.'],
+    too_many_open_rooms: ['عندك ٣ غرف مفتوحة بالفعل. اقفل واحدة الأول.', 'You already have 3 open rooms. Close one first.'],
+    story_too_small: ['القصة دي صورها أقل من عدد الفرق الموجودة.', 'This story has fewer pictures than the teams in the room.'],
+    room_locked: ['اللعبة بدأت، مينفعش تغيّر القصة.', 'The game has started; the story is locked.'],
+    invalid_team_count: ['عدد الفرق مش مناسب للقصة دي.', 'That team count does not fit this story.'],
+    invalid_name: ['اكتب اسم من ١ لـ ٤٠ حرف.', 'Enter a name of 1–40 characters.'],
+    teams_not_ready: ['لسه فيه فرق مش جاهزة.', 'Some teams are not ready yet.'],
+    not_enough_teams: ['محتاجين فريقين على الأقل.', 'At least two teams are needed.'],
+    teams_without_image: ['كل فريق لازم يختار صورة.', 'Every team must pick a picture.'],
+    empty_team: ['فيه فريق فاضي.', 'A team has no players.'],
+    forbidden: ['مش مسموح لك بالخطوة دي.', 'You are not allowed to do that.']
+  }
+  for (const [code, [a, b]] of Object.entries(t)) if (m.includes(code)) return ar ? a : b
+  return ar ? 'حصلت مشكلة. جرّب تاني.' : 'Something went wrong. Please try again.'
+}

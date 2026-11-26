@@ -5,6 +5,7 @@ export interface RoomRow {
   admin_controlled_joining: boolean; players_can_create_teams: boolean; max_teams: number; max_team_members: number
   settings_snapshot: { story: { id: string; title: string; language: 'en' | 'ar' }; images: SnapshotImage[] }
   countdown_ends_at: string | null; started_at: string | null; finished_at: string | null; created_at: string
+  player_hosted?: boolean; created_by?: string | null
 }
 export interface TeamRow { id: string; room_id: string; name: string; is_ready: boolean; captain_user_id: string | null }
 export interface TeamMemberRow { team_id: string; user_id: string; room_id: string; joined_at: string }

@@ -48,6 +48,7 @@ export default function GameDetail() {
           <button type="button" className="ar-btn-dark" onClick={share}>{shared ? '✓ ' : '📤 '}{ar ? 'شارك' : 'Share'}</button>
           <Link to={g.play.to} className="ar-btn">▶ {ar ? g.play.label[0] : g.play.label[1]}</Link>
         </div>
+        {g.id === 'story' && <Link to="/play/new" className="ar-btn block text-center" style={{ background: g.gradient }}>➕ {ar ? 'اعمل غرفتك واختار القصة' : 'Create a room & pick a story'}</Link>}
 
         <section className="ar-card space-y-3 p-4">
           <h2 className="font-bold">{ar ? 'طريقة اللعب' : 'How to play'}</h2>

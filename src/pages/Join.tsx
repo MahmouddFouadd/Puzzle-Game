@@ -16,7 +16,7 @@ const STATUS_MSG: Record<string, Key> = {
 export default function Join() {
   const { code: urlCode } = useParams<{ code: string }>()
   const { session, loading, signInAnonymously } = useAuth()
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const nav = useNavigate()
   const [code, setCode] = useState(normalizeCode(urlCode ?? ''))
   const [name, setName] = useState(() => localStorage.getItem('playerName') ?? '')
@@ -53,7 +53,7 @@ export default function Join() {
   return (
     <main className="min-h-screen">
       <div className="game-shell space-y-5">
-      <div className="flex items-center justify-between"><Link to="/" className="btn-ghost">{t('backHome')}</Link><LangToggle /></div>
+      <div className="flex items-center justify-between"><Link to="/" className="btn-ghost">{t('backHome')}</Link><Link to="/play/new" className="text-sm underline opacity-80">{lang === 'ar' ? '➕ اعمل غرفتك' : '➕ Create your own room'}</Link><LangToggle /></div>
       <form onSubmit={submit} className="story-panel pop-in w-full space-y-4">
         <div className="flex items-center gap-3">
           <PuzzleArt className="h-16 w-16 shrink-0" />
