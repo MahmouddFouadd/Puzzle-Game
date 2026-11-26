@@ -84,6 +84,14 @@ export default function DetectiveReportPage() {
           </section>
         )}
 
+        {r.team && r.team.length > 1 && (
+          <section className="det-panel space-y-2">
+            <h2 className="font-bold">{r.party_mode === 'COOPERATIVE' ? (ar ? `🤝 الفريق · مجموع النقاط ${r.team.reduce((n, m) => n + m.score, 0)}` : `🤝 Team · total ${r.team.reduce((n, m) => n + m.score, 0)}`) : (ar ? '🏁 ترتيب المنافسة' : '🏁 Race standings')}</h2>
+            {r.team.map((m, i) => <div key={i} className="flex items-center gap-3 rounded-xl bg-[#14233a] p-2"><span className="w-5 text-center">{['🥇', '🥈', '🥉'][i] ?? i + 1}</span>
+              <span className="flex-1 font-semibold">{m.nickname}</span>{!m.completed && <span className="text-xs text-[#9fb0c4]">{ar ? 'لسه بيحقق…' : 'still investigating…'}</span>}<b className="text-[#f5c46b]">{m.score}</b></div>)}
+          </section>
+        )}
+
         {r.solution && (
           <section className="det-file space-y-2">
             <span className="det-stamp">{ar ? 'الحل الرسمي' : 'Official solution'}</span>

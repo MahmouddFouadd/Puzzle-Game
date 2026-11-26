@@ -7,24 +7,25 @@ import { SettingsForm, SettingsSummary } from './SettingsForm'
 
 export function inviteUrl(code: string) { return `${window.location.origin}/bakasa/join/${code}` }
 
-export function InvitePanel({ code }: { code: string }) {
+export function InvitePanel({ code, url }: { code: string; url?: string }) {
   const { lang } = useI18n()
   const ar = lang === 'ar'
   const [qr, setQr] = useState('')
   const [copied, setCopied] = useState<string | null>(null)
-  useEffect(() => { QRCode.toDataURL(inviteUrl(code), { margin: 1, width: 360, color: { dark: '#120d2b', light: '#ffffff' } }).then(setQr).catch(() => setQr('')) }, [code])
+  const link = url ?? inviteUrl(code)
+  useEffect(() => { QRCode.toDataURL(link, { margin: 1, width: 360, color: { dark: '#120d2b', light: '#ffffff' } }).then(setQr).catch(() => setQr('')) }, [link])
   const copy = (text: string, what: string) => { void navigator.clipboard?.writeText(text).then(() => { setCopied(what); window.setTimeout(() => setCopied(null), 1600) }).catch(() => undefined) }
   const share = () => {
     const n = navigator as Navigator & { share?: (d: { title: string; text: string; url: string }) => Promise<void> }
-    if (n.share) void n.share({ title: 'بكاسة', text: ar ? `تعالى العب بكاسة معانا! الكود ${code}` : `Join my Bakasa game! Code ${code}`, url: inviteUrl(code) }).catch(() => undefined)
-    else copy(inviteUrl(code), 'link')
+    if (n.share) void n.share({ title: url ? 'المحقق' : 'بكاسة', text: url ? (ar ? `تعالى نحقق مع بعض! الكود ${code}` : `Join my investigation! Code ${code}`) : (ar ? `تعالى العب بكاسة معانا! الكود ${code}` : `Join my Bakasa game! Code ${code}`), url: link }).catch(() => undefined)
+    else copy(link, 'link')
   }
   return (
     <div className="space-y-3 text-center">
       {qr ? <img src={qr} alt={ar ? 'كود QR للدعوة' : 'Invite QR code'} className="mx-auto h-44 w-44 rounded-2xl bg-white p-2" /> : <div className="mx-auto grid h-44 w-44 place-items-center rounded-2xl bg-white/5 text-sm opacity-60">QR</div>}
       <div className="grid grid-cols-3 gap-2">
         <button type="button" className="bk-btn-ghost text-sm" onClick={() => copy(code, 'code')}>{copied === 'code' ? '✓' : '📋'} {ar ? 'الكود' : 'Code'}</button>
-        <button type="button" className="bk-btn-ghost text-sm" onClick={() => copy(inviteUrl(code), 'link')}>{copied === 'link' ? '✓' : '🔗'} {ar ? 'الرابط' : 'Link'}</button>
+        <button type="button" className="bk-btn-ghost text-sm" onClick={() => copy(link, 'link')}>{copied === 'link' ? '✓' : '🔗'} {ar ? 'الرابط' : 'Link'}</button>
         <button type="button" className="bk-btn-ghost text-sm" onClick={share}>📤 {ar ? 'شارك' : 'Share'}</button>
       </div>
       {copied && <p role="status" className="text-sm text-bk-lime">{ar ? 'اتنسخ!' : 'Copied!'}</p>}

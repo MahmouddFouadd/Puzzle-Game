@@ -33,6 +33,7 @@ export type DetectivePayload = {
   progress: { score: number; current_stage_id: string | null; started_at: string; completed_at: string | null } | null
   board: BoardLink[]; hints_used: Array<{ key: string; penalty: number; text?: string | null; text_ar?: string | null }>
   note: string | null; stats: { found: number; total: number; inspections: number }; server_now: string
+  party?: { id: string; code: string; mode: 'COOPERATIVE' | 'COMPETITIVE'; status: string } | null
 }
 export type InspectResult = { found: boolean; warm?: boolean; locked?: boolean; already?: boolean; points?: number; score?: number; evidence?: DetectiveEvidence & { scene_id?: string } }
 export type HintResult = { kind: 'text' | 'area'; text?: string; text_ar?: string; scene_id?: string; cx?: number; cy?: number; r?: number; penalty: number; score: number }
@@ -46,6 +47,7 @@ export type DetectiveReport = {
   relations: Array<{ from: string; to: string; type: Relation; explanation: string | null; explanation_ar?: string | null; found_by_you: boolean }>
   your_links: Array<{ from: string; to: string; relation: Relation; correct: boolean }>
   statements: Array<{ suspect: string; suspect_ar: string; statement: string; statement_ar: string; truth: string; explanation: string | null; explanation_ar?: string | null; contradicted_by: string[] }>
+  team?: Array<{ nickname: string; avatar: string; score: number; completed: boolean }>; party_mode?: 'COOPERATIVE' | 'COMPETITIVE' | null
   solution: { reveal: string; reveal_ar: string; explanation: string | null; explanation_ar: string | null; alternatives: Array<Record<string, string>> | null } | null
 }
 export type DetectiveHistoryRow = { session_id: string; case_id: string; title: string; title_ar: string; difficulty: number; started_at: string; completed_at: string | null; score: number; duration_seconds: number | null; found: number; total: number }
@@ -136,7 +138,11 @@ export function detectiveError(e: unknown, ar: boolean): string {
     already_completed: ['انت خلّصت التحقيق ده خلاص.', 'You already completed this investigation.'],
     case_not_published: ['القضية دي مش متاحة حاليًا.', 'This case is not available.'],
     too_many_links: ['وصلت للحد الأقصى من الروابط.', 'Link limit reached.'],
-    not_completed: ['التقرير يظهر بعد ما تخلّص التحقيق.', 'The report is available after you finish.']
+    not_completed: ['التقرير يظهر بعد ما تخلّص التحقيق.', 'The report is available after you finish.'],
+    not_enough_players: ['محتاجين محققين اتنين على الأقل.', 'At least two detectives are needed.'],
+    players_not_ready: ['فيه محققين لسه مش جاهزين.', 'Some detectives are not ready.'],
+    already_started: ['التحقيق بدأ بالفعل.', 'The investigation already started.'],
+    invalid_nickname: ['اكتب اسم من 1 لـ 30 حرف.', 'Enter a name of 1–30 characters.']
   }
   for (const [code, [a, en]] of Object.entries(t)) if (m.includes(code)) return ar ? a : en
   if (/fetch|network/i.test(m)) return ar ? 'الاتصال انقطع… بنحاول نرجعك للتحقيق.' : 'Connection lost… trying to reconnect.'
@@ -148,3 +154,23 @@ export async function submitDetectiveAnswer(sessionId: string, questionId: strin
     is_correct: boolean; points_delta: number; score?: number; explanation?: string | null; explanation_ar?: string | null; duplicate?: boolean
   }
 }
+
+// ---------- group play ----------
+export type PartyMode = 'COOPERATIVE' | 'COMPETITIVE'
+export type PartyMember = { user_id: string; nickname: string; avatar: string; is_ready: boolean; status: string; score: number | null; completed_at: string | null; found: number; answered: number; correct: number }
+export type PartyState = {
+  me: string; server_now: string
+  party: { id: string; code: string; mode: PartyMode; status: 'LOBBY' | 'PLAYING' | 'FINISHED' | 'CLOSED'; host_id: string; started_at: string | null; updated_at: string }
+  case: { id: string; title: string; title_ar: string; cover_image_path: string | null; difficulty: number; estimated_minutes: number; description: string | null; description_ar: string | null }
+  evidence_total: number; questions_total: number; my_session: string | null; members: PartyMember[]
+}
+export async function createParty(caseId: string, mode: PartyMode, nickname: string, avatar: string) {
+  return must(await supabase.rpc('detective_party_create', { p_case: caseId, p_mode: mode, p_nickname: nickname, p_avatar: avatar })) as { party_id: string; code: string }
+}
+export async function joinParty(code: string, nickname: string, avatar: string) {
+  return must(await supabase.rpc('detective_party_join', { p_code: code, p_nickname: nickname, p_avatar: avatar })) as { status: string; party_id?: string }
+}
+export async function partyState(partyId: string) { return must(await supabase.rpc('detective_party_state', { p_party: partyId })) as PartyState }
+export async function partyReady(partyId: string, ready: boolean) { const r = await supabase.rpc('detective_party_ready', { p_party: partyId, p_ready: ready }); if (r.error) throw new Error(r.error.message) }
+export async function partyStart(partyId: string) { const r = await supabase.rpc('detective_party_start', { p_party: partyId }); if (r.error) throw new Error(r.error.message) }
+export async function partyLeave(partyId: string) { const r = await supabase.rpc('detective_party_leave', { p_party: partyId }); if (r.error) throw new Error(r.error.message) }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useI18n } from '../lib/i18n'
 import { useAuth } from '../auth/AuthProvider'
-import { detectiveError, listDetectiveCases, startDetectiveSession, type DetectiveCase } from '../detective/api'
+import { createParty, detectiveError, listDetectiveCases, startDetectiveSession, type DetectiveCase, type PartyMode } from '../detective/api'
 import { DetectiveArt } from '../components/GameArt'
 import { CATEGORY_LABEL, imageUrl, Stars } from './DetectiveCatalog'
 
@@ -31,6 +31,23 @@ export default function DetectiveCasePreview() {
         try { localStorage.setItem('playerName', name.trim()) } catch { /* ignore */ }
       }
       nav(`/detective/session/${await startDetectiveSession(c.id)}`)
+    } catch (e) { setError(detectiveError(e, ar)); setBusy(false) }
+  }
+
+  const group = async (mode: PartyMode) => {
+    if (!c) return
+    setBusy(true); setError('')
+    try {
+      if (!session) {
+        if (!name.trim()) { setBusy(false); return }
+        const err = await signInAnonymously(name.trim())
+        if (err) throw new Error(err)
+      }
+      try { localStorage.setItem('playerName', name.trim() || localStorage.getItem('playerName') || '') } catch { /* ignore */ }
+      const nick = (name.trim() || (() => { try { return localStorage.getItem('playerName') } catch { return '' } })() || (ar ? 'محقق' : 'Detective')).slice(0, 30)
+      const avatar = (() => { try { return localStorage.getItem('bakasaAvatar') || 'owl' } catch { return 'owl' } })()
+      const r = await createParty(c.id, mode, nick, avatar)
+      nav(`/detective/party/${r.party_id}`)
     } catch (e) { setError(detectiveError(e, ar)); setBusy(false) }
   }
 
@@ -85,7 +102,11 @@ export default function DetectiveCasePreview() {
         {error && <p className="det-panel text-[#ff8a8d]" role="alert">{error}</p>}
         <button type="button" className="det-btn w-full text-lg" disabled={busy || (!session && !name.trim())} onClick={() => void start()}>
           🔍 {busy ? '…' : c.resume_session ? (ar ? 'كمّل التحقيق' : 'Resume investigation') : c.completed ? (ar ? 'العب القضية تاني' : 'Play again') : (ar ? 'ابدأ التحقيق' : 'Start investigation')}</button>
-        <p className="text-center text-xs text-[#7d8fa6]">{ar ? 'التحقيق الجماعي (غرف وفرق) جاي في التحديث الجاي.' : 'Team investigations (rooms) are coming in the next update.'}</p>
+        <div className="grid grid-cols-2 gap-2">
+          <button type="button" className="det-btn-ghost" disabled={busy || (!session && !name.trim())} onClick={() => void group('COOPERATIVE')}>🤝 {ar ? 'تحقيق جماعي (فريق)' : 'Team investigation'}</button>
+          <button type="button" className="det-btn-ghost" disabled={busy || (!session && !name.trim())} onClick={() => void group('COMPETITIVE')}>🏁 {ar ? 'منافسة بين المحققين' : 'Detective race'}</button>
+        </div>
+        <Link to="/detective/join" className="block text-center text-sm text-[#5eead4] underline">{ar ? 'معاك كود غرفة؟ ادخل هنا' : 'Have a room code? Join here'}</Link>
       </div>
     </main>
   )
