@@ -67,5 +67,24 @@ body { @apply bg-ink-900 text-parchment-100 font-body antialiased; background-im
 .bk-confetti i { position: absolute; top: -20px; width: 10px; height: 16px; border-radius: 3px; animation: bk-fall linear forwards; }
 @keyframes bk-fall { to { transform: translateY(110vh) rotate(720deg); } }
 .bk-spotlight { background: radial-gradient(circle at 50% 30%, rgba(255,185,56,.35), transparent 60%); }
+/* ---- Arcade hub (player app home) ---- */
+.arcade { @apply min-h-screen text-white; background: radial-gradient(circle at 80% -10%, rgba(139,92,246,.28), transparent 40%), radial-gradient(circle at -10% 60%, rgba(255,106,61,.12), transparent 40%), #0b0b10; }
+.ar-shell { @apply mx-auto w-full max-w-xl px-4; padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: calc(6.5rem + env(safe-area-inset-bottom)); }
+.ar-card { @apply rounded-3xl border border-white/[.06] bg-[#16161f]; }
+.ar-btn { @apply inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-2xl bg-[#8b5cf6] px-5 font-bold text-white transition hover:bg-[#9d74ff] active:scale-[.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white; box-shadow: 0 10px 30px rgba(139,92,246,.35); }
+.ar-btn-dark { @apply inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-2xl border border-white/10 bg-[#22222d] px-5 font-semibold text-white transition hover:bg-[#2b2b38] active:scale-[.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-white; }
+.ar-chip { @apply inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-white/10 bg-[#1b1b25] px-3.5 py-2 text-sm font-semibold text-white/85 transition; }
+.ar-chip[aria-pressed="true"] { @apply border-[#8b5cf6] bg-[#8b5cf6]/20 text-white; }
+.ar-icon { @apply grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-[#1b1b25] text-lg transition hover:bg-[#262633] focus-visible:outline focus-visible:outline-2 focus-visible:outline-white; }
+.ar-frame { @apply relative inline-grid place-items-center rounded-full p-[3px]; background: conic-gradient(from 200deg, #ffd66b, #c98a1a, #fff1b8, #c98a1a, #ffd66b); box-shadow: 0 0 0 2px #3a2a00, 0 8px 24px rgba(255,200,80,.25); }
+.ar-hero { @apply relative overflow-hidden rounded-3xl p-5; background: linear-gradient(120deg, #ff5f6d 0%, #ff8a3d 55%, #ffb938 100%); box-shadow: 0 20px 50px rgba(255,106,61,.3); }
+.ar-game { @apply relative flex h-56 w-40 shrink-0 flex-col justify-end overflow-hidden rounded-3xl p-3 text-start transition active:scale-[.97]; box-shadow: 0 14px 34px rgba(0,0,0,.45); }
+.ar-game svg.ar-art { @apply absolute inset-x-0 top-1 mx-auto h-36 w-36 drop-shadow-[0_12px_18px_rgba(0,0,0,.35)]; }
+.ar-play { @apply grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#22c55e] text-white shadow-[0_6px_18px_rgba(34,197,94,.4)]; }
+.ar-tabbar { @apply fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-[#0b0b10]/95 backdrop-blur; padding-bottom: env(safe-area-inset-bottom); }
+.ar-float { animation: ar-float 4.5s ease-in-out infinite; }
+@keyframes ar-float { 50% { transform: translateY(-10px) rotate(-2deg); } }
+.ar-spin-slow { animation: ar-spin 9s linear infinite; }
+@keyframes ar-spin { to { transform: rotate(360deg); } }
 @media print { body { background: white !important; color: #111827 !important; } aside, nav, button, select, input { display: none !important; } .card { background: white !important; border-color: #d1d5db !important; break-inside: avoid; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
