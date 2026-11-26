@@ -1,3 +1,4 @@
+import { shareOrigin } from '../../lib/publicUrl'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import QRCode from 'qrcode'
@@ -21,7 +22,7 @@ export default function RoomControl() {
   const [board, setBoard] = useState<LeaderRow[]>([])
 
   const room = state?.room ?? null
-  const link = room ? joinUrl(window.location.origin, room.code) : ''
+  const link = room ? joinUrl(shareOrigin(), room.code) : ''
   useEffect(() => { if (link) QRCode.toDataURL(link, { margin: 1, width: 240 }).then(setQr).catch(() => setQr(null)) }, [link])
 
   useEffect(() => {

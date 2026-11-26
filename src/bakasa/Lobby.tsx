@@ -1,3 +1,4 @@
+import { shareUrl } from '../lib/publicUrl'
 import { useEffect, useState } from 'react'
 import QRCode from 'qrcode'
 import { useI18n } from '../lib/i18n'
@@ -5,7 +6,7 @@ import { bakasaError, kickPlayer, setAvatar, setReady, startRound, transferHost,
 import { Avatar, AvatarPicker, ConfirmDialog } from './ui'
 import { SettingsForm, SettingsSummary } from './SettingsForm'
 
-export function inviteUrl(code: string) { return `${window.location.origin}/bakasa/join/${code}` }
+export function inviteUrl(code: string) { return shareUrl(`/bakasa/join/${code}`) }
 
 export function InvitePanel({ code, url }: { code: string; url?: string }) {
   const { lang } = useI18n()

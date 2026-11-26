@@ -1,3 +1,4 @@
+import { shareUrl } from '../lib/publicUrl'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useI18n } from '../lib/i18n'
@@ -6,7 +7,7 @@ import { Avatar, AvatarPicker, randomAvatar } from '../bakasa/ui'
 import { InvitePanel } from '../bakasa/Lobby'
 import { imageUrl, Stars } from './DetectiveCatalog'
 
-export const partyUrl = (code: string) => `${window.location.origin}/detective/join/${code}`
+export const partyUrl = (code: string) => shareUrl(`/detective/join/${code}`)
 const stored = (k: string, d: string) => { try { return localStorage.getItem(k) ?? d } catch { return d } }
 
 /** Live party leaderboard (used in the lobby and as a strip inside the investigation). */
@@ -111,8 +112,8 @@ export function DetectiveJoin() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const normalized = (() => { const raw = code.toUpperCase().replace(/[^A-Z0-9]/g, ''); const b = raw.startsWith('DT') ? raw.slice(2) : raw; return b ? `DT-${b.slice(0, 6)}` : '' })()
-  const submit = async (e: FormEvent) => {
-    e.preventDefault(); if (!name.trim()) return
+  const submit = async (e?: FormEvent) => {
+    e?.preventDefault(); if (!name.trim()) return
     setBusy(true); setError(null)
     try {
       const r = await joinParty(normalized, name.trim(), avatar)
@@ -122,6 +123,8 @@ export function DetectiveJoin() {
     } catch (err) { setError(detectiveError(err, ar)) }
     setBusy(false)
   }
+  // Invite links go straight into the room when the player already has a saved name.
+  useEffect(() => { if (urlCode && /^DT-[A-Z0-9]{6}$/.test(normalized) && name.trim()) void submit() }, []) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <main className="det"><form onSubmit={submit} className="det-shell space-y-4">
       <Link to="/detective" className="det-btn-ghost min-h-0 py-2 text-sm">{ar ? '→ القضايا' : '← Cases'}</Link>

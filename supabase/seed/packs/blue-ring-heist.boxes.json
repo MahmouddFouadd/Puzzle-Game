@@ -1,0 +1,56 @@
+{
+ "empty_cabinet": {
+  "x": 41,
+  "y": 20,
+  "width": 24,
+  "height": 32
+ },
+ "blue_wax_seal": {
+  "x": 44,
+  "y": 53,
+  "width": 5,
+  "height": 5
+ },
+ "inventory_slip": {
+  "x": 59,
+  "y": 83,
+  "width": 25,
+  "height": 15
+ },
+ "key_impression": {
+  "x": 12,
+  "y": 58,
+  "width": 32,
+  "height": 23
+ },
+ "restorer_gloves": {
+  "x": 47,
+  "y": 58,
+  "width": 16,
+  "height": 12
+ },
+ "altered_manifest": {
+  "x": 56,
+  "y": 67,
+  "width": 26,
+  "height": 27
+ },
+ "ring_in_crate": {
+  "x": 33,
+  "y": 55,
+  "width": 13,
+  "height": 9
+ },
+ "torn_label": {
+  "x": 47,
+  "y": 78,
+  "width": 8,
+  "height": 12
+ },
+ "trolley_tracks": {
+  "x": 56,
+  "y": 54,
+  "width": 36,
+  "height": 40
+ }
+}

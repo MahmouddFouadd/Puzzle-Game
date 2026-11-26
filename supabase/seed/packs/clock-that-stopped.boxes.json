@@ -1,0 +1,56 @@
+{
+ "clock_hands": {
+  "x": 42,
+  "y": 34,
+  "width": 15,
+  "height": 27
+ },
+ "service_pin": {
+  "x": 43,
+  "y": 63,
+  "width": 13,
+  "height": 8
+ },
+ "intact_mechanism": {
+  "x": 44,
+  "y": 71,
+  "width": 12,
+  "height": 13
+ },
+ "service_order": {
+  "x": 9,
+  "y": 23,
+  "width": 21,
+  "height": 41
+ },
+ "clock_service_key": {
+  "x": 25,
+  "y": 59,
+  "width": 19,
+  "height": 21
+ },
+ "oily_gloves": {
+  "x": 71,
+  "y": 51,
+  "width": 25,
+  "height": 38
+ },
+ "fast_corridor_clock": {
+  "x": 48,
+  "y": 12,
+  "width": 14,
+  "height": 11
+ },
+ "power_monitor": {
+  "x": 70,
+  "y": 39,
+  "width": 8,
+  "height": 15
+ },
+ "access_log": {
+  "x": 0,
+  "y": 64,
+  "width": 35,
+  "height": 30
+ }
+}

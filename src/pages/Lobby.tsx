@@ -1,3 +1,4 @@
+import { shareUrl } from '../lib/publicUrl'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
@@ -67,7 +68,7 @@ export default function Lobby() {
           <LangToggle />
         </div>
         <button type="button" className="code-chip" dir="ltr" aria-label={t('shareCode')} onClick={() => {
-          const url = `${window.location.origin}/join/${room.code}`
+          const url = shareUrl(`/join/${room.code}`)
           const shareable = navigator as Navigator & { share?: (d: { title: string; url: string }) => Promise<void> }
           if (shareable.share) { void shareable.share({ title: room.settings_snapshot.story.title, url }).catch(() => undefined); return }
           void navigator.clipboard?.writeText(url).then(() => { setCopied(true); window.setTimeout(() => setCopied(false), 1500) }).catch(() => undefined)
