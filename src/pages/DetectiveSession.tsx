@@ -4,6 +4,7 @@ import { useI18n } from '../lib/i18n'
 import { boardLink, detectiveError, finishDetective, inspectScene, loadDetectiveSession, saveDetectiveNote, submitDetectiveAnswer, requestDetectiveHint,
   type DetectiveEvidence, type DetectivePayload, type DetectiveQuestion, type HintResult, type Relation } from '../detective/api'
 import { SceneViewer } from '../detective/SceneViewer'
+import { EvidenceCrop } from '../detective/EvidenceCrop'
 import { EvidenceBoard, RELATIONS } from '../detective/Board'
 import { imageUrl } from './DetectiveCatalog'
 import { PartyBoard, usePartyState } from './DetectiveParty'
@@ -125,6 +126,7 @@ export default function DetectiveSession() {
   }, [p?.party, load, nav, sessionId])
 
   const found = useMemo(() => (p?.scenes ?? []).flatMap((s) => s.evidence), [p])
+  const sceneOf = useMemo(() => new Map((p?.scenes ?? []).flatMap((s) => s.evidence.map((e) => [e.id, s] as const))), [p])
   const scene = p?.scenes[sceneIdx]
   const stage = p?.stages.find((s) => s.current) ?? null
   const finalAnswered = !!p?.questions.find((q) => q.question_type === 'FINAL_CONCLUSION')?.answered
@@ -163,6 +165,9 @@ export default function DetectiveSession() {
     {loadError ? <><p role="alert">{loadError}</p><button className="det-btn" type="button" onClick={() => void load()}>{ar ? 'حاول تاني' : 'Retry'}</button> <Link className="det-btn-ghost" to="/detective">{ar ? 'القضايا' : 'Cases'}</Link></>
       : <p role="status">{ar ? 'بنفتح ملف القضية…' : 'Opening the case file…'}</p>}</div></main>
 
+  const revealScene = reveal ? (p.scenes.find((s) => s.id === (reveal as { scene_id?: string }).scene_id) ?? sceneOf.get(reveal.id) ?? null) : null
+  const sceneDone = !!revealScene && revealScene.evidence.length >= revealScene.evidence_total
+  const nextScene = revealScene ? p.scenes.findIndex((s) => s.id !== revealScene.id && s.evidence.length < s.evidence_total) : -1
   const stageQs = p.questions.filter((q) => !q.locked)
   const tabs: [Tab, string][] = [['questions', ar ? '❓ الأسئلة' : '❓ Questions'], ['evidence', `${ar ? '📁 الأدلة' : '📁 Evidence'} ${p.stats.found}`], ['board', ar ? '🧷 اللوحة' : '🧷 Board'],
     ['suspects', ar ? '👥 الأشخاص' : '👥 People'], ['timeline', ar ? '🕒 الأحداث' : '🕒 Timeline'], ['notes', ar ? '📝 ملاحظات' : '📝 Notes']]
@@ -217,7 +222,11 @@ export default function DetectiveSession() {
             <SceneViewer src={imageUrl(scene.image_path)} alt={ar ? scene.title_ar : scene.title}
               boxes={scene.evidence.map((e) => ({ id: e.id, x: e.x, y: e.y, width: e.width, height: e.height, label: ar ? e.public_title_ar : e.public_title, tone: flash === e.id ? 'flash' : 'found' }))}
               hint={hint?.kind === 'area' && hint.scene_id === scene.id ? { cx: hint.cx!, cy: hint.cy!, r: hint.r! } : null}
-              onTap={(x, y) => void tap(x, y)} onBoxClick={(id) => { const e = found.find((f) => f.id === id); if (e) setReveal(e) }} />
+              onTap={(x, y) => void tap(x, y)} onBoxClick={(id) => { const e = found.find((f) => f.id === id); if (e) setReveal(e) }}
+              overlay={<div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-2 text-[11px] font-bold">
+                <span className="rounded-full bg-black/65 px-2.5 py-1 backdrop-blur">{ar ? `المشهد ${sceneIdx + 1} / ${p.scenes.length}` : `Scene ${sceneIdx + 1} / ${p.scenes.length}`}</span>
+                <span className={`rounded-full px-2.5 py-1 backdrop-blur ${scene.evidence.length >= scene.evidence_total ? 'bg-[#0f766e]/85' : 'bg-black/65'}`}>🔎 {scene.evidence.length} / {scene.evidence_total}{scene.evidence.length >= scene.evidence_total ? ' ✓' : ''}</span>
+              </div>} />
             <p className="text-center text-xs text-[#7d8fa6]">{ar ? '🔍 كبّر الصورة واضغط على أي حاجة شاكك فيها' : '🔍 Zoom in and tap anything suspicious'}</p>
           </section>
         )}
@@ -239,9 +248,13 @@ export default function DetectiveSession() {
             <div className="space-y-2" role="tabpanel">
               {found.length === 0 && <p className="text-center text-sm text-[#9fb0c4]">{ar ? 'لسه ما لقيتش أدلة. افحص الصور!' : 'No evidence yet. Inspect the scenes!'}</p>}
               {found.map((e) => (
-                <button key={e.id} type="button" className="det-file block w-full text-start" onClick={() => setReveal(e)}>
-                  <div className="flex items-center justify-between gap-2"><b>{ar ? e.public_title_ar : e.public_title}</b><span className="rounded bg-black/10 px-1.5 text-[11px]">{(CLASS_LABEL[e.classification] ?? [e.classification, e.classification])[ar ? 0 : 1]}</span></div>
-                  <p className="text-sm">{ar ? e.public_description_ar : e.public_description}</p>
+                <button key={e.id} type="button" className="det-file flex w-full items-start gap-3 text-start" onClick={() => setReveal(e)}>
+                  {sceneOf.get(e.id) && <EvidenceCrop src={imageUrl(sceneOf.get(e.id)!.image_path)} box={e} maxW={84} maxH={64} round="rounded-lg" className="mt-0.5 ring-2 ring-[#c9a45c]/60" />}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2"><b>{ar ? e.public_title_ar : e.public_title}</b><span className="shrink-0 rounded bg-black/10 px-1.5 text-[11px]">{(CLASS_LABEL[e.classification] ?? [e.classification, e.classification])[ar ? 0 : 1]}</span></div>
+                    <p className="line-clamp-2 text-sm">{ar ? e.public_description_ar : e.public_description}</p>
+                    <span className="text-[11px] opacity-70">📍 {ar ? sceneOf.get(e.id)?.title_ar : sceneOf.get(e.id)?.title}</span>
+                  </div>
                 </button>))}
               {p.scenes.map((s) => s.evidence_total > s.evidence.length && <p key={s.id} className="text-xs text-[#7d8fa6]">❔ {ar ? `${s.evidence_total - s.evidence.length} أدلة لسه مخفية في "${s.title_ar}"` : `${s.evidence_total - s.evidence.length} hidden clues left in "${s.title}"`}</p>)}
             </div>
@@ -281,12 +294,18 @@ export default function DetectiveSession() {
       {reveal && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4" role="dialog" aria-modal="true" onClick={() => setReveal(null)}>
           <div className="det-file bk-pop w-full max-w-sm space-y-2" onClick={(e) => e.stopPropagation()}>
-            {typeof reveal.points === 'number' && <div className="flex items-center justify-between"><span className="det-stamp">{ar ? 'دليل جديد!' : 'New evidence!'}</span><b className="text-[#0f766e]" dir="ltr">+{reveal.points}</b></div>}
+            {typeof reveal.points === 'number' && <div className="flex items-center justify-between"><span className="det-stamp">{ar ? 'تم اكتشاف دليل جديد!' : 'New evidence found!'}</span><b className="det-points text-[#0f766e]" dir="ltr">+{reveal.points}</b></div>}
+            {revealScene && <div className="flex justify-center"><div className="det-lens"><EvidenceCrop src={imageUrl(revealScene.image_path)} box={reveal} maxW={300} maxH={170} /></div></div>}
             <h2 className="font-display text-2xl font-bold">🔎 {ar ? reveal.public_title_ar : reveal.public_title}</h2>
             <p>{ar ? reveal.public_description_ar : reveal.public_description}</p>
             <p className="text-xs">{ar ? 'التصنيف: ' : 'Type: '}<b>{(CLASS_LABEL[reveal.classification] ?? [reveal.classification, reveal.classification])[ar ? 0 : 1]}</b> · {ar ? 'الأهمية' : 'Importance'} {'●'.repeat(reveal.importance)}</p>
-            <p className="text-xs opacity-75">{ar ? 'الدليل اتحفظ في ملفك. معناه الكامل هيظهر في التقرير النهائي.' : 'Saved to your file. Its full meaning is explained in the final report.'}</p>
-            <button type="button" className="det-btn w-full" onClick={() => setReveal(null)} autoFocus>{ar ? 'تمام' : 'OK'}</button>
+            <p className="text-xs opacity-75">{typeof reveal.points === 'number' ? (ar ? '✓ تمت إضافة الدليل إلى دفتر التحقيق. معناه الكامل هيظهر في التقرير النهائي.' : '✓ Added to your evidence notebook. Its full meaning is explained in the final report.') : (ar ? '📁 من دفتر التحقيق' : '📁 From your evidence notebook')}</p>
+            {sceneDone && typeof reveal.points === 'number' && (
+              <p className="rounded-xl bg-[#0f766e]/15 p-2 text-center text-sm font-bold text-[#0f766e]" role="status">🎉 {ar ? `لقيت كل أدلة "${revealScene?.title_ar}"!` : `You found every clue in "${revealScene?.title}"!`}</p>
+            )}
+            {sceneDone && typeof reveal.points === 'number' && nextScene >= 0
+              ? <button type="button" className="det-btn w-full" autoFocus onClick={() => { setReveal(null); setSceneIdx(nextScene) }}>{ar ? 'المشهد التالي ←' : 'Next scene →'}</button>
+              : <button type="button" className="det-btn w-full" onClick={() => setReveal(null)} autoFocus>{typeof reveal.points === 'number' ? (ar ? 'كمّل البحث 🔍' : 'Keep searching 🔍') : (ar ? 'تمام' : 'OK')}</button>}
           </div>
         </div>
       )}

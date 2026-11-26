@@ -118,3 +118,8 @@ body { @apply bg-ink-900 text-parchment-100 font-body antialiased; background-im
 .kpi::after { content: ''; position: absolute; inset-inline-end: -30px; top: -30px; width: 110px; height: 110px; border-radius: 9999px; background: var(--glow, rgba(139,92,246,.25)); filter: blur(30px); }
 @media print { body { background: white !important; color: #111827 !important; } aside, nav, button, select, input { display: none !important; } .card { background: white !important; border-color: #d1d5db !important; break-inside: avoid; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+.det-lens { @apply rounded-2xl p-1.5; background: radial-gradient(circle at 30% 25%, #f8e7b0, #b98a2f 70%); box-shadow: 0 10px 28px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.35); animation: det-lens .45s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes det-lens { from { transform: scale(.6) rotate(-4deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.det-points { animation: det-points .6s ease-out both; }
+@keyframes det-points { 0% { transform: translateY(8px) scale(.6); opacity: 0; } 60% { transform: translateY(-4px) scale(1.25); opacity: 1; } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .det-lens, .det-points { animation: none; } }
