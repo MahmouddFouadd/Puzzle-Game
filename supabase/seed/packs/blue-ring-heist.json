@@ -1,0 +1,122 @@
+{
+  "case": {
+    "slug": "the-blue-ring-heist",
+    "title": "The Blue Ring Heist",
+    "title_ar": "سرقة الخاتم الفيروزي",
+    "case_type": "FULL",
+    "difficulty": 2,
+    "age_min": 10,
+    "age_max": 16,
+    "estimated_minutes": 20,
+    "category": "Theft",
+    "category_ar": "سرقة",
+    "status": "DRAFT",
+    "description": "A priceless turquoise ring vanished from a locked gallery cabinet in Old Cairo. Three people had access to the building, and a delivery crate left on a trolley may hold the answer.",
+    "description_ar": "اختفى خاتم فيروزي نادر من خزانة مغلقة في معرض أثري بالقاهرة القديمة. كان ثلاثة أشخاص يملكون سببًا لدخول المبنى، وقد تقودنا عربة شحن وصندوق غامض إلى الحقيقة.",
+    "briefing": "At 9:00 p.m., curator Salma discovered that the Blue Nile Ring was missing from its display. The cabinet showed no forced damage. The gallery was closed, but the restoration workshop and service courtyard had been used that evening. A courier crate was scheduled to leave at 9:30. Inspect the gallery, workshop and courtyard; compare the evidence with each witness's timeline; then identify who moved the ring, how, and why.",
+    "briefing_ar": "في التاسعة مساءً اكتشفت أمينة المعرض سلمى اختفاء خاتم النيل الأزرق من خزانته. لا توجد آثار اقتحام على الخزانة. كان المعرض مغلقًا، لكن ورشة الترميم وساحة الخدمة استُخدمتا في المساء، وكان من المقرر أن تغادر عربة شحن عند التاسعة والنصف. افحص المعرض والورشة والساحة، وقارن الأدلة بأقوال الشهود، ثم حدّد من نقل الخاتم وكيف ولماذا.",
+    "objective": "Find the ring, identify who took it, reconstruct the route and explain the motive using evidence rather than guesses.",
+    "objective_ar": "اعثر على الخاتم، وحدّد من أخذه، وأعد بناء مساره واشرح الدافع بالاستناد إلى الأدلة لا التخمين.",
+    "cover_image": "cover.jpg"
+  },
+  "stages": [
+    {"stage_key":"observe","position":1,"title":"Inspect the Gallery","title_ar":"افحص المعرض","unlock_rule":{}},
+    {"stage_key":"connect","position":2,"title":"Compare the Witnesses","title_ar":"قارن أقوال الشهود","unlock_rule":{"requires_stage":"observe"}},
+    {"stage_key":"conclude","position":3,"title":"Rebuild the Route","title_ar":"أعد بناء مسار الخاتم","unlock_rule":{"requires_stage":"connect"}}
+  ],
+  "scenes": [
+    {
+      "position":1,
+      "title":"The Display Gallery",
+      "title_ar":"قاعة العرض",
+      "image":"scene-1-gallery.jpg",
+      "introduction":"The cabinet is still standing in the center of the gallery. The velvet cushion is empty, yet the lock and frame look undamaged. A small blue mark and a paper slip may matter.",
+      "introduction_ar":"ما زالت الخزانة في وسط القاعة، لكن وسادة المخمل فارغة. يبدو القفل والإطار سليمين، بينما قد تكون لعلامة زرقاء صغيرة وورقة قرب المكتب أهمية في التحقيق.",
+      "evidence": [
+        {"key":"empty_cabinet","title":"The empty velvet cushion","title_ar":"وسادة المخمل الفارغة","x":41,"y":26,"width":24,"height":20,"classification":"FACT","importance":5,"description_ar":"الخاتم غير موجود، لكن لا خدش ولا كسر على الخزانة. يبدو أن من فتحها استخدم مفتاحًا أو لمسة صحيحة، لا القوة.","admin_explanation_ar":"يثبت الاختفاء ويجعل فرضية اقتحام الخزانة بالقوة ضعيفة."},
+        {"key":"blue_wax_seal","title":"Blue wax beside the latch","title_ar":"شمع أزرق بجوار القفل","x":49,"y":58,"width":5,"height":4,"classification":"OBSERVATION","importance":4,"description_ar":"قطعة شمع فيروزية صغيرة عالقة أسفل القفل. ليست من لون الطلاء ولا من زينة الخاتم.","admin_explanation_ar":"المادة تطابق فتات الشمع على قالب المفتاح في الورشة، وتربط العبث بالقفل بمكان إعداد قالب المفتاح."},
+        {"key":"inventory_slip","title":"The folded inventory slip","title_ar":"قصاصة سجل الجرد","x":67,"y":87,"width":19,"height":10,"classification":"FACT","importance":4,"description_ar":"على ظهر القصاصة توقيع استلام داخلي باسم نبيل، الساعة 8:42 مساءً، مع عبارة: «نقل مؤقت — صندوق الشحن».","admin_explanation_ar":"تربط نبيل مباشرة بنقل الصندوق في الوقت الذي ادعى فيه أنه لم يقترب من المعرض بعد إغلاقه."}
+      ]
+    },
+    {
+      "position":2,
+      "title":"The Restoration Workshop",
+      "title_ar":"ورشة الترميم",
+      "image":"scene-2-workshop.jpg",
+      "introduction":"The workshop was used by Amina, the restorer, and by Nabil, the gallery assistant. A key-impression block, gloves and dispatch paperwork remain on the bench.",
+      "introduction_ar":"استخدمت أمينة الترميم الورشة، ودخلها أيضًا نبيل مساعد المعرض. بقي على الطاولة قالب لطبعة مفتاح وقفازات وأوراق شحن.",
+      "evidence": [
+        {"key":"key_impression","title":"A fresh key impression","title_ar":"طبعة مفتاح حديثة","x":29,"y":72,"width":26,"height":20,"classification":"FACT","importance":5,"description_ar":"القالب يحمل تفاصيل تطابق مفتاح خزانة الخاتم. وعلى حافته أثر شمع أزرق مطابق للقطعة الموجودة قرب القفل.","admin_explanation_ar":"يشرح كيف فُتحت الخزانة من دون كسر، ويصل القالب بعلامة الشمع في مسرح الحادث."},
+        {"key":"restorer_gloves","title":"Turquoise pigment on the gloves","title_ar":"صبغة فيروزية على القفازات","x":46,"y":70,"width":18,"height":15,"classification":"OBSERVATION","importance":3,"description_ar":"على القفازات بقعة من صبغة فيروزية تُستخدم في ترميم الإطارات، لا أثرًا من حجر الخاتم.","admin_explanation_ar":"قرينة مضللة تفسّر وجود الصبغة مع أمينة. لا تثبت حيازتها للخاتم ولا تربطها بفتح الخزانة."},
+        {"key":"altered_manifest","title":"The amended dispatch manifest","title_ar":"كشف الشحن المعدّل","x":66,"y":77,"width":25,"height":20,"classification":"FACT","importance":5,"description_ar":"تُظهر نسخة الكربون أن خانة وقت خروج الصندوق عُدّلت من 9:30 إلى 8:50، وبجوار التعديل الحرفان «ن.ف»؛ وهما يطابقان توقيع استلام نبيل في سجل الجرد. وعلى ظهرها طلب تقييم للخاتم من تاجر مجوهرات وتذكير بدين شخصي باسم نبيل.","admin_explanation_ar":"يربط نبيل بمحاولة إخراج الصندوق قبل موعد الشحنة الرسمي، ويوفر قرينة على الدافع المالي. يجب جمع هذا مع دليل الخزانة والشحنة، لا اعتباره حاسمًا وحده."}
+      ]
+    },
+    {
+      "position":3,
+      "title":"The Service Courtyard",
+      "title_ar":"ساحة الخدمة الخلفية",
+      "image":"scene-3-courtyard.jpg",
+      "introduction":"A trolley waits beside the service gate. The crate is not empty, and its route marks lead back toward the gallery rather than out to the street.",
+      "introduction_ar":"توجد عربة بجوار بوابة الخدمة. الصندوق ليس فارغًا، وآثار العجلات تعود باتجاه المعرض بدلًا من الخروج إلى الشارع.",
+      "evidence": [
+        {"key":"ring_in_crate","title":"The Blue Nile Ring in the crate","title_ar":"خاتم النيل الأزرق داخل الصندوق","x":36,"y":53,"width":13,"height":10,"classification":"FACT","importance":5,"description_ar":"الخاتم ملفوف داخل بطانة مزدوجة في قاع الصندوق. لم يتضرر، لكنه كان مخفيًا ليغادر مع الشحنة.","admin_explanation_ar":"يثبت مكان الخاتم وخطة نقله خارج المبنى. لا يعني العثور عليه أن شركة الشحن أو السائق هما الفاعلان."},
+        {"key":"torn_label","title":"A torn shipping label","title_ar":"ملصق شحن ممزق","x":52,"y":80,"width":10,"height":12,"classification":"FACT","importance":4,"description_ar":"النصف الممزق يحمل اسم المرسل «نبيل فؤاد» ورقم الصندوق نفسه الموجود في كشف الشحن المعدّل.","admin_explanation_ar":"يوصل الصندوق بنبيل وبالتعديل الذي ظهر في الورشة."},
+        {"key":"trolley_tracks","title":"Trolley tracks turn back inside","title_ar":"آثار العربة تعود إلى الداخل","x":63,"y":62,"width":24,"height":19,"classification":"INFERENCE","importance":3,"description_ar":"تتقاطع آثار العجلات عند البوابة ثم تنحني عائدة نحو باب الورشة. يبدو أن الصندوق لم يغادر الساحة بعد.","admin_explanation_ar":"تضع الصندوق في مسار داخلي، وتنسجم مع العثور على الخاتم قبل موعد خروجه."}
+      ]
+    }
+  ],
+  "suspects": [
+    {"key":"nabil","name":"Nabil Fouad","name_ar":"نبيل فؤاد","relationship":"Gallery assistant","relationship_ar":"مساعد المعرض","description_ar":"يعرف ترتيب القاعة وسجل الجرد، ويمكنه دخول الورشة وساحة الخدمة.","background_ar":"كان مسؤولًا عن تجهيز الشحنات المسائية. يحتاج إلى المال بعد تراكم دين شخصي، لكنه أنكر أن يكون قد لمس صندوق الخاتم.","alibi_ar":"قال إنه غادر قبل الثامنة ولم يقترب من الخزانة أو عربة الشحن بعدها.","timeline":{"20:00":"قال إنه غادر","20:42":"وقّع استلامًا داخليًا للصندوق","20:50":"عُدّل موعد خروج الصندوق إلى هذا الوقت"}},
+    {"key":"amina","name":"Amina Hassan","name_ar":"أمينة حسن","relationship":"Restoration conservator","relationship_ar":"مرمّمة الآثار","description_ar":"تعمل على الإطارات القديمة وتستخدم الشمع والصبغات الفيروزية في الترميم.","background_ar":"أنهت عملها في الورشة قبل إغلاق المعرض، وسلمت أدواتها في سجل الورشة.","alibi_ar":"قالت إنها غادرت عند السابعة والنصف، ولم تعد بعد ذلك.","timeline":{"19:00":"انتهاء عملها المسجل","19:30":"وقت مغادرتها الذي ذكرته"}},
+    {"key":"hossam","name":"Hossam Eid","name_ar":"حسام عيد","relationship":"Courier","relationship_ar":"سائق الشحن","description_ar":"ينقل الصناديق بين المعرض والمخزن، ويستخدم العربة الظاهرة في الساحة.","background_ar":"جاء لاستلام شحنة أدوات ترميم مقررة في التاسعة والنصف.","alibi_ar":"قال إنه وصل بعد التاسعة، ووجد الصندوق مغلقًا؛ لم يفتح الصندوق ولم يغادر به.","timeline":{"21:05":"وصوله المسجل إلى البوابة","21:30":"موعد استلام الشحنة الأصلي"}}
+  ],
+  "statements": [
+    {"suspect":"nabil","statement_ar":"غادرت قبل الثامنة، ولم أقترب من الخزانة أو صندوق الشحن بعد ذلك.","truth_status":"FALSE","conflicting_evidence":["inventory_slip","altered_manifest","torn_label"],"admin_explanation_ar":"التوقيع الداخلي عند 8:42 وتعديل وقت الشحنة وملصق الصندوق باسمه تناقض قوله."},
+    {"suspect":"amina","statement_ar":"كنت أستخدم الشمع والصبغة في ترميم إطار، وغادرت قبل الثامنة. القفازات لي، لكنني لم ألمس الخاتم.","truth_status":"TRUE","conflicting_evidence":["restorer_gloves"],"admin_explanation_ar":"تفسيرها يطابق عملها المسجل؛ الصبغة على القفازات قرينة مضللة وليست أثرًا من الحجر."},
+    {"suspect":"hossam","statement_ar":"لم أصل إلا بعد التاسعة. وجدت الصندوق مقفولًا في الساحة ولم أحمله إلى الشارع.","truth_status":"TRUE","conflicting_evidence":["ring_in_crate","trolley_tracks"],"admin_explanation_ar":"وقت البوابة يؤكد وصوله بعد أن وُضع الصندوق. آثار العربة تحركت داخل الساحة لا إلى الشارع."}
+  ],
+  "stages_questions": [
+    {"stage":"observe","position":1,"type":"MULTIPLE_CHOICE","prompt_ar":"ما الذي يبيّن أن الخاتم لم يُنتزع بالقوة من الخزانة؟","options":[{"id":"a","text":"The cabinet and lock show no forced damage","text_ar":"الخزانة والقفل بلا آثار كسر"},{"id":"b","text":"The display window is open","text_ar":"نافذة العرض مفتوحة"},{"id":"c","text":"The courier arrived early","text_ar":"وصل السائق مبكرًا"}],"answer_key":{"option_id":"a"},"associated_evidence":["empty_cabinet"],"points":10,"penalty":-3},
+    {"stage":"observe","position":2,"type":"EVIDENCE_RELATIONSHIP","prompt_ar":"ما الذي يربط الشمع الأزرق عند القفل بفتح الخزانة؟","options":[],"answer_key":{"from":"blue_wax_seal","to":"key_impression","relation":"SUPPORTS"},"associated_evidence":["blue_wax_seal","key_impression"],"points":15,"penalty":-4},
+    {"stage":"observe","position":3,"type":"TRUE_FALSE","prompt_ar":"تثبت بقعة الصبغة على قفازات أمينة أنها أخذت الخاتم.","options":[],"answer_key":{"value":"false"},"associated_evidence":["restorer_gloves","ring_in_crate"],"points":10,"penalty":-3},
+    {"stage":"connect","position":1,"type":"CONTRADICTION_IDENTIFICATION","prompt_ar":"أي دليل يناقض قول نبيل إنه غادر قبل الثامنة ولم يقترب من الصندوق؟","options":[{"id":"a","text":"The signed 8:42 inventory slip and amended dispatch manifest","text_ar":"قصاصة الجرد الموقعة 8:42 وكشف الشحن المعدّل"},{"id":"b","text":"Amina's stained gloves","text_ar":"قفازات أمينة الملطخة"},{"id":"c","text":"Hossam's arrival after nine","text_ar":"وصول حسام بعد التاسعة"}],"answer_key":{"option_id":"a"},"associated_evidence":["inventory_slip","altered_manifest"],"points":15,"penalty":-5},
+    {"stage":"connect","position":2,"type":"MULTIPLE_CHOICE","prompt_ar":"لماذا لا تكفي آثار العربة وحدها لاتهام حسام؟","options":[{"id":"a","text":"The recorded arrival is after the crate was moved, and the tracks turn back inside","text_ar":"وقت وصوله المسجل لاحق، والآثار تعود إلى الداخل"},{"id":"b","text":"He has no access to any vehicle","text_ar":"ليس لديه أي عربة"},{"id":"c","text":"The crate is empty","text_ar":"الصندوق فارغ"}],"answer_key":{"option_id":"a"},"associated_evidence":["trolley_tracks","ring_in_crate"],"points":15,"penalty":-4},
+    {"stage":"connect","position":3,"type":"EVIDENCE_RELATIONSHIP","prompt_ar":"أي مجموعة أدلة تكوّن أقوى سلسلة تربط نبيل بالصندوق؟","options":[],"answer_key":{"from":"altered_manifest","to":"torn_label","relation":"SUPPORTS"},"associated_evidence":["altered_manifest","torn_label","inventory_slip"],"points":15,"penalty":-5},
+    {"stage":"conclude","position":1,"type":"EVENT_ORDERING","prompt_ar":"رتّب ما حدث من الأسبق إلى الأحدث.","options":[{"id":"a","text":"Cabinet opened with a copied key","text_ar":"فُتحت الخزانة بمفتاح منسوخ"},{"id":"b","text":"Ring hidden in the false-bottom crate","text_ar":"أُخفي الخاتم في قاع الصندوق المزدوج"},{"id":"c","text":"Crate moved to the service courtyard","text_ar":"نُقل الصندوق إلى ساحة الخدمة"},{"id":"d","text":"Hossam arrived and found it before pickup","text_ar":"وصل حسام فوجده قبل موعد الاستلام"}],"answer_key":{"order":["a","b","c","d"]},"associated_evidence":["key_impression","ring_in_crate","trolley_tracks"],"points":20,"penalty":-5},
+    {"stage":"conclude","position":2,"type":"SUSPECT_SELECTION","prompt_ar":"من الشخص الذي تدعمه الأدلة بوصفه من أخذ الخاتم؟","options":[{"id":"a","text":"Nabil Fouad","text_ar":"نبيل فؤاد"},{"id":"b","text":"Amina Hassan","text_ar":"أمينة حسن"},{"id":"c","text":"Hossam Eid","text_ar":"حسام عيد"}],"answer_key":{"option_id":"a"},"associated_evidence":["inventory_slip","altered_manifest","torn_label"],"points":20,"penalty":-5},
+    {"stage":"conclude","position":3,"type":"FINAL_CONCLUSION","prompt_ar":"ما التفسير الأفضل لاختفاء خاتم النيل الأزرق؟","options":[{"id":"a","text":"Nabil copied the cabinet key, took the ring, hid it in the outgoing crate and changed the dispatch time to sell it and repay his debt","text_ar":"نسخ نبيل المفتاح، وأخذ الخاتم وأخفاه في صندوق الشحن، ثم غيّر موعد الخروج ليبيعه ويسدد دينه"},{"id":"b","text":"Amina accidentally packed the ring with her restoration tools","text_ar":"وضعت أمينة الخاتم بالخطأ مع أدوات الترميم"},{"id":"c","text":"Hossam stole it after arriving at the courtyard","text_ar":"سرقه حسام بعد وصوله إلى الساحة"}],"answer_key":{"option_id":"a"},"associated_evidence":["empty_cabinet","blue_wax_seal","key_impression","inventory_slip","altered_manifest","ring_in_crate","torn_label","trolley_tracks"],"points":25,"penalty":-5}
+  ],
+  "relations": [
+    {"from":"blue_wax_seal","to":"key_impression","relation_type":"SUPPORTS","public_explanation_ar":"الشمع نفسه يظهر عند القفل وعلى قالب المفتاح."},
+    {"from":"key_impression","to":"empty_cabinet","relation_type":"SUPPORTS","public_explanation_ar":"قالب مفتاح الخزانة يفسر فتحها من دون كسر."},
+    {"from":"inventory_slip","to":"altered_manifest","relation_type":"TEMPORAL","public_explanation_ar":"التوقيع ووقت تعديل كشف الشحن يقعان بعد الوقت الذي قال نبيل إنه غادر فيه."},
+    {"from":"altered_manifest","to":"torn_label","relation_type":"SUPPORTS","public_explanation_ar":"كشف الشحن والملصق الممزق يحملان اسم نبيل ورقم الصندوق نفسه."},
+    {"from":"trolley_tracks","to":"ring_in_crate","relation_type":"CONTEXTUAL","public_explanation_ar":"مسار العربة ينتهي عند الصندوق الذي عُثر فيه على الخاتم."},
+    {"from":"restorer_gloves","to":"inventory_slip","relation_type":"CONTRADICTS","public_explanation_ar":"الصبغة تفسر وجود أمينة في الورشة، لكنها لا تفسر توقيع نبيل أو تغيير الشحنة."}
+  ],
+  "hints": [
+    {"stage":"observe","position":1,"penalty":-2,"hint_text_ar":"ابدأ بالسؤال: هل الخزانة مكسورة فعلًا، أم فُتحت بطريقة أخرى؟"},
+    {"stage":"connect","position":2,"penalty":-3,"hint_text_ar":"لا تتهم صاحب القفازات لمجرد وجود لون مشابه؛ قارن نوع الصبغة ببقية الأدلة."},
+    {"stage":"conclude","position":3,"penalty":-4,"hint_text_ar":"اجمع بين وقت التوقيع، واسم المرسل على الملصق، والخاتم داخل الصندوق."}
+  ],
+  "timeline_events": [
+    {"event_key":"case_closed","position":1,"label_ar":"أُغلق المعرض بعد جولة المساء","window_key":"19:00"},
+    {"event_key":"amina_left","position":2,"label_ar":"غادرت أمينة بعد انتهاء الترميم","window_key":"19:30"},
+    {"event_key":"nabil_claimed_leave","position":3,"label_ar":"قال نبيل إنه غادر","window_key":"20:00"},
+    {"event_key":"nabil_signed","position":4,"label_ar":"توقيع نبيل على نقل الصندوق","window_key":"20:42"},
+    {"event_key":"manifest_changed","position":5,"label_ar":"تغيير موعد خروج الشحنة","window_key":"20:50"},
+    {"event_key":"hossam_arrived","position":6,"label_ar":"وصل حسام قبل استلام الشحنة","window_key":"21:05"},
+    {"event_key":"ring_found","position":7,"label_ar":"العثور على الخاتم في الصندوق","window_key":"21:10"}
+  ],
+  "solution": {
+    "public_reveal_ar":"لم يغادر خاتم النيل الأزرق المعرض. نسخ نبيل فؤاد مفتاح الخزانة في ورشة الترميم، وفتحها من دون كسر، ثم خبّأ الخاتم في قاع صندوق شحن مزدوج. غيّر موعد خروج الصندوق ووقّع استلامه على أنه نقل مؤقت، على أمل بيعه لتسديد دينه. لكنه ترك سلسلة أدلة: طبعة المفتاح والشمع الأزرق، توقيعه بعد الوقت الذي ادعى فيه المغادرة، كشف الشحن المعدّل، والملصق الذي يحمل اسمه. عُثر على الخاتم قبل وصول السائق إلى موعد الاستلام. أمينة لم تسرقه؛ صبغة قفازاتها جزء من عمل الترميم، وحسام وصل بعد نقل الصندوق.",
+    "solution_key":{"culprit":"nabil","method":"copied key; hid ring in a false-bottom outgoing crate","motive":"sell the ring to repay personal debt","final_question_position":3},
+    "alternative_hypotheses":[
+      {"ar":"أمينة أخذت الخاتم لأن على قفازاتها صبغة فيروزية.","en":"Amina took the ring because her gloves had turquoise pigment.","why_wrong_ar":"الصبغة مستخدمة في الترميم، ولا تربط أمينة بتوقيع نقل الصندوق أو بتغيير موعد الشحنة أو بالملصق الذي يحمل اسم نبيل."},
+      {"ar":"حسام سرق الخاتم عندما وصل إلى الساحة.","en":"Hossam stole the ring after arriving in the courtyard.","why_wrong_ar":"وقت البوابة يثبت وصوله بعد نقل الصندوق، وآثار العربة تعود إلى الداخل، والخاتم كان مخفيًا قبل موعد استلامه."}
+    ],
+    "educational_explanation_ar":"حل القضية يعتمد على تجميع أدلة مستقلة لا على دليل واحد: سلامة الخزانة تشير إلى استخدام مفتاح، وطبعة المفتاح تتصل بالشمع الأزرق؛ سجل الجرد وكشف الشحن يناقضان أقوال نبيل؛ وملصق الصندوق يربط اسمه بالصندوق الذي وُجد فيه الخاتم. أقوال أمينة وحسام متوافقة مع التوقيت، لذا فالصبغة وآثار العربة قرائن مضللة عند فصلها عن السياق. لا توجد إصابة أو عنف؛ إنها قضية سرقة واسترداد ممتلكات."
+  },
+  "asset_files": ["cover.jpg","scene-1-gallery.jpg","scene-2-workshop.jpg","scene-3-courtyard.jpg"],
+  "implementation_note": "This is a complete content draft, not yet inserted into the production database. The current Detective Studio page exposes case creation and scene images only; its visible editor explicitly says hotspots and questions require the case version API or a future editor panel. Upload/hosting and full data persistence must be completed through the app's supported authenticated admin workflow before publication."
+}

@@ -1,0 +1,751 @@
+{
+  "case": {
+    "slug": "the-clock-that-stopped",
+    "title": "The Clock That Stopped at 8:17",
+    "title_ar": "سر الساعة التي توقفت عند ٨:١٧",
+    "case_type": "MYSTERY",
+    "difficulty": 2,
+    "age_min": 10,
+    "age_max": 16,
+    "estimated_minutes": 18,
+    "category": "Logic and timelines",
+    "category_ar": "المنطق والتسلسل الزمني",
+    "status": "DRAFT",
+    "description": "The great astronomical clock in a small museum stopped at 8:17 the evening before a school visit. Some people suspect tampering, but the clock, its service tools, and three different time records may tell a more careful story.",
+    "description_ar": "توقفت الساعة الفلكية الكبيرة في متحف صغير عند ٨:١٧ مساءً قبل زيارة مدرسية. ظن بعضهم أن أحدًا عبث بها، لكن الساعة وأدوات صيانتها وثلاثة سجلات زمنية قد تكشف تفسيرًا أدق.",
+    "briefing": "At 8:31 p.m. by the corridor clock, caretaker Omar reported that the museum's astronomical clock had stopped. The hands were motionless, but their position alone did not explain why. The backup-power monitor showed no interruption. Clock conservator Lina had a scheduled maintenance visit, while guide Sami says he saw the clock running earlier. Inspect the gallery, workshop, and corridor records. Decide what is directly observed, what the evidence supports, and whether there is enough evidence to call this sabotage.",
+    "briefing_ar": "عند ٨:٣١ مساءً بحسب ساعة الممر، أبلغ الحارس عمر أن الساعة الفلكية توقفت. كانت عقاربها ساكنة، لكن موضعها وحده لا يفسر سبب التوقف. ولم يُظهر سجل الطاقة الاحتياطية أي انقطاع. كان لدى مرمّمة الساعات لينا موعد صيانة، ويقول المرشد سامي إنه رأى الساعة تعمل قبل ذلك. افحص القاعة والورشة وسجلات الممر، ثم ميّز بين ما تراه مباشرة وما تدعمه الأدلة، وهل يكفي ذلك لاتهام أحد بالتخريب.",
+    "objective": "Use independent records to distinguish scheduled maintenance from a mechanical failure or sabotage, while avoiding conclusions that go beyond the evidence.",
+    "objective_ar": "استخدم سجلات مستقلة للتمييز بين الصيانة المجدولة والعطل الميكانيكي أو التخريب، وتجنب الاستنتاجات التي تتجاوز ما تثبته الأدلة.",
+    "cover_image": "cover.png",
+    "reveal_policy": "AFTER_COMPLETION"
+  },
+  "stages": [
+    {
+      "stage_key": "observe",
+      "position": 1,
+      "title": "Inspect the Clock Gallery",
+      "title_ar": "افحص قاعة الساعة",
+      "unlock_rule": {}
+    },
+    {
+      "stage_key": "records",
+      "position": 2,
+      "title": "Check the Service Records",
+      "title_ar": "راجع سجلات الصيانة",
+      "unlock_rule": {
+        "requires_stage": "observe"
+      }
+    },
+    {
+      "stage_key": "conclude",
+      "position": 3,
+      "title": "Explain What Happened",
+      "title_ar": "فسّر ما حدث",
+      "unlock_rule": {
+        "requires_stage": "records"
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "position": 1,
+      "title": "The Clock Gallery",
+      "title_ar": "قاعة الساعة",
+      "image": "scene-1-clock-gallery.png",
+      "introduction": "The astronomical clock is intact. Its hands are motionless just after eight, and the pendulum is still behind the lower glass panel. Look closely at the small brass part beside the pendulum before deciding why it stopped.",
+      "introduction_ar": "الساعة الفلكية سليمة من الخارج. عقاربها ساكنة بعد الثامنة بقليل، والبندول متوقف خلف اللوح الزجاجي السفلي. تفحّص القطعة النحاسية الصغيرة بجوار البندول قبل أن تقرر سبب التوقف.",
+      "evidence": [
+        {
+          "key": "clock_hands",
+          "title": "The paused clock face",
+          "title_ar": "واجهة الساعة المتوقفة",
+          "x": 36,
+          "y": 15,
+          "width": 26,
+          "height": 34,
+          "classification": "FACT",
+          "importance": 3,
+          "description": "The hands are visibly motionless just after eight. The exact scheduled stop time, 8:17 p.m., is stated on the separate maintenance card; the dial illustration should not be used to infer exact minutes.",
+          "description_ar": "العقارب ساكنة بوضوح بعد الثامنة بقليل. أما وقت الإيقاف المجدول بدقة، ٨:١٧ مساءً، فيرد في بطاقة الصيانة المنفصلة؛ ولا ينبغي استنتاج الدقائق الدقيقة من رسم الواجهة.",
+          "admin_explanation_ar": "الملاحظة المباشرة هي سكون العقارب. ويُعرف وقت ٨:١٧ من بطاقة الصيانة لا من محاولة قراءة رسم توضيحي بدقة."
+        },
+        {
+          "key": "service_pin",
+          "title": "The brass service pin",
+          "title_ar": "مسمار وضع الصيانة النحاسي",
+          "x": 45,
+          "y": 47,
+          "width": 13,
+          "height": 21,
+          "classification": "OBSERVATION",
+          "importance": 5,
+          "description": "A small brass service pin is engaged beside the pendulum. In this clock, the pin holds the mechanism safely still during scheduled service.",
+          "description_ar": "يوجد مسمار نحاسي صغير في موضع الصيانة بجوار البندول. في هذه الساعة يثبّت المسمار الآلية بأمان أثناء الصيانة المجدولة.",
+          "admin_explanation_ar": "يدل وضع المسمار على وضع الصيانة، لكن ربطه بموعد مصرح به يحتاج إلى مقارنته بأمر الصيانة وسجل الدخول."
+        },
+        {
+          "key": "intact_mechanism",
+          "title": "No visible damage",
+          "title_ar": "لا تلف ظاهر في الآلية",
+          "x": 40,
+          "y": 46,
+          "width": 20,
+          "height": 34,
+          "classification": "FACT",
+          "importance": 3,
+          "description": "The glass and visible gear housing are unbroken, with no bent parts or scattered pieces in the gallery.",
+          "description_ar": "الزجاج وغطاء التروس الظاهر غير مكسورين، ولا توجد أجزاء منحنية أو متناثرة في القاعة.",
+          "admin_explanation_ar": "يضعف ذلك فرضية الكسر الواضح، لكنه لا يبرهن بمفرده أن عطلًا داخليًا مستحيل."
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "title": "The Restoration Workshop",
+      "title_ar": "ورشة الترميم",
+      "image": "scene-2-workshop.png",
+      "introduction": "The orderly workshop contains a signed service card, the correct brass tool, and an oily cleaning cloth. Separate routine traces from evidence of wrongdoing.",
+      "introduction_ar": "تضم الورشة المرتبة بطاقة صيانة موقعة وأداة نحاسية مناسبة وقطعة قماش عليها أثر زيت. ميّز بين آثار العمل المعتادة والدليل على ارتكاب مخالفة.",
+      "evidence": [
+        {
+          "key": "service_order",
+          "title": "The approved maintenance card",
+          "title_ar": "بطاقة الصيانة المعتمدة",
+          "x": 8,
+          "y": 25,
+          "width": 23,
+          "height": 42,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "The dated work card schedules a safe service stop at 8:17 p.m. and bears clock conservator Lina's initials. The card was approved before the evening visit.",
+          "description_ar": "تحدد بطاقة العمل المؤرخة إيقافًا آمنًا للصيانة عند ٨:١٧ مساءً، وتحمل أحرف اسم مرمّمة الساعات لينا. اعتُمدت البطاقة قبل زيارة المساء.",
+          "admin_explanation_ar": "تدعم أن الإيقاف كان مخططًا ومصرحًا به. لا تُقرأ كتوقيع اعتراف بارتكاب تخريب."
+        },
+        {
+          "key": "clock_service_key",
+          "title": "The proper service key",
+          "title_ar": "مفتاح الصيانة المناسب",
+          "x": 25,
+          "y": 63,
+          "width": 26,
+          "height": 28,
+          "classification": "OBSERVATION",
+          "importance": 4,
+          "description": "A clean precision key and the small brass service pin lie beside an open, undamaged gear case. They are the normal tools listed on the service card.",
+          "description_ar": "يوجد مفتاح دقيق نظيف ومسمار الصيانة النحاسي بجوار غطاء تروس مفتوح بلا تلف. وهما الأداتان المعتادتان المذكورتان في بطاقة الصيانة.",
+          "admin_explanation_ar": "تتوافق الأدوات مع الإجراء المكتوب، ولا تظهر عليها قرينة على كسر أو اقتحام."
+        },
+        {
+          "key": "oily_gloves",
+          "title": "Oil on the work cloth and gloves",
+          "title_ar": "زيت على القماش والقفازات",
+          "x": 71,
+          "y": 50,
+          "width": 25,
+          "height": 44,
+          "classification": "OBSERVATION",
+          "importance": 2,
+          "description": "A faint clock-oil mark is visible on the cloth and ordinary conservator gloves. Oil is used for routine clock servicing and is not unique to any person.",
+          "description_ar": "تظهر بقعة خفيفة من زيت الساعات على القماش والقفازات العادية المستخدمة في الترميم. يُستخدم الزيت في الصيانة المعتادة ولا يخص شخصًا بعينه.",
+          "admin_explanation_ar": "قرينة سياقية ضعيفة؛ تتفق مع الصيانة ولا تكفي لاتهام أي مشتبه به."
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "title": "The Service Corridor",
+      "title_ar": "ممر الخدمة",
+      "image": "scene-3-corridor.png",
+      "introduction": "The corridor has a signed access ledger, a steady backup-power monitor, and a digital clock reading 8:31. A calibration entry in the open ledger says the corridor clock runs fourteen minutes fast. Compare these records before building the timeline.",
+      "introduction_ar": "في الممر سجل دخول مفتوح وشاشة طاقة احتياطية مستقرة وساعة رقمية تشير إلى ٨:٣١. يذكر سجل المعايرة في الدفتر المفتوح أن ساعة الممر تتقدم أربع عشرة دقيقة. قارن السجلات قبل بناء التسلسل الزمني.",
+      "evidence": [
+        {
+          "key": "access_log",
+          "title": "Lina's signed access record",
+          "title_ar": "سجل دخول لينا الموقّع",
+          "x": 0,
+          "y": 62,
+          "width": 36,
+          "height": 36,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "The access ledger records Lina entering the gallery corridor at 8:05 p.m. and leaving at 8:26 p.m. A calibration entry in the same ledger says the nearby corridor clock runs fourteen minutes fast.",
+          "description_ar": "يسجل دفتر الدخول دخول لينا إلى ممر القاعة عند ٨:٠٥ مساءً وخروجها عند ٨:٢٦. ويذكر سجل معايرة في الدفتر نفسه أن ساعة الممر القريبة تتقدم أربع عشرة دقيقة.",
+          "admin_explanation_ar": "يجمع بين وجود لينا في المكان والموعد المكتوب، لكنه لا يثبت مخالفة لأن بطاقة العمل معتمدة."
+        },
+        {
+          "key": "power_monitor",
+          "title": "No recorded power interruption",
+          "title_ar": "لا انقطاع مسجل للطاقة",
+          "x": 68,
+          "y": 34,
+          "width": 17,
+          "height": 29,
+          "classification": "FACT",
+          "importance": 4,
+          "description": "The backup monitor shows continuous power through the evening interval. The astronomical clock is mechanically driven, but the record also contradicts the reported building-wide flicker.",
+          "description_ar": "تُظهر شاشة الطاقة الاحتياطية استمرار التغذية خلال فترة المساء. تعمل الساعة الفلكية بآلية ميكانيكية، كما يناقض السجل رواية انطفاء كهرباء المبنى كلها.",
+          "admin_explanation_ar": "يضعف فرضية أن انقطاع الكهرباء أوقف الساعة، ويناقض ادعاء انطفاء الإنارة الشامل، لكنه لا يحدد وحده من أوقف الآلية."
+        },
+        {
+          "key": "fast_corridor_clock",
+          "title": "The corridor clock reads 8:31",
+          "title_ar": "ساعة الممر تشير إلى ٨:٣١",
+          "x": 47,
+          "y": 7,
+          "width": 17,
+          "height": 19,
+          "classification": "FACT",
+          "importance": 3,
+          "description": "The digital wall clock visibly displays 8:31. Compare it with the calibration entry in the access ledger, which says the corridor clock runs fourteen minutes fast; its corrected time is about 8:17.",
+          "description_ar": "تعرض الساعة الرقمية على الحائط ٨:٣١. قارنها بسجل المعايرة في دفتر الدخول الذي يذكر أنها تتقدم أربع عشرة دقيقة؛ فيكون وقتها المصحح نحو ٨:١٧.",
+          "admin_explanation_ar": "يشرح طرح ١٤ دقيقة من قراءة ساعة الممر وصولها إلى نحو ٨:١٧، وهو وقت بطاقة الصيانة. لا يثبت ذلك وحده من أوقف الساعة."
+        }
+      ]
+    }
+  ],
+  "suspects": [
+    {
+      "key": "lina",
+      "name": "Lina Haddad",
+      "name_ar": "لينا حداد",
+      "relationship": "Clock conservator",
+      "relationship_ar": "مرمّمة الساعات",
+      "description": "Maintains the museum's mechanical clocks and had the correct service key.",
+      "description_ar": "تتولى صيانة ساعات المتحف الميكانيكية، ولديها مفتاح الصيانة المناسب.",
+      "background_ar": "أُدرجت لها زيارة صيانة أسبوعية معتمدة قبل موعد الزيارة المدرسية.",
+      "alibi_ar": "قالت إنها أوقفت الآلية عند ٨:١٧ وفق بطاقة العمل ثم غادرت بعد إتمام الفحص.",
+      "timeline": {
+        "18:00": "Approved service card issued",
+        "20:05": "Gallery corridor entry recorded",
+        "20:17": "Scheduled safe service stop",
+        "20:26": "Exit recorded"
+      }
+    },
+    {
+      "key": "omar",
+      "name": "Omar Nasser",
+      "name_ar": "عمر ناصر",
+      "relationship": "Night caretaker",
+      "relationship_ar": "حارس المساء",
+      "description": "Checks the galleries and reports building issues during the evening shift.",
+      "description_ar": "يتفقد القاعات ويبلغ عن أعطال المبنى خلال نوبة المساء.",
+      "background_ar": "أبلغ عن توقف الساعة وقال إنه لاحظ وميضًا في الإنارة قرب وقت البلاغ.",
+      "alibi_ar": "قال إنه رأى ساعة الممر عند ٨:٣١ وظن أن توقف الساعة وقع في ذلك الوقت.",
+      "timeline": {
+        "20:31": "Corridor clock reading noted",
+        "20:34": "Report filed using the fast corridor clock"
+      }
+    },
+    {
+      "key": "sami",
+      "name": "Sami Farouk",
+      "name_ar": "سامي فاروق",
+      "relationship": "Museum guide",
+      "relationship_ar": "مرشد المتحف",
+      "description": "Led the last school-group walkthrough and left before the service window.",
+      "description_ar": "قاد آخر جولة للطلاب وغادر قبل فترة الصيانة.",
+      "background_ar": "كان آخر من تحدث عن رؤيته للساعة تعمل، لكنه غادر قبل الموعد المحدد لإيقافها.",
+      "alibi_ar": "قال إنه رأى البندول يتحرك عند مروره بالقاعة قبل الثامنة والربع.",
+      "timeline": {
+        "20:12": "Last gallery walkthrough",
+        "20:15": "Exit recorded"
+      }
+    }
+  ],
+  "statements": [
+    {
+      "suspect": "lina",
+      "statement": "I stopped the clock at 8:17 as the approved service card instructed, then checked that the mechanism was safely held.",
+      "statement_ar": "أوقفت الساعة عند ٨:١٧ كما طلبت بطاقة الصيانة المعتمدة، ثم تحققت من تثبيت الآلية بأمان.",
+      "truth_status": "TRUE",
+      "conflicting_evidence": [
+        "service_order",
+        "service_pin",
+        "access_log"
+      ],
+      "admin_explanation_ar": "تتفق أقوال لينا مع بطاقة العمل وسجل وجودها ووضع الصيانة. الأدلة تدعم عملًا مجدولًا لا تخريبًا."
+    },
+    {
+      "suspect": "omar",
+      "statement": "The whole corridor lost power, and the clock stopped at 8:31.",
+      "statement_ar": "انقطعت الكهرباء عن الممر كله، وتوقفت الساعة عند ٨:٣١.",
+      "truth_status": "PARTIALLY_FALSE",
+      "conflicting_evidence": [
+        "power_monitor",
+        "fast_corridor_clock",
+        "clock_hands"
+      ],
+      "admin_explanation_ar": "لا يسجل جهاز الطاقة انقطاعًا، وساعة الممر تتقدم ١٤ دقيقة؛ كما أن موضع عقارب الساعة الفلكية لا يثبت وحده وقت توقف الآلية."
+    },
+    {
+      "suspect": "sami",
+      "statement": "I saw the pendulum moving shortly before 8:15, then left the museum.",
+      "statement_ar": "رأيت البندول يتحرك قبل ٨:١٥ بقليل، ثم غادرت المتحف.",
+      "truth_status": "TRUE",
+      "conflicting_evidence": [
+        "access_log",
+        "service_order"
+      ],
+      "admin_explanation_ar": "يتوافق قوله مع سجل مغادرته قبل نافذة الصيانة، ولا يثبت أنه لمس الساعة أو عرف توقيت إيقافها."
+    }
+  ],
+  "stages_questions": [
+    {
+      "stage": "observe",
+      "position": 1,
+      "type": "MULTIPLE_CHOICE",
+      "prompt": "Which details can you directly observe in the gallery image?",
+      "prompt_ar": "ما التفاصيل التي يمكنك ملاحظتها مباشرة في صورة القاعة؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The clock hands are still and the pendulum is motionless",
+          "text_ar": "عقارب الساعة ساكنة والبندول لا يتحرك"
+        },
+        {
+          "id": "b",
+          "text": "Lina sabotaged the clock",
+          "text_ar": "خرّبت لينا الساعة"
+        },
+        {
+          "id": "c",
+          "text": "The clock stopped because the building lost power",
+          "text_ar": "توقفت الساعة بسبب انقطاع كهرباء المبنى"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "clock_hands",
+        "service_pin"
+      ],
+      "points": 8,
+      "penalty": -2
+    },
+    {
+      "stage": "observe",
+      "position": 2,
+      "type": "TRUE_FALSE",
+      "prompt": "The fact that the clock hands are stopped proves that someone sabotaged the clock.",
+      "prompt_ar": "يثبت توقف عقارب الساعة أن شخصًا ما خرّبها.",
+      "options": [],
+      "answer_key": {
+        "value": "false"
+      },
+      "associated_evidence": [
+        "clock_hands",
+        "service_pin"
+      ],
+      "points": 8,
+      "penalty": -2
+    },
+    {
+      "stage": "observe",
+      "position": 3,
+      "type": "FIND_EVIDENCE",
+      "prompt": "Select the clue that shows the clock was placed in its safe service mode.",
+      "prompt_ar": "حدّد الدليل الذي يوضح أن الساعة وُضعت في وضع الصيانة الآمن.",
+      "options": [],
+      "answer_key": {
+        "evidence_key": "service_pin"
+      },
+      "associated_evidence": [
+        "service_pin"
+      ],
+      "points": 10,
+      "penalty": -3
+    },
+    {
+      "stage": "records",
+      "position": 1,
+      "type": "MULTIPLE_CHOICE",
+      "prompt": "Which record most directly shows that stopping the clock at 8:17 was planned and approved?",
+      "prompt_ar": "أي سجل يوضح مباشرة أن إيقاف الساعة عند ٨:١٧ كان مخططًا ومعتمدًا؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The signed maintenance card",
+          "text_ar": "بطاقة الصيانة الموقعة"
+        },
+        {
+          "id": "b",
+          "text": "The oily gloves",
+          "text_ar": "القفازات التي عليها زيت"
+        },
+        {
+          "id": "c",
+          "text": "The corridor clock alone",
+          "text_ar": "ساعة الممر وحدها"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "service_order",
+        "access_log"
+      ],
+      "points": 12,
+      "penalty": -3
+    },
+    {
+      "stage": "records",
+      "position": 2,
+      "type": "MULTIPLE_CHOICE",
+      "prompt": "What best challenges Omar's claim of a building-wide power interruption?",
+      "prompt_ar": "ما الدليل الأقوى على عدم صحة قول عمر بانقطاع كهرباء المبنى كله؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The backup monitor records continuous power",
+          "text_ar": "سجل شاشة الطاقة استمرار التغذية"
+        },
+        {
+          "id": "b",
+          "text": "The clock face is brass",
+          "text_ar": "واجهة الساعة نحاسية"
+        },
+        {
+          "id": "c",
+          "text": "Sami left before 8:15",
+          "text_ar": "غادر سامي قبل ٨:١٥"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "power_monitor"
+      ],
+      "points": 12,
+      "penalty": -3
+    },
+    {
+      "stage": "records",
+      "position": 3,
+      "type": "INTERPRET_CLUE",
+      "prompt": "The corridor clock reads 8:31 and runs fourteen minutes fast. What is its approximate corrected time?",
+      "prompt_ar": "تشير ساعة الممر إلى ٨:٣١ وتتقدم ١٤ دقيقة. فما وقتها المصحح تقريبًا؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "About 8:17",
+          "text_ar": "نحو ٨:١٧"
+        },
+        {
+          "id": "b",
+          "text": "About 8:45",
+          "text_ar": "نحو ٨:٤٥"
+        },
+        {
+          "id": "c",
+          "text": "The display cannot be corrected",
+          "text_ar": "لا يمكن تصحيح القراءة"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "fast_corridor_clock",
+        "clock_hands"
+      ],
+      "points": 10,
+      "penalty": -2
+    },
+    {
+      "stage": "conclude",
+      "position": 1,
+      "type": "EVENT_ORDERING",
+      "prompt": "Put the supported events in chronological order.",
+      "prompt_ar": "رتّب الأحداث التي تدعمها السجلات زمنيًا.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The service card is approved",
+          "text_ar": "اعتماد بطاقة الصيانة"
+        },
+        {
+          "id": "b",
+          "text": "Lina enters the gallery corridor",
+          "text_ar": "دخول لينا ممر القاعة"
+        },
+        {
+          "id": "c",
+          "text": "The clock is safely stopped for service at 8:17",
+          "text_ar": "إيقاف الساعة بأمان للصيانة عند ٨:١٧"
+        },
+        {
+          "id": "d",
+          "text": "Lina exits the corridor",
+          "text_ar": "خروج لينا من الممر"
+        }
+      ],
+      "answer_key": {
+        "order": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      },
+      "associated_evidence": [
+        "service_order",
+        "access_log",
+        "service_pin"
+      ],
+      "points": 15,
+      "penalty": -4
+    },
+    {
+      "stage": "conclude",
+      "position": 2,
+      "type": "ELIMINATE_UNSUPPORTED",
+      "prompt": "Which explanation is not supported by the collected evidence?",
+      "prompt_ar": "أي تفسير لا تدعمه الأدلة التي جُمعت؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The clock was stopped in the approved maintenance window",
+          "text_ar": "أُوقفت الساعة ضمن موعد الصيانة المعتمد"
+        },
+        {
+          "id": "b",
+          "text": "The evidence proves Lina intended to damage the clock",
+          "text_ar": "تثبت الأدلة أن لينا قصدت إتلاف الساعة"
+        },
+        {
+          "id": "c",
+          "text": "The corridor clock's fast reading explains the apparent time difference",
+          "text_ar": "يفسر تقدم ساعة الممر اختلاف التوقيت الظاهري"
+        }
+      ],
+      "answer_key": {
+        "option_id": "b"
+      },
+      "associated_evidence": [
+        "service_order",
+        "service_pin",
+        "fast_corridor_clock"
+      ],
+      "points": 15,
+      "penalty": -4
+    },
+    {
+      "stage": "conclude",
+      "position": 3,
+      "type": "FINAL_CONCLUSION",
+      "prompt": "What is the best evidence-based conclusion?",
+      "prompt_ar": "ما أفضل استنتاج يستند إلى الأدلة؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lina performed the approved safe service stop; the evidence does not support sabotage",
+          "text_ar": "نفذت لينا إيقاف الصيانة الآمن المعتمد؛ ولا تدعم الأدلة فرضية التخريب"
+        },
+        {
+          "id": "b",
+          "text": "Omar sabotaged the clock because he reported it",
+          "text_ar": "خرّب عمر الساعة لأنه أبلغ عن توقفها"
+        },
+        {
+          "id": "c",
+          "text": "Sami must have stopped it because he saw it earlier",
+          "text_ar": "لا بد أن سامي أوقفها لأنه رآها تعمل قبل ذلك"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "service_order",
+        "service_pin",
+        "access_log",
+        "power_monitor",
+        "fast_corridor_clock"
+      ],
+      "points": 20,
+      "penalty": -5
+    }
+  ],
+  "relations": [
+    {
+      "from": "service_order",
+      "to": "service_pin",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The approved 8:17 service instruction matches the engaged service-mode pin.",
+      "public_explanation_ar": "يتوافق موعد الصيانة المعتمد عند ٨:١٧ مع مسمار وضع الصيانة المثبت."
+    },
+    {
+      "from": "service_order",
+      "to": "access_log",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The scheduled service window overlaps Lina's signed access window.",
+      "public_explanation_ar": "يتداخل موعد الصيانة المجدول مع فترة دخول لينا الموقعة."
+    },
+    {
+      "from": "fast_corridor_clock",
+      "to": "clock_hands",
+      "relation_type": "CHRONOLOGY",
+      "public_explanation": "Correcting the corridor clock by fourteen minutes gives about 8:17, matching the service-card time; the illustration itself is not the precise time source.",
+      "public_explanation_ar": "يؤدي تصحيح ساعة الممر بطرح ١٤ دقيقة إلى نحو ٨:١٧، وهو ما يطابق بطاقة الصيانة؛ أما الرسم نفسه فليس مصدرًا دقيقًا للوقت."
+    },
+    {
+      "from": "oily_gloves",
+      "to": "service_order",
+      "relation_type": "REQUIRES_CONTEXT",
+      "public_explanation": "Clock oil is consistent with ordinary maintenance and is not proof of sabotage or identity.",
+      "public_explanation_ar": "يتفق زيت الساعات مع الصيانة العادية ولا يثبت التخريب أو هوية الفاعل."
+    },
+    {
+      "from": "intact_mechanism",
+      "to": "service_pin",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The undamaged visible mechanism and the safe service pin fit a routine service stop better than forced damage.",
+      "public_explanation_ar": "تنسجم الآلية الظاهرة السليمة ومسمار الصيانة الآمن مع إيقاف روتيني أكثر من الإتلاف بالقوة."
+    }
+  ],
+  "hints": [
+    {
+      "stage": "observe",
+      "position": 1,
+      "penalty": -1,
+      "hint_text": "Separate what the clock shows from what you think caused it to stop.",
+      "hint_text_ar": "افصل بين ما تعرضه الساعة وبين تفسيرك لسبب توقفها."
+    },
+    {
+      "stage": "records",
+      "position": 2,
+      "penalty": -2,
+      "hint_text": "Compare the approved service card with the access log; then check the power record independently.",
+      "hint_text_ar": "قارن بطاقة الصيانة المعتمدة بسجل الدخول، ثم افحص سجل الطاقة على نحو مستقل."
+    },
+    {
+      "stage": "conclude",
+      "position": 3,
+      "penalty": -3,
+      "hint_text": "The strongest conclusion explains the service pin, the signed schedule, and the fast corridor clock without assuming criminal intent.",
+      "hint_text_ar": "أفضل استنتاج يفسر مسمار الصيانة والموعد الموقع وساعة الممر المتقدمة من دون افتراض نية إجرامية."
+    }
+  ],
+  "timeline_events": [
+    {
+      "event_key": "service_approved",
+      "position": 1,
+      "label": "Weekly service approved",
+      "label_ar": "اعتماد الصيانة الأسبوعية",
+      "window_key": "18:00"
+    },
+    {
+      "event_key": "lina_enters",
+      "position": 2,
+      "label": "Lina enters the gallery corridor",
+      "label_ar": "دخول لينا ممر القاعة",
+      "window_key": "20:05"
+    },
+    {
+      "event_key": "sami_leaves",
+      "position": 3,
+      "label": "Sami's exit recorded",
+      "label_ar": "تسجيل خروج سامي",
+      "window_key": "20:15"
+    },
+    {
+      "event_key": "clock_service_stop",
+      "position": 4,
+      "label": "Scheduled safe service stop",
+      "label_ar": "موعد إيقاف الصيانة الآمن",
+      "window_key": "20:17"
+    },
+    {
+      "event_key": "lina_leaves",
+      "position": 5,
+      "label": "Lina exits the corridor",
+      "label_ar": "خروج لينا من الممر",
+      "window_key": "20:26"
+    },
+    {
+      "event_key": "omar_corridor_reading",
+      "position": 6,
+      "label": "Omar notes 8:31 on a clock that is fourteen minutes fast",
+      "label_ar": "يسجل عمر ٨:٣١ على ساعة تتقدم ١٤ دقيقة",
+      "window_key": "20:31"
+    }
+  ],
+  "scoring": {
+    "currency": "points",
+    "rules": [
+      {
+        "event_code": "OBSERVATION_CORRECT",
+        "points_delta": 5
+      },
+      {
+        "event_code": "EVIDENCE_DISCOVERED",
+        "points_delta": 8
+      },
+      {
+        "event_code": "ANSWER_CORRECT",
+        "points_delta": 10
+      },
+      {
+        "event_code": "ANSWER_WRONG",
+        "points_delta": -2
+      },
+      {
+        "event_code": "HINT_USED",
+        "points_delta": -1
+      },
+      {
+        "event_code": "FINAL_CONCLUSION",
+        "points_delta": 20
+      }
+    ],
+    "attempt_limit": 2,
+    "time_bonus": 0,
+    "note_ar": "كل قيم التقييم خاصة بهذه القضية فقط. تحل قيمة النقاط أو الخصم المحددة للسؤال محل قيمة الحدث المقابلة ولا تُجمع معها؛ وكذلك يحل خصم التلميح المحدد محل قيمة HINT_USED. هذه مسودة تتطلب مراجعة قبل النشر، ولا ترث نقاط Story Puzzle.",
+    "application_note_en": "All scoring values belong to this case only. A question-specific points or penalty value overrides the corresponding case event value; do not add both. A hint-specific penalty overrides the HINT_USED event value."
+  },
+  "solution": {
+    "public_reveal": "The best-supported explanation is that clock conservator Lina stopped the astronomical clock at 8:17 as part of an approved, safe maintenance procedure. The signed service card schedules that exact stop, the service pin is engaged, and Lina's access record covers the maintenance window. The corridor clock's 8:31 reading is corrected to about 8:17 because that clock runs fourteen minutes fast. The backup monitor records no power interruption. The evidence supports routine maintenance, not sabotage; there is no basis to accuse Lina of wrongdoing.",
+    "public_reveal_ar": "أفضل تفسير تدعمه الأدلة هو أن مرمّمة الساعات لينا أوقفت الساعة الفلكية عند ٨:١٧ ضمن إجراء صيانة آمن ومعتمد. تحدد بطاقة الصيانة الموقعة هذا الموعد، ومسمار الصيانة مثبت، ويغطي سجل دخول لينا فترة العمل. تُصحح قراءة ساعة الممر ٨:٣١ إلى نحو ٨:١٧ لأنها تتقدم أربع عشرة دقيقة. كما لا يسجل جهاز الطاقة أي انقطاع. تدعم الأدلة صيانة روتينية لا تخريبًا، ولا يوجد أساس لاتهام لينا بارتكاب مخالفة.",
+    "solution_key": {
+      "responsible_person": "lina",
+      "action": "used the engaged service pin to safely stop the clock for the approved weekly maintenance at 20:17",
+      "motive": "protect the mechanism during scheduled servicing; no criminal motive",
+      "final_question_position": 3
+    },
+    "alternative_hypotheses": [
+      {
+        "en": "A power outage stopped the clock.",
+        "ar": "أوقف انقطاع الكهرباء الساعة.",
+        "why_wrong_en": "The backup monitor records continuous power, and the clock is mechanically driven. The outage explanation is not supported by the records.",
+        "why_wrong_ar": "يسجل جهاز الطاقة استمرار التغذية، كما أن الساعة تعمل بآلية ميكانيكية. لا تدعم السجلات تفسير انقطاع الكهرباء."
+      },
+      {
+        "en": "Lina sabotaged the clock because she had access and a service key.",
+        "ar": "خرّبت لينا الساعة لأنها تملك تصريح دخول ومفتاح صيانة.",
+        "why_wrong_en": "Access alone is not proof. The approved service card, safe service pin, and matching time support a scheduled procedure; there is no damage or evidence of harmful intent.",
+        "why_wrong_ar": "الدخول وحده ليس دليلًا. تدعم بطاقة الصيانة المعتمدة ومسمار الأمان والموعد المتطابق إجراءً مجدولًا، ولا يوجد تلف أو دليل على نية الإضرار."
+      },
+      {
+        "en": "Omar stopped the clock at 8:31.",
+        "ar": "أوقف عمر الساعة عند ٨:٣١.",
+        "why_wrong_en": "The corridor clock runs fourteen minutes fast, and its displayed reading does not identify who operated the clock mechanism.",
+        "why_wrong_ar": "ساعة الممر تتقدم أربع عشرة دقيقة، وقراءتها لا تحدد من تعامل مع آلية الساعة."
+      }
+    ],
+    "educational_explanation": "Good investigation separates observation from interpretation. The face shows that the hands are stopped; the engaged pin shows service mode; the approved card and signed access log connect that mode to scheduled work. Independent records challenge the power-outage claim and explain the corridor-clock discrepancy. The evidence supports an authorized maintenance action, not sabotage. Presence and access are not proof of guilt.",
+    "educational_explanation_ar": "يفصل التحقيق الجيد بين الملاحظة والتفسير. تُظهر الواجهة أن العقارب ساكنة؛ ويُظهر المسمار وضع الصيانة؛ وتربط بطاقة العمل المعتمدة وسجل الدخول الموقع ذلك الموضع بصيانة مجدولة. تناقض السجلات المستقلة ادعاء انقطاع الطاقة وتفسر فرق التوقيت في ساعة الممر. تدعم الأدلة صيانة مصرحًا بها لا تخريبًا. الوجود وامتلاك صلاحية الدخول لا يثبتان الذنب.",
+    "reveal_policy": "AFTER_COMPLETION"
+  },
+  "asset_files": [
+    "cover.png",
+    "scene-1-clock-gallery.png",
+    "scene-2-workshop.png",
+    "scene-3-corridor.png"
+  ],
+  "implementation_note": "Content-only bilingual draft package. It has not been uploaded to Supabase, connected to a room, or published. The numerical scoring is specific to this case and still requires authorized review before publication. Hotspot coordinates are initial estimates and should be checked against the final generated images before importing."
+}

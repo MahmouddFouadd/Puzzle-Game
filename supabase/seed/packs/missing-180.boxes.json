@@ -1,0 +1,56 @@
+{
+ "ticket_sales": {
+  "x": 4,
+  "y": 39,
+  "width": 27,
+  "height": 49
+ },
+ "craft_kit_sales": {
+  "x": 32,
+  "y": 45,
+  "width": 35,
+  "height": 24
+ },
+ "cash_donations": {
+  "x": 70,
+  "y": 38,
+  "width": 18,
+  "height": 58
+ },
+ "event_summary": {
+  "x": 5,
+  "y": 27,
+  "width": 31,
+  "height": 44
+ },
+ "pending_pledges": {
+  "x": 37,
+  "y": 49,
+  "width": 29,
+  "height": 21
+ },
+ "summary_calculation": {
+  "x": 55,
+  "y": 70,
+  "width": 22,
+  "height": 19
+ },
+ "witnessed_cash_count": {
+  "x": 8,
+  "y": 30,
+  "width": 26,
+  "height": 41
+ },
+ "bank_deposit_receipt": {
+  "x": 38,
+  "y": 29,
+  "width": 27,
+  "height": 42
+ },
+ "matching_seal": {
+  "x": 70,
+  "y": 41,
+  "width": 25,
+  "height": 38
+ }
+}

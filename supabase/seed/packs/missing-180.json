@@ -1,0 +1,770 @@
+{
+  "case": {
+    "slug": "the-missing-180",
+    "title": "The Missing 180",
+    "title_ar": "لغز الـ١٨٠ المفقودة",
+    "case_type": "FINANCIAL_MYSTERY",
+    "difficulty": 2,
+    "age_min": 10,
+    "age_max": 16,
+    "estimated_minutes": 20,
+    "category": "Financial reasoning",
+    "category_ar": "الاستدلال المالي",
+    "status": "DRAFT",
+    "description": "A community art fair report lists 820 credits, but the sealed bank deposit is only 640. Three volunteers had access to the event records. Audit the receipts, pledges, and deposit before deciding whether any money is actually missing.",
+    "description_ar": "يسجل تقرير معرض فني مجتمعي ٨٢٠ رصيدًا، بينما لا يتجاوز الإيداع البنكي المختوم ٦٤٠. كان ثلاثة متطوعين قادرين على الوصول إلى سجلات الفعالية. راجع الإيصالات والتعهدات والإيداع قبل أن تقرر إن كان هناك مال مفقود فعلًا.",
+    "briefing": "At closing time, the event summary showed 820 credits collected. The deposit bag and bank receipt both show 640. The difference is exactly 180. Treasurer Mariam says the report included every line on the planning sheet; volunteer Nabil remembers three large donations; counter Rasha witnessed the deposit count. Follow the money from sales to the bank. Distinguish cash received from money promised, and do not infer theft from a mismatch alone.",
+    "briefing_ar": "عند إغلاق معرض الفنون، أظهر ملخص الفعالية تحصيل ٨٢٠ رصيدًا، بينما أظهر كل من كيس الإيداع وإيصال البنك ٦٤٠. والفرق ١٨٠ بالضبط. تقول أمينة الصندوق مريم إن التقرير ضم كل البنود في ورقة التخطيط، ويتذكر المتطوع نبيل ثلاثة تبرعات كبيرة، وشهدت المحاسِبة رشا عدّ الإيداع. تتبّع المال من المبيعات حتى البنك، وميّز بين النقد المستلَم والمال الموعود، ولا تستنتج السرقة من اختلاف الأرقام وحده.",
+    "objective": "Reconcile a simple event account, distinguish received money from unpaid pledges, and state what the records do and do not justify concluding.",
+    "objective_ar": "طابق حسابات فعالية بسيطة، وميّز بين المال المستلَم والتعهدات غير المدفوعة، وحدد ما تبرر السجلات استنتاجه وما لا تبرره.",
+    "cover_image": "cover.png",
+    "reveal_policy": "AFTER_COMPLETION"
+  },
+  "stages": [
+    {
+      "stage_key": "receipts",
+      "position": 1,
+      "title": "Count What Came In",
+      "title_ar": "احسب ما تم تحصيله",
+      "unlock_rule": {}
+    },
+    {
+      "stage_key": "records",
+      "position": 2,
+      "title": "Audit the Paper Trail",
+      "title_ar": "راجع أثر السجلات",
+      "unlock_rule": {
+        "requires_stage": "receipts"
+      }
+    },
+    {
+      "stage_key": "conclude",
+      "position": 3,
+      "title": "Reconcile the Difference",
+      "title_ar": "فسّر فرق الحساب",
+      "unlock_rule": {
+        "requires_stage": "records"
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "position": 1,
+      "title": "The Art Fair Booth",
+      "title_ar": "كشك المعرض الفني",
+      "image": "scene-1-art-fair.png",
+      "introduction": "The fair has closed, but the ticket roll, craft-kit display, and donation jar are still at the booth. Read the individual totals before accepting the event summary.",
+      "introduction_ar": "انتهى المعرض، لكن دفتر التذاكر وركن الحقائب الفنية ومرطبان التبرعات ما زالت على الكشك. افحص المجاميع المنفصلة قبل اعتماد ملخص الفعالية.",
+      "evidence": [
+        {
+          "key": "ticket_sales",
+          "title": "Twenty ticket stubs",
+          "title_ar": "عشرون قصاصة تذكرة",
+          "x": 4,
+          "y": 39,
+          "width": 27,
+          "height": 49,
+          "classification": "FACT",
+          "importance": 4,
+          "description": "The ticket tally records 20 tickets sold at 10 credits each, for 200 credits received.",
+          "description_ar": "يسجل كشف التذاكر بيع ٢٠ تذكرة بسعر ١٠ أرصدة للتذكرة؛ أي ٢٠٠ رصيد مستلَم.",
+          "admin_explanation_ar": "مبلغ محصل تؤيده قصاصات التذاكر، لا مجرد توقع للمبيعات."
+        },
+        {
+          "key": "craft_kit_sales",
+          "title": "Twelve craft kits sold",
+          "title_ar": "بيع اثنتي عشرة حقيبة فنية",
+          "x": 36,
+          "y": 36,
+          "width": 27,
+          "height": 36,
+          "classification": "FACT",
+          "importance": 4,
+          "description": "The booth sheet records 12 craft kits at 15 credits each, for 180 credits received.",
+          "description_ar": "يسجل كشف الكشك بيع ١٢ حقيبة فنية بسعر ١٥ رصيدًا للحقيبة؛ أي ١٨٠ رصيدًا مستلَمًا.",
+          "admin_explanation_ar": "هذا دخل محصل من البيع، وليس قيمة مخزون أو مبلغًا موعودًا."
+        },
+        {
+          "key": "cash_donations",
+          "title": "The counted donation jar",
+          "title_ar": "مرطبان التبرعات المعدود",
+          "x": 66,
+          "y": 43,
+          "width": 27,
+          "height": 37,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "The two-person count sheet lists 260 credits of donations physically received at the booth. It does not include pledge cards.",
+          "description_ar": "يسجل كشف العدّ المشترك ٢٦٠ رصيدًا من التبرعات التي استُلِمت نقدًا في الكشك. ولا يشمل بطاقات التعهد.",
+          "admin_explanation_ar": "عند جمع ٢٠٠ + ١٨٠ + ٢٦٠ يصبح النقد المحصل ٦٤٠ رصيدًا."
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "title": "The Accounts Desk",
+      "title_ar": "مكتب الحسابات",
+      "image": "scene-2-accounts-desk.png",
+      "introduction": "A summary shows 820 credits, but the desk also holds three unpaid pledge cards and a handwritten calculation. Check what each number represents.",
+      "introduction_ar": "يظهر الملخص ٨٢٠ رصيدًا، لكن المكتب يضم أيضًا ثلاث بطاقات تعهد غير مدفوعة وحسابًا مكتوبًا يدويًا. تحقّق مما يمثله كل رقم.",
+      "evidence": [
+        {
+          "key": "event_summary",
+          "title": "The 820-credit summary",
+          "title_ar": "ملخص الـ٨٢٠ رصيدًا",
+          "x": 8,
+          "y": 24,
+          "width": 26,
+          "height": 43,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "The closing summary labels 820 credits as the event total. Its total combines 640 credits received with 180 credits still expected; the column heading is easy to overlook.",
+          "description_ar": "يصنف ملخص الإغلاق ٨٢٠ رصيدًا على أنها إجمالي الفعالية. لكنه يجمع ٦٤٠ رصيدًا مستلَمًا و١٨٠ رصيدًا ما زالت متوقعة؛ وعنوان العمود سهل التجاوز.",
+          "admin_explanation_ar": "الرقم صحيح بوصفه إجمالي النقد والتعهدات معًا، لكنه ليس إجمالي النقد المحصل."
+        },
+        {
+          "key": "pending_pledges",
+          "title": "Three pledge cards marked pending",
+          "title_ar": "ثلاث بطاقات تعهد معلّقة",
+          "x": 37,
+          "y": 46,
+          "width": 27,
+          "height": 31,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "Three cards promise 60 credits each. Each is marked pending—not paid—so the 180 credits have not yet been received.",
+          "description_ar": "تتعهد ثلاث بطاقات بمبلغ ٦٠ رصيدًا لكل منها. وكل بطاقة موسومة بأنها معلّقة وليست مدفوعة، لذا لم تُستلم الأرصدة الـ١٨٠ بعد.",
+          "admin_explanation_ar": "يتطابق مجموع التعهدات غير المدفوعة مع فرق الـ١٨٠، لكن وجودها لا يثبت أن أحدًا أخذ مالًا."
+        },
+        {
+          "key": "summary_calculation",
+          "title": "The calculation beside the summary",
+          "title_ar": "الحساب المكتوب بجوار الملخص",
+          "x": 44,
+          "y": 72,
+          "width": 29,
+          "height": 25,
+          "classification": "OBSERVATION",
+          "importance": 4,
+          "description": "A working note adds the 640-credit cash subtotal to the 180-credit pending pledges to reach 820. It is a mixed total, not a cash count.",
+          "description_ar": "يجمع حساب العمل ٦٤٠ رصيدًا من النقد مع ١٨٠ رصيدًا من التعهدات المعلّقة ليصل إلى ٨٢٠. إنه إجمالي مختلط وليس عدًّا للنقد.",
+          "admin_explanation_ar": "يشرح مصدر فرق الحساب مباشرة، من دون تحديد خطأ متعمد أو فاعل لسرقة."
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "title": "The Deposit Counter",
+      "title_ar": "منضدة الإيداع",
+      "image": "scene-3-deposit-counter.png",
+      "introduction": "The cash bag was counted, sealed, and deposited. Compare the amount at each handoff and check whether the seal record matches.",
+      "introduction_ar": "عُدّ كيس النقد وخُتم وأُودع. قارن المبلغ عند كل تسليم وتحقق من تطابق سجل الختم.",
+      "evidence": [
+        {
+          "key": "witnessed_cash_count",
+          "title": "Two witnesses count 640 credits",
+          "title_ar": "شاهدا العدّ يثبتان ٦٤٠ رصيدًا",
+          "x": 8,
+          "y": 42,
+          "width": 27,
+          "height": 40,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "Mariam and Rasha signed the closing sheet confirming that the sealed bag contained 640 credits after the booth receipts were reconciled.",
+          "description_ar": "وقّعت مريم ورشا كشف الإغلاق لتأكيد أن الكيس المختوم احتوى ٦٤٠ رصيدًا بعد مطابقة إيصالات الكشك.",
+          "admin_explanation_ar": "يؤيد العدّ المشترك مبلغ النقد الفعلي، لكنه لا يثبت وحده كل ما جرى قبل العد."
+        },
+        {
+          "key": "bank_deposit_receipt",
+          "title": "The bank receipt for 640",
+          "title_ar": "إيصال البنك بمبلغ ٦٤٠",
+          "x": 38,
+          "y": 29,
+          "width": 27,
+          "height": 42,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "The bank deposit receipt records 640 credits—the same amount as the witnessed cash count.",
+          "description_ar": "يسجل إيصال الإيداع البنكي ٦٤٠ رصيدًا، وهو المبلغ نفسه الذي أثبته العدّ المشترك.",
+          "admin_explanation_ar": "لا يظهر اختلاف بين النقد المعدود والمبلغ المودع لدى البنك."
+        },
+        {
+          "key": "matching_seal",
+          "title": "The unbroken matching seal",
+          "title_ar": "الختم المطابق غير المكسور",
+          "x": 68,
+          "y": 41,
+          "width": 25,
+          "height": 38,
+          "classification": "OBSERVATION",
+          "importance": 3,
+          "description": "The bag's seal number matches the handoff log and is recorded as intact at the bank. This supports an accounted-for handoff after the witnessed count.",
+          "description_ar": "يطابق رقم ختم الكيس سجل التسليم، وسُجل الختم سليمًا عند البنك. يدعم ذلك توثيق التسليم بعد العدّ المشترك.",
+          "admin_explanation_ar": "قرينة على سلامة مرحلة النقل بعد العدّ، وليست دليلًا قاطعًا على كل مرحلة سابقة."
+        }
+      ]
+    }
+  ],
+  "suspects": [
+    {
+      "key": "mariam",
+      "name": "Mariam Adel",
+      "name_ar": "مريم عادل",
+      "relationship": "Event treasurer",
+      "relationship_ar": "أمينة صندوق الفعالية",
+      "description": "Prepared the closing summary and co-signed the cash count.",
+      "description_ar": "أعدّت ملخص الإغلاق وشاركت في توقيع عدّ النقد.",
+      "background_ar": "تقول إنها نقلت كل البنود الظاهرة في ورقة التخطيط إلى الملخص.",
+      "alibi_ar": "تؤكد أن عدّ النقد تم بحضور رشا وأنها لم تعتبر التعهدات نقودًا مستلمة عمدًا.",
+      "timeline": {
+        "18:00": "Closing summary prepared",
+        "18:12": "Cash count co-signed"
+      }
+    },
+    {
+      "key": "nabil",
+      "name": "Nabil Samir",
+      "name_ar": "نبيل سمير",
+      "relationship": "Donation-table volunteer",
+      "relationship_ar": "متطوع طاولة التبرعات",
+      "description": "Collected pledge cards and helped at the donation booth.",
+      "description_ar": "جمع بطاقات التعهد وساعد في كشك التبرعات.",
+      "background_ar": "يتذكر وعودًا بثلاثة تبرعات كبيرة، لكنه لا يملك إيصالات تثبت استلامها نقدًا.",
+      "alibi_ar": "قال في البداية إن كل التعهدات سُددت في يوم الفعالية، ثم أوضح أنه كان يقصد أنها وُعدت.",
+      "timeline": {
+        "17:40": "Pledge cards gathered",
+        "18:00": "Booth closes"
+      }
+    },
+    {
+      "key": "rasha",
+      "name": "Rasha Fouad",
+      "name_ar": "رشا فؤاد",
+      "relationship": "Second cash counter",
+      "relationship_ar": "شاهدة العدّ الثانية",
+      "description": "Verified the physical cash count and accompanied the sealed bag to the bank handoff.",
+      "description_ar": "تحققت من عدّ النقد الفعلي ورافقت تسليم الكيس المختوم للبنك.",
+      "background_ar": "وقّعت كشفًا مشتركًا يطابق إيصالات البيع والتبرعات النقدية.",
+      "alibi_ar": "تقول إن الكيس احتوى ٦٤٠ رصيدًا عند الختم والتسليم.",
+      "timeline": {
+        "18:12": "Cash count co-signed",
+        "18:25": "Sealed bag handed over"
+      }
+    }
+  ],
+  "statements": [
+    {
+      "suspect": "mariam",
+      "statement": "The 820 figure included the three pending pledges as well as the cash. I should have labelled it expected total, not cash collected.",
+      "statement_ar": "تضمن رقم ٨٢٠ التعهدات الثلاثة المعلّقة إلى جانب النقد. كان ينبغي أن أسميه الإجمالي المتوقع لا النقد المحصل.",
+      "truth_status": "TRUE",
+      "conflicting_evidence": [
+        "event_summary",
+        "pending_pledges",
+        "summary_calculation"
+      ],
+      "admin_explanation_ar": "تتفق مريم مع الحساب الظاهر. يشير ذلك إلى خطأ في تسمية الإجمالي، ولا يثبت نية احتيال."
+    },
+    {
+      "suspect": "nabil",
+      "statement": "All three large pledges were paid in cash before closing.",
+      "statement_ar": "دُفعت التعهدات الكبيرة الثلاثة نقدًا قبل الإغلاق.",
+      "truth_status": "UNSUPPORTED",
+      "conflicting_evidence": [
+        "pending_pledges",
+        "cash_donations",
+        "witnessed_cash_count"
+      ],
+      "admin_explanation_ar": "تسجل البطاقات التعهدات بأنها معلّقة ولا تظهر إيصالات دفع. قد يكون نبيل خلط بين الوعد والدفع؛ ولا تكفي السجلات الحالية للجزم بأنه كذب عمدًا."
+    },
+    {
+      "suspect": "rasha",
+      "statement": "Mariam and I counted 640 credits, sealed the bag, and the bank recorded the same amount.",
+      "statement_ar": "عددنا أنا ومريم ٦٤٠ رصيدًا، وختمنا الكيس، وسجل البنك المبلغ نفسه.",
+      "truth_status": "TRUE",
+      "conflicting_evidence": [
+        "witnessed_cash_count",
+        "bank_deposit_receipt",
+        "matching_seal"
+      ],
+      "admin_explanation_ar": "تتفق إفادة رشا مع كشف العدّ وإيصال البنك وسجل الختم."
+    }
+  ],
+  "stages_questions": [
+    {
+      "stage": "receipts",
+      "position": 1,
+      "type": "MULTIPLE_CHOICE",
+      "prompt": "What do the ticket records show was actually received?",
+      "prompt_ar": "ماذا تثبت سجلات التذاكر أنه تم تحصيله فعلًا؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "20 tickets × 10 credits = 200 credits",
+          "text_ar": "٢٠ تذكرة × ١٠ أرصدة = ٢٠٠ رصيد"
+        },
+        {
+          "id": "b",
+          "text": "Three pledges = 180 credits received",
+          "text_ar": "ثلاثة تعهدات = ١٨٠ رصيدًا مستلَمًا"
+        },
+        {
+          "id": "c",
+          "text": "820 credits in cash",
+          "text_ar": "٨٢٠ رصيدًا نقدًا"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "ticket_sales"
+      ],
+      "points": 8,
+      "penalty": -2
+    },
+    {
+      "stage": "receipts",
+      "position": 2,
+      "type": "COMBINE_CLUES",
+      "prompt": "Add ticket sales, craft-kit sales, and cash donations. How much cash was collected at the fair?",
+      "prompt_ar": "اجمع مبيعات التذاكر والحقائب الفنية والتبرعات النقدية. كم بلغ النقد المحصل في المعرض؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "640 credits",
+          "text_ar": "٦٤٠ رصيدًا"
+        },
+        {
+          "id": "b",
+          "text": "820 credits",
+          "text_ar": "٨٢٠ رصيدًا"
+        },
+        {
+          "id": "c",
+          "text": "460 credits",
+          "text_ar": "٤٦٠ رصيدًا"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "ticket_sales",
+        "craft_kit_sales",
+        "cash_donations"
+      ],
+      "points": 12,
+      "penalty": -3
+    },
+    {
+      "stage": "receipts",
+      "position": 3,
+      "type": "TRUE_FALSE",
+      "prompt": "A signed pledge card is the same as cash already received.",
+      "prompt_ar": "بطاقة التعهد الموقعة تعادل نقدًا تم استلامه بالفعل.",
+      "options": [],
+      "answer_key": {
+        "value": "false"
+      },
+      "associated_evidence": [
+        "pending_pledges"
+      ],
+      "points": 8,
+      "penalty": -2
+    },
+    {
+      "stage": "records",
+      "position": 1,
+      "type": "INTERPRET_CLUE",
+      "prompt": "Why does the event summary show 820 when the cash receipts total 640?",
+      "prompt_ar": "لماذا يظهر ملخص الفعالية ٨٢٠ بينما يبلغ مجموع الإيصالات النقدية ٦٤٠؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "It adds 180 credits of unpaid pledges to the cash total",
+          "text_ar": "أضاف ١٨٠ رصيدًا من التعهدات غير المدفوعة إلى مجموع النقد"
+        },
+        {
+          "id": "b",
+          "text": "The bank created 180 extra credits",
+          "text_ar": "أنشأ البنك ١٨٠ رصيدًا إضافيًا"
+        },
+        {
+          "id": "c",
+          "text": "The ticket total was counted twice",
+          "text_ar": "حُسبت التذاكر مرتين"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "event_summary",
+        "pending_pledges",
+        "summary_calculation"
+      ],
+      "points": 12,
+      "penalty": -3
+    },
+    {
+      "stage": "records",
+      "position": 2,
+      "type": "MATCH_EXPLANATION",
+      "prompt": "Match the 180-credit difference with the record that explains it.",
+      "prompt_ar": "اربط فرق الـ١٨٠ رصيدًا بالسجل الذي يفسره.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Three unpaid promises of 60 credits each",
+          "text_ar": "ثلاثة وعود غير مدفوعة، قيمة كل منها ٦٠ رصيدًا"
+        },
+        {
+          "id": "b",
+          "text": "A bank fee of 180 credits",
+          "text_ar": "رسوم بنك بقيمة ١٨٠ رصيدًا"
+        },
+        {
+          "id": "c",
+          "text": "A missing sealed bag",
+          "text_ar": "كيس مختوم مفقود"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "pending_pledges",
+        "summary_calculation"
+      ],
+      "points": 10,
+      "penalty": -2
+    },
+    {
+      "stage": "records",
+      "position": 3,
+      "type": "MULTIPLE_CHOICE",
+      "prompt": "Which independent record confirms the amount reached the bank?",
+      "prompt_ar": "أي سجل مستقل يؤكد المبلغ الذي وصل إلى البنك؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The bank deposit receipt for 640 credits",
+          "text_ar": "إيصال البنك بإيداع ٦٤٠ رصيدًا"
+        },
+        {
+          "id": "b",
+          "text": "The event's fundraising target",
+          "text_ar": "الهدف المالي للفعالية"
+        },
+        {
+          "id": "c",
+          "text": "Nabil's memory of the pledges",
+          "text_ar": "تذكر نبيل للتعهدات"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "witnessed_cash_count",
+        "bank_deposit_receipt",
+        "matching_seal"
+      ],
+      "points": 12,
+      "penalty": -3
+    },
+    {
+      "stage": "conclude",
+      "position": 1,
+      "type": "ELIMINATE_UNSUPPORTED",
+      "prompt": "Which claim goes beyond the evidence currently available?",
+      "prompt_ar": "أي ادعاء يتجاوز الأدلة المتاحة حاليًا؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The cash count and bank deposit both show 640",
+          "text_ar": "يظهر عدّ النقد والإيداع البنكي ٦٤٠ كليهما"
+        },
+        {
+          "id": "b",
+          "text": "A specific volunteer stole exactly 180 credits",
+          "text_ar": "سرق متطوع محدد ١٨٠ رصيدًا بالضبط"
+        },
+        {
+          "id": "c",
+          "text": "The summary included unpaid pledges",
+          "text_ar": "تضمن الملخص تعهدات غير مدفوعة"
+        }
+      ],
+      "answer_key": {
+        "option_id": "b"
+      },
+      "associated_evidence": [
+        "pending_pledges",
+        "witnessed_cash_count",
+        "bank_deposit_receipt"
+      ],
+      "points": 15,
+      "penalty": -4
+    },
+    {
+      "stage": "conclude",
+      "position": 2,
+      "type": "INSUFFICIENT_EVIDENCE",
+      "prompt": "What additional information would best resolve whether any separate cash was ever collected but not recorded?",
+      "prompt_ar": "ما المعلومة الإضافية الأفضل للتحقق مما إذا كان قد جُمع نقد آخر ولم يُسجل؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "Original numbered receipts and the spreadsheet edit history",
+          "text_ar": "الإيصالات الأصلية المرقمة وسجل تعديلات جدول الحسابات"
+        },
+        {
+          "id": "b",
+          "text": "A guess about who looked nervous",
+          "text_ar": "تخمين عمّن بدا متوترًا"
+        },
+        {
+          "id": "c",
+          "text": "A photo of the empty booth",
+          "text_ar": "صورة للكشك بعد إخلائه"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "ticket_sales",
+        "event_summary",
+        "witnessed_cash_count"
+      ],
+      "points": 15,
+      "penalty": -4
+    },
+    {
+      "stage": "conclude",
+      "position": 3,
+      "type": "FINAL_CONCLUSION",
+      "prompt": "What is the fairest conclusion from the records?",
+      "prompt_ar": "ما الاستنتاج الأكثر إنصافًا الذي تدعمه السجلات؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "640 credits were collected and deposited; 180 credits were pledged but still pending, so the mismatch alone does not prove theft",
+          "text_ar": "تم تحصيل ٦٤٠ رصيدًا وإيداعها؛ أما ١٨٠ رصيدًا فكانت تعهدات معلّقة، لذا لا يثبت اختلاف الإجمالي وحده وقوع سرقة"
+        },
+        {
+          "id": "b",
+          "text": "Nabil definitely stole 180 credits",
+          "text_ar": "سرق نبيل ١٨٠ رصيدًا بالتأكيد"
+        },
+        {
+          "id": "c",
+          "text": "The bank kept 180 credits",
+          "text_ar": "احتفظ البنك بـ١٨٠ رصيدًا"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "ticket_sales",
+        "craft_kit_sales",
+        "cash_donations",
+        "pending_pledges",
+        "witnessed_cash_count",
+        "bank_deposit_receipt"
+      ],
+      "points": 20,
+      "penalty": -5
+    }
+  ],
+  "relations": [
+    {
+      "from": "ticket_sales",
+      "to": "summary_calculation",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "Ticket sales are part of the 640-credit cash subtotal.",
+      "public_explanation_ar": "تدخل مبيعات التذاكر ضمن مجموع النقد البالغ ٦٤٠ رصيدًا."
+    },
+    {
+      "from": "craft_kit_sales",
+      "to": "summary_calculation",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "Craft-kit sales are another received-cash line in the subtotal.",
+      "public_explanation_ar": "تدخل مبيعات الحقائب الفنية أيضًا ضمن النقد المستلَم."
+    },
+    {
+      "from": "cash_donations",
+      "to": "summary_calculation",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The booth's counted donations complete the 640-credit cash total.",
+      "public_explanation_ar": "تكمل التبرعات المعدودة في الكشك مجموع النقد البالغ ٦٤٠ رصيدًا."
+    },
+    {
+      "from": "pending_pledges",
+      "to": "event_summary",
+      "relation_type": "REQUIRES_CONTEXT",
+      "public_explanation": "The three unpaid promises explain the extra 180 in the mixed event total, but they are not cash received.",
+      "public_explanation_ar": "تفسر التعهدات الثلاثة غير المدفوعة زيادة ١٨٠ في إجمالي الفعالية المختلط، لكنها ليست نقدًا مستلمًا."
+    },
+    {
+      "from": "witnessed_cash_count",
+      "to": "bank_deposit_receipt",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The witnessed count and bank receipt independently report the same 640-credit amount.",
+      "public_explanation_ar": "يسجل العدّ المشهود وإيصال البنك بصورة مستقلة المبلغ نفسه: ٦٤٠ رصيدًا."
+    },
+    {
+      "from": "matching_seal",
+      "to": "bank_deposit_receipt",
+      "relation_type": "CHRONOLOGY",
+      "public_explanation": "The matching intact seal documents the handoff after the joint count.",
+      "public_explanation_ar": "يوثق الختم السليم المطابق التسليم الذي أعقب العدّ المشترك."
+    }
+  ],
+  "hints": [
+    {
+      "stage": "receipts",
+      "position": 1,
+      "penalty": -1,
+      "hint_text": "Keep ticket sales, kit sales, and donations in separate lines before adding them.",
+      "hint_text_ar": "أبقِ مبيعات التذاكر والحقائب والتبرعات في بنود منفصلة قبل جمعها."
+    },
+    {
+      "stage": "records",
+      "position": 2,
+      "penalty": -2,
+      "hint_text": "Check the status word on each pledge card: promised is not the same as paid.",
+      "hint_text_ar": "تحقق من حالة كل بطاقة تعهد: الوعد ليس هو الدفع."
+    },
+    {
+      "stage": "conclude",
+      "position": 3,
+      "penalty": -3,
+      "hint_text": "Compare the physical cash count with the bank receipt, then explain the remaining 180 without naming a thief unless evidence supports it.",
+      "hint_text_ar": "قارن عدّ النقد الفعلي بإيصال البنك، ثم فسّر الـ١٨٠ المتبقية دون اتهام أحد ما لم تدعم الأدلة ذلك."
+    }
+  ],
+  "timeline_events": [
+    {
+      "event_key": "fair_opens",
+      "position": 1,
+      "label": "The fair opens",
+      "label_ar": "افتتاح المعرض",
+      "window_key": "15:00"
+    },
+    {
+      "event_key": "pledges_recorded",
+      "position": 2,
+      "label": "Three pledges are marked pending",
+      "label_ar": "تسجيل ثلاثة تعهدات بحالة معلّقة",
+      "window_key": "17:40"
+    },
+    {
+      "event_key": "fair_closes",
+      "position": 3,
+      "label": "Sales booth closes",
+      "label_ar": "إغلاق كشك المبيعات",
+      "window_key": "18:00"
+    },
+    {
+      "event_key": "cash_count",
+      "position": 4,
+      "label": "640 credits counted and signed by two witnesses",
+      "label_ar": "عدّ ٦٤٠ رصيدًا وتوقيعه من شاهدين",
+      "window_key": "18:12"
+    },
+    {
+      "event_key": "bag_sealed",
+      "position": 5,
+      "label": "Deposit bag sealed",
+      "label_ar": "ختم كيس الإيداع",
+      "window_key": "18:25"
+    },
+    {
+      "event_key": "bank_deposit",
+      "position": 6,
+      "label": "Bank receipt records 640 credits",
+      "label_ar": "إيصال البنك يسجل ٦٤٠ رصيدًا",
+      "window_key": "19:00"
+    }
+  ],
+  "scoring": {
+    "currency": "points",
+    "rules": [
+      {
+        "event_code": "OBSERVATION_CORRECT",
+        "points_delta": 5
+      },
+      {
+        "event_code": "EVIDENCE_DISCOVERED",
+        "points_delta": 8
+      },
+      {
+        "event_code": "ANSWER_CORRECT",
+        "points_delta": 10
+      },
+      {
+        "event_code": "ANSWER_WRONG",
+        "points_delta": -2
+      },
+      {
+        "event_code": "HINT_USED",
+        "points_delta": -1
+      },
+      {
+        "event_code": "FINAL_CONCLUSION",
+        "points_delta": 20
+      }
+    ],
+    "attempt_limit": 2,
+    "time_bonus": 0,
+    "application_note_en": "These values apply only to this case. A question-specific points or penalty value overrides the corresponding event value; do not add both. A hint-specific penalty overrides HINT_USED.",
+    "note_ar": "هذه القيم خاصة بهذه القضية فقط. تحل قيمة النقاط أو الخصم المحددة للسؤال محل قيمة الحدث المقابلة ولا تُجمع معها؛ وكذلك يحل خصم التلميح المحدد محل قيمة HINT_USED. يلزم اعتمادها عند إعداد الإصدار للنشر، ولا تُورث نقاط Story Puzzle."
+  },
+  "solution": {
+    "public_reveal": "The records reconcile without a demonstrated cash loss. Ticket sales produced 200 credits, craft-kit sales 180, and received cash donations 260: a total of 640. The signed count and bank receipt both show 640. The other 180 consists of three 60-credit pledges marked pending. The closing summary combined received cash with expected pledges and mislabeled the combined figure as collected money. The records support a reporting/classification error, not a proven theft or a proven dishonest person. If concern remains about additional unrecorded receipts, review original numbered receipts and the spreadsheet edit history.",
+    "public_reveal_ar": "تتطابق السجلات من دون ثبوت نقص في النقد: بلغت مبيعات التذاكر ٢٠٠ رصيد، والحقائب الفنية ١٨٠، والتبرعات النقدية المستلمة ٢٦٠؛ أي ٦٤٠ رصيدًا. ويثبت كشف العدّ الموقع وإيصال البنك المبلغ نفسه. أما الـ١٨٠ الأخرى فهي ثلاثة تعهدات بقيمة ٦٠ لكل منها، وما زالت معلّقة. جمع ملخص الإغلاق النقد المستلَم بالتعهدات المتوقعة ووصف الإجمالي المختلط خطأً بأنه مال محصل. تدعم السجلات خطأً في التصنيف أو إعداد التقرير، لا سرقة مثبتة ولا إدانة لشخص بعينه. وإذا بقي قلق من إيصالات إضافية غير مسجلة، فينبغي مراجعة الإيصالات الأصلية المرقمة وسجل تعديلات جدول الحسابات.",
+    "solution_key": {
+      "cash_collected": 640,
+      "pending_pledges": 180,
+      "mixed_summary": 820,
+      "demonstrated_cash_loss": 0,
+      "cause": "unpaid pledges included in the collected-total field",
+      "culprit": null,
+      "final_question_position": 3
+    },
+    "alternative_hypotheses": [
+      {
+        "en": "Nabil stole exactly 180 credits.",
+        "ar": "سرق نبيل ١٨٠ رصيدًا بالضبط.",
+        "why_wrong_en": "The 180 matches three pending 60-credit promises. The current records do not show cash was collected on those promises or that Nabil took it. This does not prove that no other unrecorded issue could ever exist; original receipts and edit history would help check that.",
+        "why_wrong_ar": "يطابق مبلغ ١٨٠ ثلاثة تعهدات معلّقة، قيمة كل منها ٦٠. ولا تثبت السجلات الحالية أن هذه المبالغ دُفعت أو أن نبيل أخذها. وهذا لا يبرهن استحالة وجود مشكلة أخرى غير مسجلة؛ فالإيصالات الأصلية وسجل التعديلات يساعدان على التحقق."
+      },
+      {
+        "en": "The bank kept 180 credits.",
+        "ar": "احتفظ البنك بـ١٨٠ رصيدًا.",
+        "why_wrong_en": "The bank receipt matches the witnessed 640-credit deposit. The apparent difference already has a documented explanation in the pending pledges.",
+        "why_wrong_ar": "يطابق إيصال البنك الإيداع المشهود البالغ ٦٤٠ رصيدًا. وللفرق الظاهري تفسير موثق في التعهدات المعلّقة."
+      },
+      {
+        "en": "The event earned 820 credits in cash.",
+        "ar": "جمعت الفعالية ٨٢٠ رصيدًا نقدًا.",
+        "why_wrong_en": "The 820 total includes expected but unpaid pledges; the receipts and bank record support 640 received credits.",
+        "why_wrong_ar": "يتضمن إجمالي ٨٢٠ تعهدات متوقعة لم تُدفع؛ وتدعم الإيصالات وسجل البنك تحصيل ٦٤٠ رصيدًا."
+      }
+    ],
+    "educational_explanation": "Financial investigations should reconcile source records before naming a culprit. Add only amounts actually received, keep pledges separate from cash, and compare a witnessed count with the bank receipt. Here the arithmetic explains the full 180-credit difference, but the records still do not justify declaring that no other error is possible. The fair conclusion is limited to what these documents support.",
+    "educational_explanation_ar": "ينبغي للتحقيق المالي مطابقة السجلات الأصلية قبل تسمية متهم. اجمع المبالغ المستلمة فعلًا فقط، وافصل التعهدات عن النقد، وقارن العدّ المشهود بإيصال البنك. تفسر الحسابات هنا فرق الـ١٨٠ كاملًا، لكن السجلات لا تبرر الجزم باستحالة وجود أي خطأ آخر. ينبغي أن يظل الاستنتاج ضمن ما تدعمه هذه الوثائق.",
+    "reveal_policy": "AFTER_COMPLETION"
+  },
+  "asset_files": [
+    "cover.png",
+    "scene-1-art-fair.png",
+    "scene-2-accounts-desk.png",
+    "scene-3-deposit-counter.png"
+  ],
+  "implementation_note": "Bilingual content-only draft. Correct answers and the official explanation are included for authorized case authors; do not expose this JSON to players. Hotspot regions have been checked against the generated artwork. This has not been inserted into Supabase, linked to a room, or published."
+}
