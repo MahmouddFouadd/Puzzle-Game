@@ -40,5 +40,32 @@ body { @apply bg-ink-900 text-parchment-100 font-body antialiased; background-im
 @keyframes pop-in { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .float { animation: float 5s ease-in-out infinite; }
 @keyframes float { 50% { transform: translateY(-6px); } }
+/* ---- Bakasa party theme ---- */
+.bakasa { @apply min-h-screen text-white; background: radial-gradient(circle at 15% 0%, rgba(255,111,168,.22), transparent 35%), radial-gradient(circle at 90% 20%, rgba(61,197,255,.18), transparent 35%), radial-gradient(circle at 50% 110%, rgba(255,185,56,.18), transparent 45%), #120d2b; }
+.bk-shell { @apply mx-auto w-full max-w-xl px-4 pb-24 pt-4; padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: max(6rem, env(safe-area-inset-bottom)); }
+.bk-panel { @apply rounded-3xl border border-white/10 p-5; background: linear-gradient(160deg, rgba(58,42,122,.55), rgba(27,19,64,.85)); box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+.bk-title { @apply font-display text-4xl font-bold leading-tight text-bk-accent; text-shadow: 0 3px 0 #8a4b00, 0 10px 30px rgba(255,185,56,.35); }
+.bk-btn { @apply inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-2xl bg-bk-accent px-5 py-3 text-lg font-bold text-bk-900 transition disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white; box-shadow: 0 5px 0 #b86f00, 0 12px 26px rgba(255,185,56,.3); }
+.bk-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 #b86f00; }
+.bk-btn-ghost { @apply inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-2xl border-2 border-white/20 px-4 py-2.5 font-semibold transition hover:bg-white/10 disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white; }
+.bk-btn-danger { @apply inline-flex min-h-[3rem] items-center justify-center rounded-2xl bg-[#ff5d5d] px-4 py-2.5 font-bold text-white; }
+.bk-icon-btn { @apply grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/5 text-lg hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white; }
+.bk-input { @apply w-full rounded-2xl border-2 border-white/15 bg-bk-900/70 px-4 py-3 text-lg text-white placeholder:text-white/40 focus-visible:border-bk-accent focus-visible:outline-none; }
+.bk-chip { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold; }
+.bk-pop { animation: bk-pop .4s cubic-bezier(.2,1.5,.4,1) both; }
+@keyframes bk-pop { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.bk-pulse { animation: bk-pulse 1s ease-in-out infinite; }
+@keyframes bk-pulse { 50% { transform: scale(1.08); } }
+.bk-float { animation: float 4s ease-in-out infinite; }
+.bk-flip { perspective: 1200px; }
+.bk-flip-inner { @apply relative h-full w-full transition-transform duration-700; transform-style: preserve-3d; }
+.bk-flip.is-open .bk-flip-inner { transform: rotateY(180deg); }
+.bk-face { @apply absolute inset-0 grid place-items-center rounded-3xl p-6 text-center; backface-visibility: hidden; }
+.bk-face-back { transform: rotateY(180deg); }
+.bk-card-back { background: repeating-linear-gradient(45deg, #2a1d5c 0 14px, #3a2a7a 14px 28px); border: 3px solid #ffb938; }
+.bk-confetti { pointer-events: none; position: fixed; inset: 0; overflow: hidden; z-index: 40; }
+.bk-confetti i { position: absolute; top: -20px; width: 10px; height: 16px; border-radius: 3px; animation: bk-fall linear forwards; }
+@keyframes bk-fall { to { transform: translateY(110vh) rotate(720deg); } }
+.bk-spotlight { background: radial-gradient(circle at 50% 30%, rgba(255,185,56,.35), transparent 60%); }
 @media print { body { background: white !important; color: #111827 !important; } aside, nav, button, select, input { display: none !important; } .card { background: white !important; border-color: #d1d5db !important; break-inside: avoid; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

@@ -6,6 +6,13 @@ import { APP_VARIANT, canAccessAdminRoutes, canAccessPlayerRoutes, defaultLandin
 import Login from './pages/Login'
 import Home from './pages/Home'
 import { RequirePlayer } from './auth/RequirePlayer'
+import BakasaIntro from './pages/bakasa/BakasaIntro'
+import BakasaCreate from './pages/bakasa/BakasaCreate'
+import BakasaJoin from './pages/bakasa/BakasaJoin'
+import BakasaRoom from './pages/bakasa/BakasaRoom'
+import BakasaLocal from './pages/bakasa/BakasaLocal'
+import BakasaHistory from './pages/bakasa/BakasaHistory'
+import BakasaAdmin from './pages/admin/BakasaAdmin'
 import AdminLayout from './pages/admin/AdminLayout'
 import Dashboard from './pages/admin/Dashboard'
 import PuzzleLab from './pages/admin/PuzzleLab'
@@ -53,6 +60,13 @@ export default function App() {
       {canAccessPlayerRoutes(APP_VARIANT) && (
         <>
           <Route path="/" element={<Home />} />
+          <Route path="/bakasa" element={<BakasaIntro />} />
+          <Route path="/bakasa/local" element={<BakasaLocal />} />
+          <Route path="/bakasa/create" element={<RequirePlayer><BakasaCreate /></RequirePlayer>} />
+          <Route path="/bakasa/join" element={<RequirePlayer><BakasaJoin /></RequirePlayer>} />
+          <Route path="/bakasa/join/:code" element={<RequirePlayer><BakasaJoin /></RequirePlayer>} />
+          <Route path="/bakasa/room/:roomId" element={<RequirePlayer><BakasaRoom /></RequirePlayer>} />
+          <Route path="/bakasa/history" element={<RequirePlayer><BakasaHistory /></RequirePlayer>} />
           <Route path="/detective" element={<RequirePlayer><DetectiveCatalog /></RequirePlayer>} />
           <Route path="/detective/session/:sessionId" element={<RequirePlayer><DetectiveSession /></RequirePlayer>} />
         </>
@@ -84,6 +98,7 @@ export default function App() {
             <Route path="categories" element={<ContentCategories />} />
           </Route>
           <Route path="detective" element={<RequireAuth permission="story.manage"><DetectiveStudio /></RequireAuth>} />
+          <Route path="bakasa" element={<RequireAuth permission="story.manage"><BakasaAdmin /></RequireAuth>} />
           <Route path="detective/:id" element={<RequireAuth permission="story.manage"><DetectiveCaseEditor /></RequireAuth>} />
           <Route path="rooms/:id" element={<RequireAuth permission="room.manage"><RoomControl /></RequireAuth>} />
           <Route path="puzzle-lab" element={<RequireAuth permission="story.manage"><PuzzleLab /></RequireAuth>} />
