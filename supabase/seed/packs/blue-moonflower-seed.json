@@ -1,0 +1,753 @@
+{
+  "case": {
+    "slug": "the-blue-moonflower-seed",
+    "title": "The Vanishing Blue Moonflower Seed",
+    "title_ar": "سر اختفاء بذرة زهرة القمر الزرقاء",
+    "case_type": "MYSTERY",
+    "difficulty": 2,
+    "age_min": 10,
+    "age_max": 16,
+    "estimated_minutes": 20,
+    "category": "Observation and records",
+    "category_ar": "الملاحظة والسجلات",
+    "status": "DRAFT",
+    "description": "A rare blue moonflower seed packet has vanished from a greenhouse display just before the school garden showcase. The display case is intact, and the location card still names the display shelf. Inspect the humidity log, transfer note, and storage records before deciding what happened.",
+    "description_ar": "اختفت حافظة بذور نادرة لزهرة القمر الزرقاء من معرض البيت الزجاجي قبيل عرض حديقة المدرسة. صندوق العرض سليم، وبطاقة الموقع ما زالت تشير إلى رف العرض. افحص سجل الرطوبة ومذكرة النقل وسجلات التخزين قبل أن تقرر ما حدث.",
+    "briefing": "At 3:30 p.m., student volunteer Farah found the moonflower display empty. A small blue-flower symbol on the stand identifies the missing packet as collection item S-12. The glass cover and latch are intact. Greenhouse supervisor Salma says humidity rose above the safe limit; inventory helper Omar says the location card still lists the display shelf. Follow the records. An empty stand shows that an object is absent from that spot, but it does not by itself tell you who moved it or why.",
+    "briefing_ar": "في الساعة ٣:٣٠ عصرًا، وجدت المتطوعة الطالبة فرح منصة زهرة القمر فارغة. يحدد رمز الزهرة الزرقاء على المنصة الحافظة المفقودة بوصفها العينة S-12 من المجموعة. الغطاء الزجاجي والمزلاج سليمان. تقول مشرفة البيت الزجاجي سلمى إن الرطوبة تجاوزت الحد الآمن، بينما يقول مساعد الجرد عمر إن بطاقة الموقع ما زالت تشير إلى رف العرض. تتبّع السجلات. يثبت خلو المنصة أن الغرض غير موجود في ذلك الموضع، لكنه لا يحدد وحده من نقله أو لماذا.",
+    "objective": "Separate direct observations from explanations, use independent records to trace an item, and avoid treating absence or access as proof of theft.",
+    "objective_ar": "ميّز بين الملاحظات المباشرة والتفسيرات، واستخدم سجلات مستقلة لتتبّع غرض، ولا تعتبر غيابه أو إمكانية الوصول إليه دليلًا على السرقة.",
+    "cover_image": "cover.png",
+    "reveal_policy": "AFTER_COMPLETION"
+  },
+  "stages": [
+    {
+      "stage_key": "inspect",
+      "position": 1,
+      "title": "Inspect the Empty Display",
+      "title_ar": "افحص منصة العرض الفارغة",
+      "unlock_rule": {}
+    },
+    {
+      "stage_key": "trace",
+      "position": 2,
+      "title": "Trace the Paper Trail",
+      "title_ar": "تتبّع أثر السجلات",
+      "unlock_rule": {
+        "requires_stage": "inspect"
+      }
+    },
+    {
+      "stage_key": "resolve",
+      "position": 3,
+      "title": "Resolve the Mystery",
+      "title_ar": "حلّ اللغز",
+      "unlock_rule": {
+        "requires_stage": "trace"
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "position": 1,
+      "title": "The Greenhouse Display",
+      "title_ar": "معرض البيت الزجاجي",
+      "image": "scene-1-greenhouse-display.png",
+      "introduction": "The school showcase is about to begin. The glass display is still standing, but the blue moonflower packet is no longer on its labeled cradle. Inspect the case, the damp shelf, and the flower symbol before guessing why it is empty.",
+      "introduction_ar": "يوشك عرض المدرسة على البدء. ما زال صندوق العرض الزجاجي في مكانه، لكن حافظة بذور زهرة القمر الزرقاء لم تعد على قاعدتها المحددة. افحص الصندوق والرف الرطب ورمز الزهرة قبل تخمين سبب فراغه.",
+      "evidence": [
+        {
+          "key": "empty_display",
+          "title": "The empty, closed display",
+          "title_ar": "صندوق العرض المغلق والفارغ",
+          "x": 4,
+          "y": 34,
+          "width": 30,
+          "height": 48,
+          "classification": "FACT",
+          "importance": 4,
+          "description": "The small display cradle is empty. Its glass cover and latch appear intact. This establishes that the packet is not currently on the stand; it does not show who moved it or whether it was stolen.",
+          "description_ar": "قاعدة العرض الصغيرة فارغة، ويبدو غطاؤها الزجاجي ومزلاجها سليمين. يثبت ذلك أن الحافظة ليست على المنصة الآن، لكنه لا يبين من نقلها أو إن كانت قد سُرقت.",
+          "admin_explanation_ar": "ملاحظة مباشرة عن المكان والحالة الظاهرة فقط؛ لا تستنتج منها هوية شخص أو سبب الغياب."
+        },
+        {
+          "key": "humidity_clue",
+          "title": "Condensation near the humidity gauge",
+          "title_ar": "تكاثف قرب مقياس الرطوبة",
+          "x": 36,
+          "y": 27,
+          "width": 27,
+          "height": 44,
+          "classification": "OBSERVATION",
+          "importance": 4,
+          "description": "Water beads gather on the shelf beside the greenhouse humidity gauge. The image suggests damp conditions, but the exact reading and the safe storage limit must be checked in the written log and care guide.",
+          "description_ar": "تتجمع قطرات ماء على الرف قرب مقياس رطوبة البيت الزجاجي. يوحي المشهد بظروف رطبة، لكن يجب مراجعة القراءة الدقيقة وحد التخزين الآمن في السجل ودليل العناية.",
+          "admin_explanation_ar": "قرينة بصرية على الرطوبة، وليست وحدها إثباتًا أن الرطوبة تجاوزت الحد أو أن النقل كان ضروريًا."
+        },
+        {
+          "key": "flower_identity_tag",
+          "title": "The blue moonflower symbol",
+          "title_ar": "رمز زهرة القمر الزرقاء",
+          "x": 68,
+          "y": 49,
+          "width": 26,
+          "height": 37,
+          "classification": "FACT",
+          "importance": 3,
+          "description": "A blue moonflower symbol remains on the empty display cradle. The same collection symbol appears on the packet sleeve in the storage scene, helping identify the item without proving how it got there.",
+          "description_ar": "يبقى رمز زهرة القمر الزرقاء على قاعدة العرض الفارغة. ويظهر الرمز نفسه على حافظة البذور في مشهد التخزين، ما يساعد على تحديد العينة دون أن يثبت كيف وصلت إلى هناك.",
+          "admin_explanation_ar": "رمز تعريف للمقارنة بين المشاهد، لا دليل اتهام ولا تفسير مستقل لعملية النقل."
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "title": "The Greenhouse Records Bench",
+      "title_ar": "منضدة سجلات البيت الزجاجي",
+      "image": "scene-2-records-bench.png",
+      "introduction": "The workbench holds a humidity log, a signed transfer slip, and a location card that still points to the display. Compare the time and status on each record; a card can be out of date without being false about what it once recorded.",
+      "introduction_ar": "تضم منضدة العمل سجل رطوبة ومذكرة نقل موقعة وبطاقة موقع ما زالت تشير إلى منصة العرض. قارن الوقت والحالة في كل سجل؛ فقد تصبح البطاقة قديمة دون أن تكون كاذبة بشأن ما سجلته سابقًا.",
+      "evidence": [
+        {
+          "key": "humidity_log",
+          "title": "The 3:06 humidity reading",
+          "title_ar": "قراءة الرطوبة عند ٣:٠٦",
+          "x": 4,
+          "y": 35,
+          "width": 28,
+          "height": 39,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "The signed greenhouse log records 86% humidity at 3:06 p.m. The seed-care guide says packets should be moved to the dry cabinet when humidity rises above 80%. The entry predates the report that the display was empty.",
+          "description_ar": "يسجل دفتر البيت الزجاجي الموقع رطوبة بنسبة ٨٦٪ عند ٣:٠٦ عصرًا. وينص دليل العناية بالبذور على نقل الحافظات إلى الخزانة الجافة إذا تجاوزت الرطوبة ٨٠٪. ويسبق التسجيل بلاغ خلو المنصة.",
+          "admin_explanation_ar": "السجل يتجاوز عتبة النقل المحددة في دليل العناية؛ هذا يدعم سببًا عمليًا لكنه لا يحدد وحده من نقل الحافظة."
+        },
+        {
+          "key": "signed_transfer_slip",
+          "title": "The signed S-12 transfer slip",
+          "title_ar": "مذكرة نقل العينة S-12 الموقعة",
+          "x": 36,
+          "y": 32,
+          "width": 28,
+          "height": 48,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "A transfer slip for collection item S-12 is signed by greenhouse supervisor Salma at 3:10 p.m. It directs the packet from the display cradle to dry cabinet B after the humidity reading exceeded the care limit.",
+          "description_ar": "تحمل مذكرة نقل العينة S-12 توقيع مشرفة البيت الزجاجي سلمى عند ٣:١٠ عصرًا، وتوجّه بنقل الحافظة من منصة العرض إلى الخزانة الجافة B بعد تجاوز قراءة الرطوبة حد العناية.",
+          "admin_explanation_ar": "أقوى سجل يثبت أن النقل كان موثقًا ومصرحًا به قبل اكتشاف المنصة الفارغة."
+        },
+        {
+          "key": "stale_location_card",
+          "title": "The old display-location card",
+          "title_ar": "بطاقة الموقع القديمة",
+          "x": 68,
+          "y": 35,
+          "width": 27,
+          "height": 43,
+          "classification": "OBSERVATION",
+          "importance": 4,
+          "description": "The inventory card still lists the display cradle as the packet's location. Its update box is blank. This conflicts with the newer transfer slip, but it may simply be a lagging location record rather than proof that the packet disappeared from the greenhouse.",
+          "description_ar": "ما زالت بطاقة الجرد تذكر منصة العرض موقعًا للحافظة، وخانة التحديث فارغة. يتعارض ذلك مع مذكرة النقل الأحدث، لكنه قد يكون تأخرًا في تحديث الموقع لا دليلًا على اختفاء الحافظة من البيت الزجاجي.",
+          "admin_explanation_ar": "سجل قديم لم يُحدّث؛ يفسر الالتباس الإداري ولا يثبت السرقة أو الإهمال المتعمد."
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "title": "The Dry Storage Cabinet",
+      "title_ar": "خزانة التخزين الجاف",
+      "image": "scene-3-storage-cabinet.png",
+      "introduction": "Cabinet B is closed in the seed-storage nook. Look for the matching packet sleeve, the cabinet record, and the intact closure. A matching item and a documented handoff can answer where it went without turning a routine move into an accusation.",
+      "introduction_ar": "الخزانة B مغلقة في ركن تخزين البذور. ابحث عن حافظة البذور المطابقة وسجل الخزانة والإغلاق السليم. يمكن للغرض المطابق والتسليم الموثق أن يجيبا عن مكانه دون تحويل نقل روتيني إلى اتهام.",
+      "evidence": [
+        {
+          "key": "seed_packet_in_cabinet",
+          "title": "The S-12 packet in dry storage",
+          "title_ar": "حافظة S-12 في التخزين الجاف",
+          "x": 9,
+          "y": 41,
+          "width": 27,
+          "height": 42,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "A packet bearing the same blue moonflower collection symbol is safely stored inside dry cabinet B. The inventory register identifies it as item S-12, the same packet listed on the transfer slip.",
+          "description_ar": "توجد حافظة تحمل رمز زهرة القمر الزرقاء نفسه محفوظة بأمان داخل الخزانة الجافة B. ويحددها سجل الجرد بوصفها العينة S-12 نفسها المذكورة في مذكرة النقل.",
+          "admin_explanation_ar": "يثبت تطابق الرمز والسجل العثور على العينة في موقع التخزين المحدد."
+        },
+        {
+          "key": "cabinet_handoff_log",
+          "title": "The 3:16 cabinet handoff entry",
+          "title_ar": "قيد تسليم الخزانة عند ٣:١٦",
+          "x": 38,
+          "y": 45,
+          "width": 26,
+          "height": 42,
+          "classification": "FACT",
+          "importance": 5,
+          "description": "The cabinet log records item S-12 placed in cabinet B at 3:16 p.m. under Salma's initials. The entry is four minutes after the transfer slip and fourteen minutes before Farah noticed the empty display.",
+          "description_ar": "يسجل دفتر الخزانة وضع العينة S-12 في الخزانة B عند ٣:١٦ عصرًا بأحرف اسم سلمى. يأتي القيد بعد مذكرة النقل بأربع دقائق وقبل ملاحظة فرح للمنصة الفارغة بأربع عشرة دقيقة.",
+          "admin_explanation_ar": "سجل مستقل في موقع التخزين يطابق مذكرة النقل زمنيًا ويحدد مكان العينة."
+        },
+        {
+          "key": "intact_cabinet_seal",
+          "title": "The intact cabinet closure",
+          "title_ar": "إغلاق الخزانة السليم",
+          "x": 68,
+          "y": 26,
+          "width": 27,
+          "height": 54,
+          "classification": "OBSERVATION",
+          "importance": 3,
+          "description": "The dry cabinet latch and numbered tie are intact. This supports that the cabinet has remained closed since the recorded storage handoff; it does not prove every action that occurred before the packet was placed inside.",
+          "description_ar": "مزلاج الخزانة الجافة والرباط المرقم سليمان. يدعم ذلك بقاء الخزانة مغلقة منذ تسليم التخزين المسجل، لكنه لا يثبت كل ما جرى قبل وضع الحافظة بداخلها.",
+          "admin_explanation_ar": "قرينة على سلامة التخزين بعد الإيداع، ولا تثبت وحدها تفاصيل المراحل السابقة."
+        }
+      ]
+    }
+  ],
+  "suspects": [
+    {
+      "key": "salma",
+      "name": "Salma Nabil",
+      "name_ar": "سلمى نبيل",
+      "relationship": "Greenhouse supervisor",
+      "relationship_ar": "مشرفة البيت الزجاجي",
+      "description": "Maintains the seed collection and can authorize a protective storage transfer.",
+      "description_ar": "تعتني بمجموعة البذور ويمكنها اعتماد نقل وقائي إلى التخزين.",
+      "background_ar": "نقلت حافظة العينة S-12 بعد تسجيل رطوبة مرتفعة، ووقعت مذكرة النقل.",
+      "alibi_ar": "تتوافق أحرف توقيعها في مذكرة النقل ودفتر الخزانة مع وقت نقل الحافظة.",
+      "timeline": {
+        "15:06": "Humidity above the seed-care limit",
+        "15:10": "Transfer slip signed",
+        "15:16": "Cabinet B handoff recorded"
+      }
+    },
+    {
+      "key": "farah",
+      "name": "Farah Youssef",
+      "name_ar": "فرح يوسف",
+      "relationship": "Student display volunteer",
+      "relationship_ar": "متطوعة عرض من الطالبات",
+      "description": "Helped prepare the science showcase and first noticed that the display cradle was empty.",
+      "description_ar": "ساعدت في إعداد عرض العلوم وكانت أول من لاحظ خلو منصة العرض.",
+      "background_ar": "وضعت رمز زهرة القمر على منصة العرض صباحًا، ثم أبلغت عن خلوها عند ٣:٣٠.",
+      "alibi_ar": "لم تشاهد عملية النقل وقالت بوضوح إنها لا تعرف من نقل الحافظة حتى راجعت السجلات.",
+      "timeline": {
+        "14:40": "Display checked before showcase",
+        "15:30": "Empty cradle reported"
+      }
+    },
+    {
+      "key": "omar",
+      "name": "Omar Adel",
+      "name_ar": "عمر عادل",
+      "relationship": "Inventory helper",
+      "relationship_ar": "مساعد الجرد",
+      "description": "Maintains location cards and helped prepare the seed-storage register.",
+      "description_ar": "يتولى بطاقات المواقع وساعد في إعداد سجل تخزين البذور.",
+      "background_ar": "ترك بطاقة الموقع القديمة على المنصة ولم يسجل تحديثًا بعد توقيع مذكرة النقل.",
+      "alibi_ar": "أقر بأن البطاقة لم تُحدّث بعد، ولا يثبت ذلك أنه نقل الحافظة أو أخفاها.",
+      "timeline": {
+        "14:50": "Location card checked",
+        "15:30": "Old location card still displayed"
+      }
+    }
+  ],
+  "statements": [
+    {
+      "suspect": "salma",
+      "statement": "I signed a transfer for S-12 after the humidity reading passed the safe limit, then placed it in cabinet B.",
+      "statement_ar": "وقعت مذكرة نقل العينة S-12 بعد تجاوز قراءة الرطوبة الحد الآمن، ثم وضعتها في الخزانة B.",
+      "truth_status": "TRUE",
+      "conflicting_evidence": [
+        "humidity_log",
+        "signed_transfer_slip",
+        "cabinet_handoff_log"
+      ],
+      "admin_explanation_ar": "تتفق إفادة سلمى مع سجل الرطوبة ومذكرة النقل ودفتر الخزانة. الأدلة تدعم نقلًا وقائيًا موثقًا."
+    },
+    {
+      "suspect": "farah",
+      "statement": "The display was empty when I checked at 3:30, but I did not see who moved the packet.",
+      "statement_ar": "كانت منصة العرض فارغة عندما تفقدتها عند ٣:٣٠، لكنني لم أرَ من نقل الحافظة.",
+      "truth_status": "TRUE",
+      "conflicting_evidence": [
+        "empty_display",
+        "cabinet_handoff_log"
+      ],
+      "admin_explanation_ar": "تتفق مع مشهد المنصة الخالية وسجل الخزانة، ولا تدعي معرفة لا تدعمها الأدلة."
+    },
+    {
+      "suspect": "omar",
+      "statement": "The location card still says display shelf; I had not updated it after the transfer.",
+      "statement_ar": "ما زالت بطاقة الموقع تشير إلى رف العرض؛ لم أكن قد حدّثتها بعد النقل.",
+      "truth_status": "TRUE",
+      "conflicting_evidence": [
+        "stale_location_card",
+        "signed_transfer_slip",
+        "cabinet_handoff_log"
+      ],
+      "admin_explanation_ar": "تتفق إفادة عمر مع البطاقة القديمة ومذكرة النقل. تأخر تحديث السجل لا يثبت إخفاء الحافظة أو سرقتها."
+    }
+  ],
+  "stages_questions": [
+    {
+      "stage": "inspect",
+      "position": 1,
+      "type": "MULTIPLE_CHOICE",
+      "prompt": "Which detail can you directly observe in the first scene?",
+      "prompt_ar": "أي تفصيل يمكنك ملاحظته مباشرة في المشهد الأول؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The display cradle is empty and its cover looks intact",
+          "text_ar": "قاعدة العرض فارغة وغطاؤها يبدو سليمًا"
+        },
+        {
+          "id": "b",
+          "text": "Farah took the packet",
+          "text_ar": "أخذت فرح الحافظة"
+        },
+        {
+          "id": "c",
+          "text": "The packet was destroyed by humidity",
+          "text_ar": "أتلفت الرطوبة الحافظة"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "empty_display"
+      ],
+      "points": 8,
+      "penalty": -2
+    },
+    {
+      "stage": "inspect",
+      "position": 2,
+      "type": "TRUE_FALSE",
+      "prompt": "An empty display proves that someone stole the packet.",
+      "prompt_ar": "يثبت خلو منصة العرض أن شخصًا ما سرق الحافظة.",
+      "options": [],
+      "answer_key": {
+        "value": "false"
+      },
+      "associated_evidence": [
+        "empty_display",
+        "flower_identity_tag"
+      ],
+      "points": 8,
+      "penalty": -2
+    },
+    {
+      "stage": "inspect",
+      "position": 3,
+      "type": "FIND_EVIDENCE",
+      "prompt": "Select the visual clue that suggests the display area was damp.",
+      "prompt_ar": "حدّد القرينة البصرية التي توحي بأن منطقة العرض كانت رطبة.",
+      "options": [],
+      "answer_key": {
+        "evidence_key": "humidity_clue"
+      },
+      "associated_evidence": [
+        "humidity_clue"
+      ],
+      "points": 10,
+      "penalty": -3
+    },
+    {
+      "stage": "trace",
+      "position": 1,
+      "type": "INTERPRET_CLUE",
+      "prompt": "The care guide sets a safe limit of 80%, while the log reads 86%. What does that support?",
+      "prompt_ar": "يحدد دليل العناية الحد الآمن عند ٨٠٪، بينما يسجل الدفتر ٨٦٪. ما الذي يدعمه ذلك؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "A protective move to dry storage was called for",
+          "text_ar": "كان النقل الوقائي إلى التخزين الجاف مبررًا"
+        },
+        {
+          "id": "b",
+          "text": "A particular student stole the seed",
+          "text_ar": "سرق طالب بعينه البذرة"
+        },
+        {
+          "id": "c",
+          "text": "The packet was already missing before 3:06",
+          "text_ar": "كانت الحافظة مفقودة قبل ٣:٠٦"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "humidity_log",
+        "humidity_clue"
+      ],
+      "points": 12,
+      "penalty": -3
+    },
+    {
+      "stage": "trace",
+      "position": 2,
+      "type": "MULTIPLE_CHOICE",
+      "prompt": "Which record best shows that the transfer was authorized before the empty display was reported?",
+      "prompt_ar": "أي سجل يوضح بأفضل صورة أن النقل كان معتمدًا قبل الإبلاغ عن خلو المنصة؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The signed 3:10 transfer slip",
+          "text_ar": "مذكرة النقل الموقعة عند ٣:١٠"
+        },
+        {
+          "id": "b",
+          "text": "The old location card",
+          "text_ar": "بطاقة الموقع القديمة"
+        },
+        {
+          "id": "c",
+          "text": "A guess based on who had access",
+          "text_ar": "تخمين مبني على من كان يستطيع الدخول"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "signed_transfer_slip",
+        "stale_location_card"
+      ],
+      "points": 12,
+      "penalty": -3
+    },
+    {
+      "stage": "trace",
+      "position": 3,
+      "type": "INTERPRET_CLUE",
+      "prompt": "The location card still names the display shelf, but a newer transfer slip and cabinet log place S-12 in cabinet B. What is the best interpretation?",
+      "prompt_ar": "ما زالت بطاقة الموقع تشير إلى منصة العرض، لكن مذكرة نقل أحدث ودفتر الخزانة يضعان S-12 في الخزانة B. ما التفسير الأفضل؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The location card was not updated after the recorded transfer",
+          "text_ar": "لم تُحدّث بطاقة الموقع بعد النقل المسجل"
+        },
+        {
+          "id": "b",
+          "text": "The old card proves the seed was stolen",
+          "text_ar": "تثبت البطاقة القديمة أن البذرة سُرقت"
+        },
+        {
+          "id": "c",
+          "text": "The cabinet log must be false because it is newer",
+          "text_ar": "لا بد أن دفتر الخزانة مزيف لأنه أحدث"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "stale_location_card",
+        "signed_transfer_slip",
+        "cabinet_handoff_log"
+      ],
+      "points": 10,
+      "penalty": -2
+    },
+    {
+      "stage": "resolve",
+      "position": 1,
+      "type": "CHRONOLOGICAL_REASONING",
+      "prompt": "Put the supported events in chronological order.",
+      "prompt_ar": "رتّب الأحداث التي تدعمها السجلات زمنيًا.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Humidity reaches 86%",
+          "text_ar": "تصل الرطوبة إلى ٨٦٪"
+        },
+        {
+          "id": "b",
+          "text": "Salma signs the transfer slip",
+          "text_ar": "توقّع سلمى مذكرة النقل"
+        },
+        {
+          "id": "c",
+          "text": "S-12 is logged into cabinet B",
+          "text_ar": "تُسجل S-12 في الخزانة B"
+        },
+        {
+          "id": "d",
+          "text": "Farah reports the empty display",
+          "text_ar": "تبلغ فرح عن خلو المنصة"
+        }
+      ],
+      "answer_key": {
+        "order": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      },
+      "associated_evidence": [
+        "humidity_log",
+        "signed_transfer_slip",
+        "cabinet_handoff_log",
+        "empty_display"
+      ],
+      "points": 15,
+      "penalty": -4
+    },
+    {
+      "stage": "resolve",
+      "position": 2,
+      "type": "ELIMINATE_UNSUPPORTED",
+      "prompt": "Which claim goes beyond the evidence currently available?",
+      "prompt_ar": "أي ادعاء يتجاوز الأدلة المتاحة حاليًا؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "The seed packet was moved to cabinet B after a high humidity reading",
+          "text_ar": "نُقلت الحافظة إلى الخزانة B بعد قراءة رطوبة مرتفعة"
+        },
+        {
+          "id": "b",
+          "text": "Farah stole the packet because she first noticed it was gone",
+          "text_ar": "سرقت فرح الحافظة لأنها أول من لاحظ غيابها"
+        },
+        {
+          "id": "c",
+          "text": "The location card had not been updated",
+          "text_ar": "لم تُحدّث بطاقة الموقع"
+        }
+      ],
+      "answer_key": {
+        "option_id": "b"
+      },
+      "associated_evidence": [
+        "signed_transfer_slip",
+        "cabinet_handoff_log",
+        "stale_location_card"
+      ],
+      "points": 15,
+      "penalty": -4
+    },
+    {
+      "stage": "resolve",
+      "position": 3,
+      "type": "FINAL_CONCLUSION",
+      "prompt": "What is the fairest conclusion supported by the records?",
+      "prompt_ar": "ما الاستنتاج الأكثر إنصافًا الذي تدعمه السجلات؟",
+      "options": [
+        {
+          "id": "a",
+          "text": "Salma documented a protective move of S-12 to cabinet B after humidity exceeded the safe limit; the old card was not updated, and the records do not support theft",
+          "text_ar": "وثّقت سلمى نقلًا وقائيًا للعينة S-12 إلى الخزانة B بعد تجاوز الرطوبة الحد الآمن؛ ولم تُحدّث البطاقة القديمة، ولا تدعم السجلات فرضية السرقة"
+        },
+        {
+          "id": "b",
+          "text": "Farah must have stolen it because she discovered the empty display",
+          "text_ar": "لا بد أن فرح سرقتها لأنها اكتشفت خلو المنصة"
+        },
+        {
+          "id": "c",
+          "text": "The seed was destroyed because the greenhouse was damp",
+          "text_ar": "تلفت البذرة لأن البيت الزجاجي كان رطبًا"
+        }
+      ],
+      "answer_key": {
+        "option_id": "a"
+      },
+      "associated_evidence": [
+        "humidity_log",
+        "signed_transfer_slip",
+        "stale_location_card",
+        "seed_packet_in_cabinet",
+        "cabinet_handoff_log",
+        "intact_cabinet_seal"
+      ],
+      "points": 20,
+      "penalty": -5
+    }
+  ],
+  "relations": [
+    {
+      "from": "humidity_clue",
+      "to": "humidity_log",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The visible condensation is consistent with the recorded high humidity, but the log provides the measured value.",
+      "public_explanation_ar": "يتفق التكاثف الظاهر مع الرطوبة المرتفعة المسجلة، لكن الدفتر هو مصدر القراءة المقاسة."
+    },
+    {
+      "from": "humidity_log",
+      "to": "signed_transfer_slip",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The recorded 86% reading exceeds the seed-care guide's 80% limit and precedes the signed transfer.",
+      "public_explanation_ar": "تتجاوز قراءة ٨٦٪ الحد ٨٠٪ في دليل العناية، وتسبق مذكرة النقل الموقعة."
+    },
+    {
+      "from": "signed_transfer_slip",
+      "to": "cabinet_handoff_log",
+      "relation_type": "CHRONOLOGY",
+      "public_explanation": "The cabinet entry follows the signed transfer by six minutes and names the same item and destination.",
+      "public_explanation_ar": "يأتي قيد الخزانة بعد مذكرة النقل بست دقائق، ويذكر العينة والوجهة نفسيهما."
+    },
+    {
+      "from": "flower_identity_tag",
+      "to": "seed_packet_in_cabinet",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The matching blue moonflower collection symbol helps identify the stored packet as the display item.",
+      "public_explanation_ar": "يساعد تطابق رمز زهرة القمر الزرقاء على تحديد الحافظة المخزنة بوصفها عينة العرض نفسها."
+    },
+    {
+      "from": "stale_location_card",
+      "to": "signed_transfer_slip",
+      "relation_type": "REQUIRES_CONTEXT",
+      "public_explanation": "The old card gives the previous location; the newer signed transfer and cabinet log show the updated location.",
+      "public_explanation_ar": "تذكر البطاقة القديمة الموقع السابق؛ وتوضح مذكرة النقل الأحدث ودفتر الخزانة الموقع المحدّث."
+    },
+    {
+      "from": "cabinet_handoff_log",
+      "to": "intact_cabinet_seal",
+      "relation_type": "SUPPORTS",
+      "public_explanation": "The intact closure is consistent with the packet remaining in secured storage after the recorded handoff.",
+      "public_explanation_ar": "يتفق الإغلاق السليم مع بقاء الحافظة في التخزين المؤمّن بعد التسليم المسجل."
+    }
+  ],
+  "hints": [
+    {
+      "stage": "inspect",
+      "position": 1,
+      "penalty": -1,
+      "hint_text": "An empty stand tells you where the packet is not. Look for records that explain where it went.",
+      "hint_text_ar": "تخبرك المنصة الفارغة أين لا توجد الحافظة. ابحث عن سجلات تشرح أين ذهبت."
+    },
+    {
+      "stage": "trace",
+      "position": 2,
+      "penalty": -2,
+      "hint_text": "Compare the humidity reading with the care threshold, then check whether a transfer was signed before 3:30.",
+      "hint_text_ar": "قارن قراءة الرطوبة بحد العناية، ثم تحقق مما إذا كان النقل قد وُقّع قبل ٣:٣٠."
+    },
+    {
+      "stage": "resolve",
+      "position": 3,
+      "penalty": -3,
+      "hint_text": "The newest location record and the old display card disagree. A stale record is not the same as a missing object.",
+      "hint_text_ar": "يختلف أحدث سجل للموقع عن بطاقة العرض القديمة. السجل المتأخر ليس هو نفسه الغرض المفقود."
+    }
+  ],
+  "timeline_events": [
+    {
+      "event_key": "display_checked",
+      "position": 1,
+      "label": "The display is checked before the showcase",
+      "label_ar": "تفقد منصة العرض قبل بدء الفعالية",
+      "window_key": "14:40"
+    },
+    {
+      "event_key": "humidity_exceeds_limit",
+      "position": 2,
+      "label": "Humidity reaches 86%",
+      "label_ar": "تصل الرطوبة إلى ٨٦٪",
+      "window_key": "15:06"
+    },
+    {
+      "event_key": "transfer_signed",
+      "position": 3,
+      "label": "Salma signs the S-12 transfer slip",
+      "label_ar": "توقّع سلمى مذكرة نقل S-12",
+      "window_key": "15:10"
+    },
+    {
+      "event_key": "cabinet_entry",
+      "position": 4,
+      "label": "S-12 is logged into dry cabinet B",
+      "label_ar": "تُسجل S-12 في الخزانة الجافة B",
+      "window_key": "15:16"
+    },
+    {
+      "event_key": "empty_display_reported",
+      "position": 5,
+      "label": "Farah reports the empty display",
+      "label_ar": "تبلغ فرح عن خلو منصة العرض",
+      "window_key": "15:30"
+    }
+  ],
+  "scoring": {
+    "currency": "points",
+    "rules": [
+      {
+        "event_code": "OBSERVATION_CORRECT",
+        "points_delta": 5
+      },
+      {
+        "event_code": "EVIDENCE_DISCOVERED",
+        "points_delta": 8
+      },
+      {
+        "event_code": "ANSWER_CORRECT",
+        "points_delta": 10
+      },
+      {
+        "event_code": "ANSWER_WRONG",
+        "points_delta": -2
+      },
+      {
+        "event_code": "HINT_USED",
+        "points_delta": -1
+      },
+      {
+        "event_code": "FINAL_CONCLUSION",
+        "points_delta": 20
+      }
+    ],
+    "attempt_limit": 2,
+    "time_bonus": 0,
+    "application_note_en": "All scoring values belong to this case only. Question-specific points and penalties override the matching event values and must not be added twice. A hint-specific penalty overrides HINT_USED. Review these values before publication; do not inherit Story Puzzle scoring.",
+    "note_ar": "كل قيم النقاط خاصة بهذه القضية. تحل نقاط السؤال وخصوماته محل قيم الأحداث المقابلة ولا تُجمع معها مرتين. ويحل خصم التلميح المحدد محل HINT_USED. راجع القيم قبل النشر؛ ولا ترث القضية نقاط Story Puzzle."
+  },
+  "solution": {
+    "public_reveal": "The packet was not shown to be stolen. The greenhouse log recorded 86% humidity, above the 80% care limit. Supervisor Salma signed a transfer at 3:10 p.m., and the cabinet log records the same S-12 packet in dry cabinet B at 3:16. The packet is still safely stored there, while the old display-location card was never updated. The records support a documented protective move and an out-of-date card, not theft or blame of a student.",
+    "public_reveal_ar": "لا تثبت السجلات أن الحافظة سُرقت. سجل دفتر البيت الزجاجي رطوبة بنسبة ٨٦٪، أعلى من حد العناية البالغ ٨٠٪. ووقعت المشرفة سلمى مذكرة نقل عند ٣:١٠ عصرًا، ثم سجل دفتر الخزانة العينة S-12 نفسها في الخزانة الجافة B عند ٣:١٦. ما زالت الحافظة محفوظة هناك، بينما لم تُحدّث بطاقة موقع العرض القديمة. تدعم السجلات نقلًا وقائيًا موثقًا وبطاقة غير محدثة، لا السرقة ولا اتهام طالبة.",
+    "solution_key": {
+      "responsible_person": "salma",
+      "action": "moved collection item S-12 to dry cabinet B under the documented humidity-protection procedure",
+      "motive": "protect the seed packet; no wrongdoing is supported",
+      "final_question_position": 3
+    },
+    "alternative_hypotheses": [
+      {
+        "en": "Farah stole the packet because she found the empty display.",
+        "ar": "سرقت فرح الحافظة لأنها وجدت المنصة فارغة.",
+        "why_wrong_en": "Finding an empty stand does not show who moved the packet. The signed transfer and cabinet entry document a protective move before Farah's report.",
+        "why_wrong_ar": "العثور على منصة فارغة لا يحدد من نقل الحافظة. توثق مذكرة النقل ودفتر الخزانة نقلًا وقائيًا قبل بلاغ فرح."
+      },
+      {
+        "en": "The seed packet was destroyed by humidity.",
+        "ar": "أتلفت الرطوبة حافظة البذور.",
+        "why_wrong_en": "The records place the packet in dry cabinet B, and the matching collection symbol identifies it there. No damage is recorded.",
+        "why_wrong_ar": "تضع السجلات الحافظة في الخزانة الجافة B، ويحددها رمز المجموعة المطابق. ولا يوجد تلف مسجل."
+      },
+      {
+        "en": "The old location card proves the packet was still on the display shelf.",
+        "ar": "تثبت بطاقة الموقع القديمة أن الحافظة بقيت على رف العرض.",
+        "why_wrong_en": "The card was not updated. The newer transfer slip and cabinet log record the later location.",
+        "why_wrong_ar": "لم تُحدّث البطاقة. وتسجل مذكرة النقل ودفتر الخزانة الأحدث الموقع اللاحق."
+      }
+    ],
+    "educational_explanation": "A careful investigator separates absence from theft, and a clue from proof. The damp shelf suggests a condition to check; the signed humidity log gives the measurement; the transfer slip documents an authorized decision; and the cabinet log independently records where the packet went. The old location card explains the confusion but is not evidence of a crime. The conclusion should stop where the records stop.",
+    "educational_explanation_ar": "يفصل المحقق الدقيق بين الغياب والسرقة، وبين القرينة والإثبات. يوحي الرف الرطب بظرف يستحق الفحص؛ ويقدم سجل الرطوبة الموقع القياس؛ وتوثق مذكرة النقل قرارًا معتمدًا؛ ويسجل دفتر الخزانة بصورة مستقلة أين ذهبت الحافظة. تفسر بطاقة الموقع القديمة سبب الالتباس، لكنها ليست دليل جريمة. ينبغي أن يتوقف الاستنتاج عند حدود السجلات.",
+    "reveal_policy": "AFTER_COMPLETION"
+  },
+  "asset_files": [
+    "cover.png",
+    "scene-1-greenhouse-display.png",
+    "scene-2-records-bench.png",
+    "scene-3-storage-cabinet.png"
+  ],
+  "implementation_note": "Bilingual content-only draft. The image-generation request was blocked by the daily image quota; the four image filenames referenced by the scenes are planned paths only and are not present yet. Hotspot coordinates remain provisional and must be checked against the final illustrations. Do not import or publish until the images are generated and reviewed. Correct answers and the official explanation are for authorized authors only. This case has not been uploaded to Supabase, linked to a room, or published."
+}

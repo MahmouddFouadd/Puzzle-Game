@@ -5,7 +5,7 @@ do $$
 declare c record; v_session uuid; s record; e record; qq record; r jsonb; v_payload jsonb; v_rep jsonb; v_ans jsonb; v_found int; v_total int;
 begin
   perform set_config('app.uid', '00000000-0000-0000-0000-0000000000a1', false);
-  for c in select id, slug from detective_cases where slug in ('the-blue-ring-heist', 'the-clock-that-stopped', 'the-missing-180') order by slug loop
+  for c in select id, slug from detective_cases where slug in ('the-blue-ring-heist', 'the-clock-that-stopped', 'the-missing-180', 'the-blue-moonflower-seed') order by slug loop
     perform publish_detective_case(c.id);
     perform set_config('app.uid', '00000000-0000-0000-0000-0000000000d1', false);
     v_session := (start_detective_session(c.id, 'SOLO')->>'session_id')::uuid;

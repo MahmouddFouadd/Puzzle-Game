@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { seededShuffle } from '../lib/shuffle'
 import { useI18n, type Key } from '../lib/i18n'
 import { errorKey } from '../stories/errors'
 import { decideCard, drawCard, drawRescueCard, submitAnswer } from './api'
@@ -117,7 +118,7 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
           {card.state === 'DRAWN' && (
             <>
               {q.type === 'MULTIPLE_CHOICE' && (
-                <div role="radiogroup" className="space-y-2">{q.options.map((o) => (
+                <div role="radiogroup" className="space-y-2">{seededShuffle(q.options, `${roomId}:${teamId}:${card.draw_id}`).map((o) => (
                   <label key={o.id} className={`flex gap-2 items-center rounded-xl border-2 bg-white/60 p-3 font-semibold ${option === o.id ? 'border-sea-500 bg-sea-500/15' : 'border-ink-900/15'}`}>
                     <input type="radio" name="opt" disabled={!canAct} checked={option === o.id} onChange={() => setOption(o.id)} />{o.text}</label>))}</div>
               )}

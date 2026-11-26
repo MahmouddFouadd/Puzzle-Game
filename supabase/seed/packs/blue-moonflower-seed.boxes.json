@@ -1,0 +1,11 @@
+{
+ "empty_display": {"x":8,"y":18,"width":24,"height":35},
+ "humidity_clue": {"x":42,"y":21,"width":15,"height":44},
+ "flower_identity_tag": {"x":78,"y":69,"width":9,"height":14},
+ "humidity_log": {"x":1,"y":49,"width":40,"height":46},
+ "signed_transfer_slip": {"x":40,"y":44,"width":26,"height":39},
+ "stale_location_card": {"x":74,"y":35,"width":23,"height":39},
+ "seed_packet_in_cabinet": {"x":12,"y":34,"width":10,"height":18},
+ "cabinet_handoff_log": {"x":33,"y":48,"width":34,"height":22},
+ "intact_cabinet_seal": {"x":75,"y":28,"width":18,"height":41}
+}
