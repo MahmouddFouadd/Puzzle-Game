@@ -4,6 +4,12 @@ export type Lang = 'en' | 'ar'
 
 const dict = {
   en: {
+    homeTagline: 'Solve questions together, win puzzle pieces, and reveal the hidden story picture.', chooseMode: 'Choose a game', modeTeams: 'Teams · live room', modeSolo: 'Solo · case file',
+    modePuzzleTitle: 'Story Puzzle', modePuzzleDesc: 'Join your room, answer clue cards and rebuild the picture before the other teams.', joinRoomCta: 'Join a room',
+    modeDetectiveTitle: 'Detective Mode', modeDetectiveDesc: 'Inspect scenes, collect evidence and solve the case.', openCases: 'Open cases',
+    howToPlay: 'How to play', stepJoin: 'Join with the room code', stepAnswer: 'Answer the clue cards', stepReveal: 'Reveal the picture and win',
+    whatsYourName: 'What should we call you?', letsPlay: "Let's play", backHome: 'Back to home', shareCode: 'Share room code', codeCopied: 'Copied!',
+    playersLabel: 'players', finalResults: 'Final results', yourTeamLabel: 'Your team', roomWaiting: 'Waiting for the host to start the game…', roomReady: 'All set! The host can start any moment.', roomPlaying: 'Game in progress',
     appName: 'Story Puzzle', installApp: 'Install app', signIn: 'Sign in', signOut: 'Sign out', email: 'Email', password: 'Password',
     dashboard: 'Dashboard', stories: 'Stories', rooms: 'Rooms', users: 'Users', reports: 'Reports',
     totalStories: 'Total stories', publishedStories: 'Published', draftStories: 'Drafts', activeRooms: 'Active rooms',
@@ -113,6 +119,12 @@ const dict = {
     noStoryChoices: 'No editable stories available.'
   },
   ar: {
+    homeTagline: 'أجيبوا عن الأسئلة معًا، واربحوا قطع الأحجية، واكشفوا صورة الحكاية المخفية.', chooseMode: 'اختر اللعبة', modeTeams: 'فرق · غرفة مباشرة', modeSolo: 'فردي · ملف قضية',
+    modePuzzleTitle: 'أحجية الحكاية', modePuzzleDesc: 'ادخل غرفتك، وأجب عن بطاقات الأدلة، وأكمل الصورة قبل الفرق الأخرى.', joinRoomCta: 'ادخل غرفة',
+    modeDetectiveTitle: 'وضع المحقق', modeDetectiveDesc: 'افحص المشاهد، واجمع الأدلة، وحُلّ القضية.', openCases: 'افتح القضايا',
+    howToPlay: 'طريقة اللعب', stepJoin: 'ادخل برمز الغرفة', stepAnswer: 'أجب عن بطاقات الأدلة', stepReveal: 'اكشف الصورة واربح',
+    whatsYourName: 'ماذا نناديك؟', letsPlay: 'هيا نلعب', backHome: 'العودة للرئيسية', shareCode: 'شارك رمز الغرفة', codeCopied: 'تم النسخ!',
+    playersLabel: 'لاعبين', finalResults: 'النتائج النهائية', yourTeamLabel: 'فريقك', roomWaiting: 'بانتظار المضيف لبدء اللعبة…', roomReady: 'كل شيء جاهز! يمكن للمضيف البدء في أي لحظة.', roomPlaying: 'اللعبة جارية',
     appName: 'لغز الحكاية', installApp: 'تثبيت التطبيق', signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', email: 'البريد الإلكتروني', password: 'كلمة المرور',
     dashboard: 'لوحة التحكم', stories: 'القصص', rooms: 'الغرف', users: 'المستخدمون', reports: 'التقارير',
     totalStories: 'إجمالي القصص', publishedStories: 'منشورة', draftStories: 'مسودات', activeRooms: 'الغرف النشطة',

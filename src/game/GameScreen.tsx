@@ -3,6 +3,7 @@ import { useI18n, type Key } from '../lib/i18n'
 import { errorKey } from '../stories/errors'
 import { decideCard, drawCard, drawRescueCard, submitAnswer } from './api'
 import { PieceBoard } from './PieceBoard'
+import { Scoreboard } from './Scoreboard'
 import { useTeamState } from './useTeamState'
 import type { AnswerResult, DecisionResult } from './types'
 
@@ -76,9 +77,14 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
       {state.room.status === 'PAUSED' && <p role="status" className="card">{t('pausedMsg')}</p>}
       {error && <p role="alert" className="text-danger">{error}</p>}
 
-      <header className="card flex items-center justify-between gap-2">
-        <div><div className="font-display text-xl">{state.team.name}</div><div className="text-sm opacity-70">{isCaptain ? t('youAreCaptain') : t('waitCaptain')}</div></div>
-        <div className="text-end"><div className="text-3xl font-bold text-gold-400" aria-live="polite">{state.team.score}</div><div className="text-xs opacity-70">{t('scoreLabel')}</div></div>
+      <header className="story-panel space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0"><div className="truncate font-display text-2xl">{state.team.name}</div><div className="text-sm opacity-70">{isCaptain ? `★ ${t('youAreCaptain')}` : t('waitCaptain')}</div></div>
+          <div className="score-badge"><div key={state.team.score} className="pop-in font-display text-3xl text-gold-400" aria-live="polite">{state.team.score}</div><div className="text-xs opacity-80">{t('scoreLabel')}</div></div>
+        </div>
+        <div className="progress-track" role="progressbar" aria-label={t('piecesFound')} aria-valuemin={0} aria-valuemax={state.progress.total} aria-valuenow={state.progress.revealed}>
+          <div className="progress-fill" style={{ width: `${state.progress.total ? (state.progress.revealed / state.progress.total) * 100 : 0}%` }} />
+        </div>
       </header>
 
       {state.image && <PieceBoard width={state.image.width} height={state.image.height} pieces={state.pieces} label={t('yourBoard')}
@@ -86,7 +92,7 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
       <div className="text-sm opacity-80" aria-live="polite">{t('piecesFound')}: {state.progress.revealed}/{state.progress.total} · {t('cardsLeft')}: {state.cards_left}</div>
 
       {state.team.state === 'COMPLETED' && (
-        <p className="card text-center font-display text-2xl text-gold-400" role="status">{t('completedMsg')} {state.team.rank ? `· ${t('rankLabel')} ${state.team.rank}` : ''}</p>
+        <p className="story-panel pop-in text-center font-display text-2xl text-gold-400" role="status">🎉 {t('completedMsg')} {state.team.rank ? `· ${t('rankLabel')} ${state.team.rank}` : ''}</p>
       )}
       {(state.team.state === 'ABANDONED' || state.team.state === 'DISQUALIFIED') && <p className="card" role="status">{t('teamStopped')}</p>}
 
@@ -104,40 +110,40 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
       {notice && !card && <p className="card" role="status">{t(notice)}</p>}
 
       {card && q && (
-        <article className="card space-y-3" style={{ background: 'linear-gradient(160deg,#2b2a33,#1d1c24)' }}>
-          <div className="flex justify-between text-sm opacity-70"><span>{card.kind === 'RESCUE' ? t('rescueCard') : card.kind === 'RECYCLED' ? t('recycledCard') : t('clueCard')}</span>{left !== null && <span aria-live="off">{t('timeLeft')}: {left}s</span>}</div>
-          <p className="text-lg">{q.text}</p>
-          {q.hint && <p className="text-sm opacity-70">💡 {q.hint}</p>}
+        <article key={card.draw_id} className="parchment-panel pop-in space-y-3">
+          <div className="flex justify-between text-sm"><span className="font-semibold text-sea-600">{card.kind === 'RESCUE' ? t('rescueCard') : card.kind === 'RECYCLED' ? t('recycledCard') : t('clueCard')}</span>{left !== null && <span aria-live="off" className={`rounded-full px-2 font-bold ${left <= 10 ? 'bg-danger text-parchment-50' : 'bg-ink-900/10'}`}>⏱ {left}s</span>}</div>
+          <p className="font-display text-xl leading-relaxed">{q.text}</p>
+          {q.hint && <p className="text-sm text-ink-700">💡 {q.hint}</p>}
           {card.state === 'DRAWN' && (
             <>
               {q.type === 'MULTIPLE_CHOICE' && (
                 <div role="radiogroup" className="space-y-2">{q.options.map((o) => (
-                  <label key={o.id} className={`flex gap-2 items-center rounded-xl border p-3 ${option === o.id ? 'border-gold-500' : 'border-parchment-200/20'}`}>
+                  <label key={o.id} className={`flex gap-2 items-center rounded-xl border-2 bg-white/60 p-3 font-semibold ${option === o.id ? 'border-sea-500 bg-sea-500/15' : 'border-ink-900/15'}`}>
                     <input type="radio" name="opt" disabled={!canAct} checked={option === o.id} onChange={() => setOption(o.id)} />{o.text}</label>))}</div>
               )}
               {q.type === 'TRUE_FALSE' && (
                 <div className="flex gap-2">{(['true', 'false'] as const).map((v) => (
                   <button key={v} type="button" disabled={!canAct} onClick={() => setAnswer(v)} aria-pressed={answer === v}
-                    className={`btn-ghost flex-1 ${answer === v ? 'border-gold-500 text-gold-400' : ''}`}>{v === 'true' ? t('trueLabel') : t('falseLabel')}</button>))}</div>
+                    className={`btn flex-1 border-2 ${answer === v ? 'border-sea-500 bg-sea-500 text-parchment-50' : 'border-ink-900/20 bg-white/60'}`}>{v === 'true' ? t('trueLabel') : t('falseLabel')}</button>))}</div>
               )}
-              {q.type === 'SHORT_TEXT' && <input className="input" aria-label={t('yourAnswer')} placeholder={t('yourAnswer')} maxLength={500} disabled={!canAct} value={answer} onChange={(e) => setAnswer(e.target.value)} />}
+              {q.type === 'SHORT_TEXT' && <input className="input bg-white text-ink-900" aria-label={t('yourAnswer')} placeholder={t('yourAnswer')} maxLength={500} disabled={!canAct} value={answer} onChange={(e) => setAnswer(e.target.value)} />}
               <button className="btn-primary w-full" type="button" disabled={!canAct || (q.type === 'MULTIPLE_CHOICE' ? !option : !answer.trim())} onClick={() => void submit()}>{t('submitAnswer')}</button>
             </>
           )}
           {card.state === 'ANSWER_CORRECT' && (
             <div className="space-y-3">
-              <div className="rounded-xl border border-gold-400/40 bg-gold-500/10 p-3 text-center text-sm" aria-live="polite">
+              <div className="rounded-xl border border-sea-600/40 bg-sea-500/10 p-3 text-center text-sm" aria-live="polite">
                 <p className="mb-2">{t('dragPieceToImage')}</p>
                 <button type="button" draggable disabled={!canAct} onDragStart={() => setDraggingPiece(true)}
                   onDragEnd={() => setDraggingPiece(false)} onPointerDown={() => setDraggingPiece(true)}
                   onPointerUp={() => { if (draggingPiece) placeDraggedPiece() }}
-                  className={`mx-auto block rounded-xl border-2 border-dashed border-gold-400 px-5 py-3 font-semibold text-gold-400 transition ${draggingPiece ? 'scale-105 bg-gold-500/20' : 'hover:bg-gold-500/10'}`}>
+                  className={`mx-auto block rounded-xl border-2 border-dashed border-sea-600 bg-white/70 px-5 py-3 font-semibold text-sea-600 transition ${draggingPiece ? 'scale-105 bg-gold-500/20' : 'hover:bg-gold-500/10'}`}>
                   {t('dragPiece')}
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-2">
               <button className="btn-primary" type="button" disabled={!canAct} onClick={() => void decide('PLACE')}>{t('placeOnImage')}</button>
-              <button className="btn-ghost" type="button" disabled={!canAct} onClick={() => void decide('DISCARD')}>{t('discardBasket')}</button>
+              <button className="btn border-2 border-ink-900/25 bg-white/60" type="button" disabled={!canAct} onClick={() => void decide('DISCARD')}>{t('discardBasket')}</button>
               </div>
             </div>
           )}
@@ -152,12 +158,7 @@ export function GameScreen({ roomId, teamId, userId }: { roomId: string; teamId:
       )}
       {!card && playing && state.recovery === 'STUCK' && <p className="card" role="status">{t('stuckMsg')}</p>}
 
-      <section className="card" aria-label={t('leaderboard')}>
-        <h3 className="font-semibold mb-2">{t('leaderboard')}</h3>
-        <ol className="space-y-1">{board.map((r) => (
-          <li key={r.team} className={`flex justify-between gap-2 ${r.team === teamId ? 'text-gold-400' : ''}`}>
-            <span>{r.rank ? `${r.rank}. ` : ''}{r.name}</span><span>{r.revealed}/{r.total} · {r.score}</span></li>))}</ol>
-      </section>
+      <Scoreboard rows={board} myTeam={teamId} finished={state.room.status === 'FINISHED'} />
     </section>
   )
 }

@@ -4,6 +4,8 @@ import { isConfigured } from './lib/supabase'
 import { useI18n } from './lib/i18n'
 import { APP_VARIANT, canAccessAdminRoutes, canAccessPlayerRoutes, defaultLandingPath } from './lib/appVariant'
 import Login from './pages/Login'
+import Home from './pages/Home'
+import { RequirePlayer } from './auth/RequirePlayer'
 import AdminLayout from './pages/admin/AdminLayout'
 import Dashboard from './pages/admin/Dashboard'
 import PuzzleLab from './pages/admin/PuzzleLab'
@@ -50,8 +52,9 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       {canAccessPlayerRoutes(APP_VARIANT) && (
         <>
-          <Route path="/detective" element={<RequireAuth><DetectiveCatalog /></RequireAuth>} />
-          <Route path="/detective/session/:sessionId" element={<RequireAuth><DetectiveSession /></RequireAuth>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/detective" element={<RequirePlayer><DetectiveCatalog /></RequirePlayer>} />
+          <Route path="/detective/session/:sessionId" element={<RequirePlayer><DetectiveSession /></RequirePlayer>} />
         </>
       )}
       {canAccessPlayerRoutes(APP_VARIANT) && (

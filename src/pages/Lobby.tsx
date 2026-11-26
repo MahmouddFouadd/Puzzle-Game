@@ -8,6 +8,7 @@ import { useRoomState } from '../rooms/useRoomState'
 import { advanceRoom, createTeam, joinTeam, leaveTeam, selectImage, setTeamReady } from '../rooms/api'
 import { secondsLeft } from '../rooms/util'
 import { GameScreen } from '../game/GameScreen'
+import { crestColor } from '../components/StoryArt'
 
 export default function Lobby() {
   const { roomId } = useParams<{ roomId: string }>()
@@ -19,6 +20,7 @@ export default function Lobby() {
   const [teamName, setTeamName] = useState('')
   const [hintFor, setHintFor] = useState<string | null>(null)
   const [now, setNow] = useState(Date.now())
+  const [copied, setCopied] = useState(false)
 
   const me = session?.user.id
   const room = state?.room ?? null
@@ -58,17 +60,27 @@ export default function Lobby() {
   const submitTeam = (e: FormEvent) => { e.preventDefault(); if (teamName.trim()) void run(async () => { await createTeam(room.id, teamName.trim()); setTeamName('') }) }
 
   return (
-    <main className="min-h-screen p-4 max-w-xl mx-auto space-y-4">
-      <header className="flex items-center justify-between gap-2">
-        <div><h1 className="font-display text-2xl text-gold-400">{room.settings_snapshot.story.title}</h1><div className="text-sm opacity-70" dir="ltr">{room.code}</div></div>
-        <LangToggle />
+    <main className="min-h-screen"><div className="game-shell space-y-4">
+      <header className="story-panel space-y-3">
+        <div className="flex items-start justify-between gap-2">
+          <h1 className="hero-title text-3xl">{room.settings_snapshot.story.title}</h1>
+          <LangToggle />
+        </div>
+        <button type="button" className="code-chip" dir="ltr" aria-label={t('shareCode')} onClick={() => {
+          const url = `${window.location.origin}/join/${room.code}`
+          const shareable = navigator as Navigator & { share?: (d: { title: string; url: string }) => Promise<void> }
+          if (shareable.share) { void shareable.share({ title: room.settings_snapshot.story.title, url }).catch(() => undefined); return }
+          void navigator.clipboard?.writeText(url).then(() => { setCopied(true); window.setTimeout(() => setCopied(false), 1500) }).catch(() => undefined)
+        }}>{room.code} <span aria-hidden="true">⇪</span></button>
+        {copied && <span role="status" className="ms-2 text-sm text-ok">{t('codeCopied')}</span>}
+        {open && <p className="status-banner" role="status"><span className="metric-dot" aria-hidden="true" />{room.status === 'READY' ? t('roomReady') : t('roomWaiting')}</p>}
       </header>
       {(error !== null || loadError !== null) && <p role="alert" className="text-danger">{error ?? t('loadFailed')}</p>}
 
       {room.status === 'COUNTDOWN' && (
-        <section className="card text-center" aria-live="assertive">
+        <section className="story-panel text-center" aria-live="assertive">
           <div className="opacity-70">{t('countdownTitle')}</div>
-          <div className="font-display text-7xl text-gold-400">{secondsLeft(room.countdown_ends_at, now) || t('startWord')}</div>
+          <div key={secondsLeft(room.countdown_ends_at, now)} className="pop-in hero-title text-8xl">{secondsLeft(room.countdown_ends_at, now) || t('startWord')}</div>
         </section>
       )}
       {myTeam && me && ['PLAYING', 'PAUSED', 'FINISHED'].includes(room.status) && <GameScreen roomId={room.id} teamId={myTeam.id} userId={me} />}
@@ -78,17 +90,23 @@ export default function Lobby() {
       {(open || room.status === 'COUNTDOWN') && <section className="space-y-2">
         <h2 className="font-display text-xl">{t('teamsHeading')} ({state.teams.length}/{room.max_teams})</h2>
         {state.teams.length === 0 && <p className="opacity-70">{t('noTeams')}</p>}
-        {state.teams.map((tm) => {
+        {state.teams.map((tm, index) => {
           const members = state.teamMembers.filter((m) => m.team_id === tm.id)
           const full = members.length >= room.max_team_members
           const isMine = myTeam?.id === tm.id
           return (
-            <div key={tm.id} className={`card space-y-1 ${isMine ? 'border-gold-500' : ''}`}>
-              <div className="flex justify-between gap-2">
-                <strong>{tm.name}</strong>
-                <span className="text-sm opacity-70">{members.length}/{room.max_team_members} {tm.is_ready ? '· ' + t('readyLabel') : ''}</span>
+            <div key={tm.id} className={`story-panel pop-in space-y-2 !p-4 ${isMine ? '!border-gold-400' : ''}`}>
+              <div className="flex items-center gap-3">
+                <span className="team-crest" style={{ background: crestColor(index) }} aria-hidden="true">{tm.name.trim().charAt(0) || '★'}</span>
+                <div className="min-w-0 flex-1">
+                  <strong className="block truncate text-lg">{tm.name}{isMine && <span className="ms-2 text-xs text-gold-400">({t('yourTeamLabel')})</span>}</strong>
+                  <span className="text-sm opacity-70">{members.length}/{room.max_team_members} {t('playersLabel')}</span>
+                </div>
+                {tm.is_ready && <span className="rounded-full bg-ok/25 px-3 py-1 text-xs font-semibold text-parchment-50">✓ {t('readyLabel')}</span>}
               </div>
-              <div className="text-sm opacity-80">{members.map((m) => `${tm.captain_user_id === m.user_id ? '★ ' : ''}${names.get(m.user_id) ?? '…'}`).join('، ')}</div>
+              <ul className="flex flex-wrap gap-1.5">{members.map((m) => (
+                <li key={m.user_id} className={`rounded-full px-2.5 py-1 text-sm ${tm.captain_user_id === m.user_id ? 'bg-gold-500/20 text-gold-400' : 'bg-ink-900/60'}`}>
+                  {tm.captain_user_id === m.user_id && <span aria-label={t('captainLabel')}>★ </span>}{names.get(m.user_id) ?? '…'}</li>))}</ul>
               {open && !myTeam && <button className="btn-primary" type="button" disabled={full} onClick={() => void run(() => joinTeam(tm.id))}>{full ? t('fullLabel') : t('joinTeam')}</button>}
               {open && isMine && <button className="btn-ghost" type="button" onClick={() => void run(() => leaveTeam(tm.id))}>{t('leaveTeam')}</button>}
             </div>
@@ -136,6 +154,6 @@ export default function Lobby() {
           {open && myTeam.is_ready && <p role="status" className="text-center opacity-80">{t('waitingStart')}</p>}
         </section>
       )}
-    </main>
+    </div></main>
   )
 }
