@@ -110,14 +110,14 @@ export default function DetectiveReportPage() {
             <article key={e.id} className={`rounded-xl border p-3 text-sm ${e.found ? 'border-[#2dd4bf]/40 bg-[#0f1a2b]' : 'border-[#e5484d]/40 bg-[#1f1116]'}`}>
               <div className="flex items-center justify-between gap-2"><b>{e.found ? '✅' : '❌'} {ar ? e.title_ar : e.title}</b><span className="text-[11px] text-[#9fb0c4]">{'●'.repeat(e.importance)}</span></div>
               <p className="text-[#cdd8e5]"><span className="text-[#9fb0c4]">{ar ? 'اللي باين: ' : 'Observed: '}</span>{ar ? e.description_ar : e.description}</p>
-              {e.explanation && <p className="text-[#cdd8e5]"><span className="text-[#9fb0c4]">{ar ? 'بيدعم: ' : 'Supports: '}</span>{e.explanation}</p>}
+              {(ar ? e.explanation_ar || e.explanation : e.explanation) && <p className="text-[#cdd8e5]"><span className="text-[#9fb0c4]">{ar ? 'بيدعم: ' : 'Supports: '}</span>{ar ? e.explanation_ar || e.explanation : e.explanation}</p>}
             </article>))}
         </section>
 
         {(r.relations.length > 0 || r.your_links.length > 0) && (
           <section className="det-panel space-y-2 text-sm">
             <h2 className="font-bold">{ar ? 'الروابط بين الأدلة' : 'Links between clues'}</h2>
-            {r.relations.map((x, i) => <p key={i}>{x.found_by_you ? '✅' : '▫️'} <b>{evTitle.get(x.from)}</b> <span style={{ color: RELATIONS[x.type]?.color }}>— {ar ? RELATIONS[x.type]?.ar : RELATIONS[x.type]?.en} —</span> <b>{evTitle.get(x.to)}</b>{x.explanation ? `: ${x.explanation}` : ''}</p>)}
+            {r.relations.map((x, i) => <p key={i}>{x.found_by_you ? '✅' : '▫️'} <b>{evTitle.get(x.from)}</b> <span style={{ color: RELATIONS[x.type]?.color }}>— {ar ? RELATIONS[x.type]?.ar : RELATIONS[x.type]?.en} —</span> <b>{evTitle.get(x.to)}</b>{(ar ? x.explanation_ar || x.explanation : x.explanation) ? `: ${ar ? x.explanation_ar || x.explanation : x.explanation}` : ''}</p>)}
             {r.your_links.filter((l) => !l.correct).map((l, i) => <p key={`w${i}`} className="text-[#ff8a8d]">✖ {ar ? 'رابطك:' : 'Your link:'} {evTitle.get(l.from)} — {ar ? RELATIONS[l.relation].ar : RELATIONS[l.relation].en} — {evTitle.get(l.to)}</p>)}
           </section>
         )}
@@ -130,7 +130,7 @@ export default function DetectiveReportPage() {
                 <div className="flex items-center justify-between"><b>{ar ? s.suspect_ar : s.suspect}</b>
                   <span className={`det-chip ${s.truth === 'FALSE' ? '!text-[#ff8a8d]' : s.truth === 'TRUE' ? '!text-[#4ade80]' : ''}`}>{({ TRUE: ar ? 'صادق' : 'True', FALSE: ar ? 'غير صحيح' : 'False', INCOMPLETE: ar ? 'ناقص' : 'Incomplete', UNREVIEWED: '—' } as Record<string, string>)[s.truth]}</span></div>
                 <p className="italic">“{ar ? s.statement_ar : s.statement}”</p>
-                {s.explanation && <p className="text-[#9fb0c4]">{s.explanation}</p>}
+                {(ar ? s.explanation_ar || s.explanation : s.explanation) && <p className="text-[#9fb0c4]">{ar ? s.explanation_ar || s.explanation : s.explanation}</p>}
                 {s.contradicted_by?.length > 0 && <p className="text-xs text-[#ff8a8d]">{ar ? 'يناقضه: ' : 'Contradicted by: '}{s.contradicted_by.map((id) => evTitle.get(id) ?? '?').join('، ')}</p>}
               </article>))}
           </section>

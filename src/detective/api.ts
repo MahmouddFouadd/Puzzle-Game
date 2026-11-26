@@ -41,11 +41,11 @@ export type DetectiveReport = {
   score: number; duration_seconds: number; evidence_found: number; evidence_total: number; inspections: number; hits: number
   questions_total: number; questions_correct: number; hints_used: number; hint_penalty: number; breakdown: Record<string, number>; conclusion_correct: boolean | null
   questions: Array<{ prompt: string; prompt_ar: string; type: string; options: Array<{ id: string; text: string; text_ar?: string }>; answer_key: Record<string, unknown>; your_answer: Record<string, unknown> | null; is_correct: boolean | null; points: number | null; explanation: string | null; explanation_ar: string | null }>
-  evidence: Array<{ id: string; title: string; title_ar: string; description: string | null; description_ar: string | null; explanation: string | null; classification: string; importance: number; found: boolean; scene_id: string; x: number; y: number; width: number; height: number }>
+  evidence: Array<{ id: string; title: string; title_ar: string; description: string | null; description_ar: string | null; explanation: string | null; explanation_ar?: string | null; classification: string; importance: number; found: boolean; scene_id: string; x: number; y: number; width: number; height: number }>
   scenes: Array<{ id: string; title: string; title_ar: string; image_path: string }>
-  relations: Array<{ from: string; to: string; type: Relation; explanation: string | null; found_by_you: boolean }>
+  relations: Array<{ from: string; to: string; type: Relation; explanation: string | null; explanation_ar?: string | null; found_by_you: boolean }>
   your_links: Array<{ from: string; to: string; relation: Relation; correct: boolean }>
-  statements: Array<{ suspect: string; suspect_ar: string; statement: string; statement_ar: string; truth: string; explanation: string | null; contradicted_by: string[] }>
+  statements: Array<{ suspect: string; suspect_ar: string; statement: string; statement_ar: string; truth: string; explanation: string | null; explanation_ar?: string | null; contradicted_by: string[] }>
   solution: { reveal: string; reveal_ar: string; explanation: string | null; explanation_ar: string | null; alternatives: Array<Record<string, string>> | null } | null
 }
 export type DetectiveHistoryRow = { session_id: string; case_id: string; title: string; title_ar: string; difficulty: number; started_at: string; completed_at: string | null; score: number; duration_seconds: number | null; found: number; total: number }
