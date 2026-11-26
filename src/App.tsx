@@ -5,6 +5,8 @@ import { useI18n } from './lib/i18n'
 import { APP_VARIANT, canAccessAdminRoutes, canAccessPlayerRoutes, defaultLandingPath } from './lib/appVariant'
 import Login from './pages/Login'
 import Home from './pages/Home'
+import GameDetail from './pages/GameDetail'
+import Profile from './pages/Profile'
 import { RequirePlayer } from './auth/RequirePlayer'
 import BakasaIntro from './pages/bakasa/BakasaIntro'
 import BakasaCreate from './pages/bakasa/BakasaCreate'
@@ -60,6 +62,8 @@ export default function App() {
       {canAccessPlayerRoutes(APP_VARIANT) && (
         <>
           <Route path="/" element={<Home />} />
+          <Route path="/game/:id" element={<GameDetail />} />
+          <Route path="/me" element={<Profile />} />
           <Route path="/bakasa" element={<BakasaIntro />} />
           <Route path="/bakasa/local" element={<BakasaLocal />} />
           <Route path="/bakasa/create" element={<RequirePlayer><BakasaCreate /></RequirePlayer>} />
