@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useI18n, type Key } from '../lib/i18n'
 import { LangToggle } from '../components/LangToggle'
+import { Link } from 'react-router-dom'
+import { PuzzleArt } from '../components/StoryArt'
 import { joinRoom, previewRoom } from '../rooms/api'
 import { isValidCode, normalizeCode } from '../rooms/util'
 import { errorKey } from '../stories/errors'
@@ -49,9 +51,14 @@ export default function Join() {
 
   if (loading) return <p className="p-6" role="status">{t('loading')}</p>
   return (
-    <main className="min-h-screen grid place-items-center p-4 bg-gradient-to-b from-ink-900 to-ink-800">
-      <form onSubmit={submit} className="card w-full max-w-sm space-y-4">
-        <h1 className="font-display text-3xl text-gold-400">{t('joinRoomTitle')}</h1>
+    <main className="min-h-screen">
+      <div className="game-shell space-y-5">
+      <div className="flex items-center justify-between"><Link to="/" className="btn-ghost">{t('backHome')}</Link><LangToggle /></div>
+      <form onSubmit={submit} className="story-panel pop-in w-full space-y-4">
+        <div className="flex items-center gap-3">
+          <PuzzleArt className="h-16 w-16 shrink-0" />
+          <h1 className="hero-title text-3xl">{t('joinRoomTitle')}</h1>
+        </div>
         <label className="block">{t('roomCodeInput')}
           <input className="input mt-1 text-center font-display text-2xl tracking-widest" dir="ltr" autoCapitalize="characters" autoComplete="off" required
             value={code} onChange={(e) => setCode(normalizeCode(e.target.value))} placeholder="XX-ABC123" />
@@ -65,11 +72,14 @@ export default function Join() {
           </label>
         )}
         {error && <p role="alert" className="text-danger">{error}</p>}
-        <div className="flex gap-2">
-          <button className="btn-primary flex-1" disabled={busy || !isValidCode(code)} type="submit">{t('joinBtn')}</button>
-          <LangToggle />
-        </div>
+        <button className="btn-primary w-full py-3 text-lg" disabled={busy || !isValidCode(code)} type="submit">{busy ? '…' : t('joinBtn')}</button>
       </form>
+      <ol className="story-panel grid grid-cols-3 gap-2 text-center text-xs text-parchment-100/80" aria-label={t('howToPlay')}>
+        <li><div className="font-display text-2xl text-gold-400">1</div>{t('stepJoin')}</li>
+        <li><div className="font-display text-2xl text-gold-400">2</div>{t('stepAnswer')}</li>
+        <li><div className="font-display text-2xl text-gold-400">3</div>{t('stepReveal')}</li>
+      </ol>
+      </div>
     </main>
   )
 }

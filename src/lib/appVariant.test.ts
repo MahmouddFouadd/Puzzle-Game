@@ -13,7 +13,7 @@ describe('app variants', () => {
     expect(variant).toBe('web')
     expect(canAccessAdminRoutes(variant)).toBe(true)
     expect(canAccessPlayerRoutes(variant)).toBe(true)
-    expect(defaultLandingPath(variant)).toBe('/join')
+    expect(defaultLandingPath(variant)).toBe('/')
     expect(defaultAuthenticatedPath(variant)).toBe('/admin')
   })
 
@@ -29,8 +29,8 @@ describe('app variants', () => {
     const variant = resolveAppVariant('user')
     expect(canAccessAdminRoutes(variant)).toBe(false)
     expect(canAccessPlayerRoutes(variant)).toBe(true)
-    expect(defaultLandingPath(variant)).toBe('/join')
-    expect(defaultAuthenticatedPath(variant)).toBe('/join')
+    expect(defaultLandingPath(variant)).toBe('/')
+    expect(defaultAuthenticatedPath(variant)).toBe('/')
   })
 
   it('falls back to the full web app for unrecognized values', () => {

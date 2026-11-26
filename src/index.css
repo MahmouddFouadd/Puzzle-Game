@@ -1,7 +1,8 @@
 @tailwind base; @tailwind components; @tailwind utilities;
-body { @apply bg-ink-900 text-parchment-100 font-body antialiased; }
+body { @apply bg-ink-900 text-parchment-100 font-body antialiased; background-image: radial-gradient(circle at 12% 8%, rgba(224,179,74,.14), transparent 32%), radial-gradient(circle at 88% 92%, rgba(31,122,140,.18), transparent 36%), radial-gradient(rgba(232,215,170,.05) 1px, transparent 1px); background-size: auto, auto, 22px 22px; background-attachment: fixed; }
 .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-semibold transition disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-400; }
-.btn-primary { @apply btn bg-gold-500 text-ink-900 hover:bg-gold-400; }
+.btn-primary { @apply btn bg-gold-500 text-ink-900 hover:bg-gold-400; box-shadow: 0 4px 0 #8a6214, 0 10px 24px rgba(201,150,43,.25); }
+.btn-primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #8a6214; }
 .btn-ghost { @apply btn border border-parchment-200/30 hover:bg-ink-700; }
 .card { @apply rounded-card border border-parchment-200/15 bg-ink-800 p-4; }
 .input { @apply w-full rounded-xl border border-parchment-200/30 bg-ink-900 px-3 py-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-400; }
@@ -19,5 +20,25 @@ body { @apply bg-ink-900 text-parchment-100 font-body antialiased; }
 .progress-ring::before { content: ''; position: absolute; inset: 8px; border-radius: 50%; background: #1d1c24; }
 .progress-ring span { position: relative; z-index: 1; font-size: 1.25rem; font-weight: 700; }
 .quick-link { @apply rounded-xl border border-parchment-200/15 px-3 py-2 text-center text-sm transition hover:border-gold-400 hover:bg-gold-500/10; }
+/* ---- Storybook game UI ---- */
+.game-shell { @apply mx-auto w-full max-w-xl px-4 pb-10 pt-4; padding-top: max(1rem, env(safe-area-inset-top)); }
+.story-panel { @apply rounded-card border border-gold-400/25 p-5; background: linear-gradient(165deg, rgba(43,42,51,.92), rgba(29,28,36,.96)); box-shadow: 0 1px 0 rgba(244,234,210,.06) inset, 0 18px 50px rgba(0,0,0,.35); }
+.parchment-panel { @apply rounded-card p-5 text-ink-900; background: linear-gradient(170deg, #fbf6ea 0%, #f4ead2 60%, #e8d7aa 100%); box-shadow: 0 2px 0 #c9962b inset, 0 18px 40px rgba(0,0,0,.35); }
+.hero-title { @apply font-display text-4xl leading-tight text-gold-400; text-shadow: 0 2px 0 #5b3f0b, 0 8px 30px rgba(224,179,74,.35); }
+.mode-card { @apply relative block overflow-hidden rounded-card border border-parchment-200/15 p-5 text-start transition; background: linear-gradient(150deg, #2b2a33, #1d1c24); box-shadow: 0 14px 36px rgba(0,0,0,.3); }
+.mode-card:hover, .mode-card:focus-visible { @apply border-gold-400; transform: translateY(-2px); }
+.mode-card .mode-art { position: absolute; inset-inline-end: -12px; bottom: -12px; width: 120px; height: 120px; opacity: .9; }
+.code-chip { @apply inline-flex items-center gap-2 rounded-full border border-gold-400/50 bg-gold-500/10 px-3 py-1 font-display text-lg tracking-widest text-gold-400; }
+.team-crest { @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl font-display text-xl text-ink-900; box-shadow: 0 3px 0 rgba(0,0,0,.35); }
+.status-banner { @apply flex items-center gap-3 rounded-card border border-sea-500/40 bg-sea-600/20 px-4 py-3 text-sm; }
+.score-badge { @apply rounded-2xl px-4 py-2 text-center; background: radial-gradient(circle at 50% 0%, rgba(224,179,74,.35), rgba(224,179,74,.08)); border: 1px solid rgba(224,179,74,.45); }
+.progress-track { @apply h-2 w-full overflow-hidden rounded-full bg-ink-900; }
+.progress-fill { @apply h-full rounded-full bg-gradient-to-r from-sea-500 to-gold-400 transition-all duration-700; }
+.podium { @apply grid grid-cols-3 items-end gap-2 text-center; }
+.podium-step { @apply rounded-t-xl px-2 pt-3 pb-2 text-ink-900; }
+.pop-in { animation: pop-in .45s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes pop-in { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.float { animation: float 5s ease-in-out infinite; }
+@keyframes float { 50% { transform: translateY(-6px); } }
 @media print { body { background: white !important; color: #111827 !important; } aside, nav, button, select, input { display: none !important; } .card { background: white !important; border-color: #d1d5db !important; break-inside: avoid; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
