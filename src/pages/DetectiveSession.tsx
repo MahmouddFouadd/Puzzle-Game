@@ -6,6 +6,7 @@ import { boardLink, detectiveError, finishDetective, inspectScene, loadDetective
 import { SceneViewer } from '../detective/SceneViewer'
 import { EvidenceBoard, RELATIONS } from '../detective/Board'
 import { imageUrl } from './DetectiveCatalog'
+import { PartyBoard, usePartyState } from './DetectiveParty'
 
 type Tab = 'questions' | 'evidence' | 'board' | 'suspects' | 'timeline' | 'notes'
 const CLASS_LABEL: Record<string, [string, string]> = {
@@ -115,6 +116,13 @@ export default function DetectiveSession() {
   useEffect(() => { const on = () => { void load() }; window.addEventListener('online', on); return () => window.removeEventListener('online', on) }, [load])
   useEffect(() => { if (!toast) return; const id = window.setTimeout(() => setToast(null), 2200); return () => window.clearTimeout(id) }, [toast])
   const elapsed = useElapsed(p?.progress?.started_at, p?.progress?.completed_at)
+  const { s: party } = usePartyState(p?.party?.id, 4000)
+  // Team investigations: pull teammates' discoveries/answers; finish together.
+  useEffect(() => {
+    if (!p?.party || p.party.mode !== 'COOPERATIVE') return
+    const id = window.setInterval(() => { void load().then((d) => { if (d?.progress?.completed_at) nav(`/detective/report/${sessionId}`) }) }, 4000)
+    return () => window.clearInterval(id)
+  }, [p?.party, load, nav, sessionId])
 
   const found = useMemo(() => (p?.scenes ?? []).flatMap((s) => s.evidence), [p])
   const scene = p?.scenes[sceneIdx]
@@ -183,6 +191,7 @@ export default function DetectiveSession() {
           </div>
         </header>
 
+        {party && <PartyBoard s={party} compact />}
         {hintAsk && (
           <div className="det-panel flex items-center gap-2 text-sm" role="dialog">
             <span className="flex-1">{ar ? 'التلميح بيخصم من نقطك (2–3 نقط). تحب تاخد تلميح؟' : 'A hint costs 2–3 points. Take one?'}</span>

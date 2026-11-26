@@ -45,6 +45,7 @@ import DetectiveSession from './pages/DetectiveSession'
 import DetectiveCasePreview from './pages/DetectiveCase'
 import DetectiveReportPage from './pages/DetectiveReport'
 import DetectiveHistory from './pages/DetectiveHistory'
+import DetectiveParty, { DetectiveJoin } from './pages/DetectiveParty'
 import DetectiveStudio from './pages/admin/DetectiveStudio'
 import DetectiveCaseEditor from './pages/admin/DetectiveCaseEditor'
 
@@ -78,6 +79,9 @@ export default function App() {
           <Route path="/detective/case/:id" element={<DetectiveCasePreview />} />
           <Route path="/detective/report/:sessionId" element={<RequirePlayer><DetectiveReportPage /></RequirePlayer>} />
           <Route path="/detective/history" element={<RequirePlayer><DetectiveHistory /></RequirePlayer>} />
+          <Route path="/detective/party/:partyId" element={<RequirePlayer><DetectiveParty /></RequirePlayer>} />
+          <Route path="/detective/join" element={<RequirePlayer><DetectiveJoin /></RequirePlayer>} />
+          <Route path="/detective/join/:code" element={<RequirePlayer><DetectiveJoin /></RequirePlayer>} />
           <Route path="/detective/session/:sessionId" element={<RequirePlayer><DetectiveSession /></RequirePlayer>} />
         </>
       )}
