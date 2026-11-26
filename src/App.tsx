@@ -28,6 +28,7 @@ import Rooms from './pages/admin/Rooms'
 import RoomControl from './pages/admin/RoomControl'
 import Join from './pages/Join'
 import Lobby from './pages/Lobby'
+import CreateRoom from './pages/CreateRoom'
 import Users from './pages/admin/Users'
 import Reports from './pages/admin/Reports'
 import PlatformSettings from './pages/admin/PlatformSettings'
@@ -89,6 +90,7 @@ export default function App() {
         <>
           <Route path="/join" element={<Join />} />
           <Route path="/join/:code" element={<Join />} />
+          <Route path="/play/new" element={<RequirePlayer><CreateRoom /></RequirePlayer>} />
           <Route path="/play/:roomId" element={<Lobby />} />
         </>
       )}

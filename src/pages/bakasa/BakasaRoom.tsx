@@ -6,6 +6,7 @@ import { advance, leaveRoom, type BakasaStatus } from '../../bakasa/api'
 import { BakasaLogo, ConfirmDialog, playSound, SoundToggle, TimerRing, useBakasaRoom, useCountdown } from '../../bakasa/ui'
 import { LobbyView, noticeText } from '../../bakasa/Lobby'
 import { DiscussionPhase, GuessPhase, ResultsPhase, RevealPhase, VotingPhase } from '../../bakasa/Phases'
+import { VoiceBar } from '../../voice/VoiceBar'
 
 const PHASES: Record<BakasaStatus, [string, string]> = {
   LOBBY: ['اللوبي', 'Lobby'], REVEAL: ['كشف الأدوار', 'Role reveal'], DISCUSSION: ['الأسئلة والنقاش', 'Discussion'], VOTING: ['التصويت', 'Voting'],
@@ -101,6 +102,7 @@ export default function BakasaRoom() {
             <TimerRing seconds={phaseLeft} total={phaseTotal[r.status] ?? 0} label={ar ? 'الوقت المتبقي' : 'Time left'} />
           </div>
         </header>
+        {<VoiceBar kind="bakasa" roomId={r.id} selfId={state.me} names={Object.fromEntries(state.players.map((p) => [p.user_id, p.nickname]))} />}
 
         {!online && <p className="bk-panel text-center" role="alert">📡 {ar ? 'الاتصال انقطع… بنحاول نرجعك للعبة' : 'Connection lost… trying to get you back into the game'}</p>}
 

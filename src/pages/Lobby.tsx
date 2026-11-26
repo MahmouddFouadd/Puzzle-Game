@@ -1,20 +1,27 @@
 import { shareUrl } from '../lib/publicUrl'
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useI18n } from '../lib/i18n'
 import { LangToggle } from '../components/LangToggle'
 import { errorKey } from '../stories/errors'
 import { useRoomState } from '../rooms/useRoomState'
-import { advanceRoom, createTeam, joinTeam, leaveTeam, selectImage, setTeamReady } from '../rooms/api'
+import { advanceRoom, createTeam, joinTeam, leaveTeam, selectImage, setTeamReady, startGame, setRoomStatus, playerSetRoomStory, hostError, type StoryCard } from '../rooms/api'
+import { StoryPicker } from '../rooms/StoryPicker'
 import { secondsLeft } from '../rooms/util'
 import { GameScreen } from '../game/GameScreen'
 import { crestColor } from '../components/StoryArt'
+import { VoiceBar } from '../voice/VoiceBar'
 
 export default function Lobby() {
   const { roomId } = useParams<{ roomId: string }>()
   const { session, loading } = useAuth()
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
+  const ar = lang === 'ar'
+  const [picking, setPicking] = useState(false)
+  const [pick, setPick] = useState<StoryCard | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
+  const lastTitle = useRef<string | null>(null)
   const nav = useNavigate()
   const { state, error: loadError, reload } = useRoomState(session ? roomId : undefined)
   const [error, setError] = useState<string | null>(null)
@@ -35,6 +42,17 @@ export default function Lobby() {
     }, 500)
     return () => window.clearInterval(tick)
   }, [status, room?.countdown_ends_at, roomId, reload])
+
+  const storyTitle = room?.settings_snapshot.story.title ?? null
+  const isHost = !!room?.player_hosted && !!me && room.created_by === me
+  // Tell everyone when the host picks a different story.
+  useEffect(() => {
+    if (!storyTitle) return
+    if (lastTitle.current && lastTitle.current !== storyTitle && !isHost) setNotice(ar ? `📖 صاحب الغرفة اختار قصة: ${storyTitle}` : `📖 The host picked a story: ${storyTitle}`)
+    lastTitle.current = storyTitle
+  }, [storyTitle, isHost, ar])
+  useEffect(() => { if (!notice) return; const id = window.setTimeout(() => setNotice(null), 4000); return () => window.clearTimeout(id) }, [notice])
+  const hostRun = async (fn: () => Promise<unknown>) => { setError(null); try { await fn(); await reload() } catch (e) { setError(hostError(e, ar)) } }
 
   const names = useMemo(() => new Map((state?.roomMembers ?? []).map((m) => [m.user_id, m.display_name])), [state])
   const myTeam = state?.teams.find((tm) => state.teamMembers.some((m) => m.team_id === tm.id && m.user_id === me)) ?? null
@@ -77,6 +95,39 @@ export default function Lobby() {
         {open && <p className="status-banner" role="status"><span className="metric-dot" aria-hidden="true" />{room.status === 'READY' ? t('roomReady') : t('roomWaiting')}</p>}
       </header>
       {(error !== null || loadError !== null) && <p role="alert" className="text-danger">{error ?? t('loadFailed')}</p>}
+      {room.status !== 'CANCELLED' && <VoiceBar kind="room" roomId={room.id} selfId={me} names={names} />}
+      {notice && <p className="card pop-in border-gold-400" role="status">{notice}</p>}
+      {room.player_hosted && open && (
+        <section className="story-panel space-y-3" aria-label={ar ? 'إعدادات صاحب الغرفة' : 'Host controls'}>
+          <div className="flex items-center gap-3">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gold-500/20 text-2xl" aria-hidden="true">📖</span>
+            <div className="min-w-0 flex-1">
+              <div className="text-xs opacity-70">{isHost ? (ar ? 'انت صاحب الغرفة · القصة المختارة' : 'You are the host · selected story') : (ar ? 'القصة اللي اختارها صاحب الغرفة' : 'Story chosen by the host')}</div>
+              <b className="block truncate text-lg">{storyTitle}</b>
+            </div>
+            {isHost && <button type="button" className="btn-ghost" onClick={() => { setPick(null); setPicking(true) }}>{ar ? 'غيّر القصة' : 'Change story'}</button>}
+          </div>
+          {isHost && (
+            <div className="grid grid-cols-[1fr_auto] gap-2">
+              <button type="button" className="btn-primary" disabled={room.status !== 'READY'} onClick={() => void hostRun(() => startGame(room.id, false))}>
+                ▶ {room.status === 'READY' ? (ar ? 'ابدأ اللعبة' : 'Start the game') : (ar ? 'مستني الفرق تجهز…' : 'Waiting for teams…')}</button>
+              <button type="button" className="btn-ghost" onClick={() => { if (window.confirm(ar ? 'تقفل الغرفة؟' : 'Close this room?')) void hostRun(() => setRoomStatus(room.id, 'cancel')) }}>{ar ? 'اقفل الغرفة' : 'Close room'}</button>
+            </div>
+          )}
+        </section>
+      )}
+      {picking && isHost && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 p-3" role="dialog" aria-modal="true" aria-label={ar ? 'اختار القصة' : 'Choose a story'}>
+          <div className="mx-auto max-w-3xl space-y-3 rounded-2xl bg-ink-800 p-4">
+            <div className="flex items-center justify-between"><h2 className="font-display text-2xl">{ar ? 'اختار القصة' : 'Choose a story'}</h2>
+              <button type="button" className="btn-ghost" onClick={() => setPicking(false)}>{ar ? 'إلغاء' : 'Cancel'}</button></div>
+            <p className="text-sm opacity-75">{ar ? 'تغيير القصة بيلغي اختيارات الصور للفرق، وكل فريق يختار تاني.' : 'Changing the story clears every team’s picture choice.'}</p>
+            <StoryPicker ar={ar} value={pick?.id ?? room.story_id} onChange={setPick} />
+            <button type="button" className="btn-primary w-full" disabled={!pick || pick.id === room.story_id}
+              onClick={() => { if (pick) void hostRun(async () => { await playerSetRoomStory(room.id, pick.id); setPicking(false) }) }}>{ar ? 'تأكيد القصة' : 'Confirm story'}</button>
+          </div>
+        </div>
+      )}
 
       {room.status === 'COUNTDOWN' && (
         <section className="story-panel text-center" aria-live="assertive">
