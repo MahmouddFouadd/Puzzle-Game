@@ -11,6 +11,7 @@ import { StoryPicker } from '../rooms/StoryPicker'
 import { secondsLeft } from '../rooms/util'
 import { GameScreen } from '../game/GameScreen'
 import { crestColor } from '../components/StoryArt'
+import { VoiceBar } from '../voice/VoiceBar'
 
 export default function Lobby() {
   const { roomId } = useParams<{ roomId: string }>()
@@ -94,6 +95,7 @@ export default function Lobby() {
         {open && <p className="status-banner" role="status"><span className="metric-dot" aria-hidden="true" />{room.status === 'READY' ? t('roomReady') : t('roomWaiting')}</p>}
       </header>
       {(error !== null || loadError !== null) && <p role="alert" className="text-danger">{error ?? t('loadFailed')}</p>}
+      {room.status !== 'CANCELLED' && <VoiceBar kind="room" roomId={room.id} selfId={me} names={names} />}
       {notice && <p className="card pop-in border-gold-400" role="status">{notice}</p>}
       {room.player_hosted && open && (
         <section className="story-panel space-y-3" aria-label={ar ? 'إعدادات صاحب الغرفة' : 'Host controls'}>
