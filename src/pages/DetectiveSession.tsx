@@ -9,6 +9,7 @@ import { seededShuffle } from '../lib/shuffle'
 import { EvidenceBoard, RELATIONS } from '../detective/Board'
 import { imageUrl } from './DetectiveCatalog'
 import { PartyBoard, usePartyState } from './DetectiveParty'
+import { VoiceBar } from '../voice/VoiceBar'
 
 type Tab = 'questions' | 'evidence' | 'board' | 'suspects' | 'timeline' | 'notes'
 const CLASS_LABEL: Record<string, [string, string]> = {
@@ -198,6 +199,7 @@ export default function DetectiveSession() {
         </header>
 
         {party && <PartyBoard s={party} compact />}
+        {party && party.party.status !== 'CLOSED' && <VoiceBar kind="detective" roomId={party.party.id} selfId={party.me} names={Object.fromEntries(party.members.map((m) => [m.user_id, m.nickname]))} />}
         {hintAsk && (
           <div className="det-panel flex items-center gap-2 text-sm" role="dialog">
             <span className="flex-1">{ar ? 'التلميح بيخصم من نقطك (2–3 نقط). تحب تاخد تلميح؟' : 'A hint costs 2–3 points. Take one?'}</span>

@@ -10,6 +10,7 @@ import { advanceRoom, createTeam, joinTeam, leaveTeam, selectImage, setTeamReady
 import { secondsLeft } from '../rooms/util'
 import { GameScreen } from '../game/GameScreen'
 import { crestColor } from '../components/StoryArt'
+import { VoiceBar } from '../voice/VoiceBar'
 
 export default function Lobby() {
   const { roomId } = useParams<{ roomId: string }>()
@@ -77,6 +78,7 @@ export default function Lobby() {
         {open && <p className="status-banner" role="status"><span className="metric-dot" aria-hidden="true" />{room.status === 'READY' ? t('roomReady') : t('roomWaiting')}</p>}
       </header>
       {(error !== null || loadError !== null) && <p role="alert" className="text-danger">{error ?? t('loadFailed')}</p>}
+      {room.status !== 'CANCELLED' && <VoiceBar kind="room" roomId={room.id} selfId={me} names={names} />}
 
       {room.status === 'COUNTDOWN' && (
         <section className="story-panel text-center" aria-live="assertive">
