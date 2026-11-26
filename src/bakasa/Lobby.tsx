@@ -40,7 +40,9 @@ export function noticeText(n: string | null, ar: boolean): string | null {
     join: [`انضم ${who} للغرفة! 👋`, `${who} joined! 👋`], ready: [`${who} بقى جاهز ✅`, `${who} is ready ✅`], left: [`${who} خرج من الغرفة`, `${who} left the room`],
     settings: ['المضيف غيّر إعدادات الجولة ⚙️', 'The host changed the settings ⚙️'], host: [`${who} بقى المضيف الجديد 👑`, `${who} is the new host 👑`],
     rematch: ['مباراة جديدة! النقاط اتصفّرت 🔁', 'Rematch! Scores reset 🔁'], tie_revote: ['تعادل! إعادة تصويت ⚖️', 'Tie! Revote ⚖️'],
-    abandoned: ['الجولة اتلغت عشان لاعبين خرجوا', 'The round was cancelled because players left']
+    abandoned: ['الجولة اتلغت عشان لاعبين خرجوا', 'The round was cancelled because players left'],
+    questions_done: ['انتهت فترة الأسئلة ⏸️', 'Question time is over ⏸️'], more_questions: ['جولة أسئلة كمان! 💬', 'Another round of questions! 💬'],
+    spy_guess: ['البِكس بيخمّن الكلمة… 🤔', 'The spy is guessing the word… 🤔'], voting: ['يلا نصوّت! 🗳️', 'Time to vote! 🗳️']
   }
   return t[kind] ? t[kind][ar ? 0 : 1] : null
 }

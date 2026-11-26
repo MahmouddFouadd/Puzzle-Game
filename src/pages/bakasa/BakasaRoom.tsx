@@ -32,13 +32,13 @@ export default function BakasaRoom() {
     const first = lastVersion.current === -1
     lastVersion.current = room.version
     const text = noticeText(room.notice, ar)
-    if (!first && text) {
+    if (!first && text && room.status === 'LOBBY') {
       setFeed((f) => [...f.slice(-1), { id: room.version, text }])
       if (room.notice?.startsWith('join:')) playSound('join')
     }
   }, [room, ar])
   useEffect(() => { if (feed.length === 0) return; const id = window.setTimeout(() => setFeed((f) => f.slice(1)), 4500); return () => window.clearTimeout(id) }, [feed])
-  useEffect(() => { if (room && room.status !== lastStatus.current) { if (lastStatus.current && room.status === 'VOTING') playSound('vote'); lastStatus.current = room.status } }, [room])
+  useEffect(() => { if (room && room.status !== lastStatus.current) { if (lastStatus.current && room.status === 'VOTING') playSound('vote'); lastStatus.current = room.status; setFeed([]) } }, [room])
 
   // Deadlines: any client nudges the server when a timer reaches zero. The server re-checks the deadline.
   useEffect(() => {
