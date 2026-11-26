@@ -37,7 +37,7 @@ BEGIN
   VALUES
     ('10000000-0000-0000-0000-000000000031', '10000000-0000-0000-0000-000000000011', 'gold-seal', 'Gold seal', 'A gold seal', 'ختم ذهبي', 14, 20, 16, 18, 'A seal with a star-shaped mark.', 'ختم يحمل علامة على شكل نجمة.', 'The seal matches the workshop stamp.', 'FACT', 4, '{}'::jsonb),
     ('10000000-0000-0000-0000-000000000032', '10000000-0000-0000-0000-000000000011', 'open-window', 'Open window', 'An open window', 'نافذة مفتوحة', 59, 25, 18, 24, 'The window is open despite the rain.', 'النافذة مفتوحة رغم المطر.', 'The window explains the wet trail.', 'OBSERVATION', 3, '{}'::jsonb),
-    ('10000000-0000-0000-0000-000000000033', '10000000-0000-0000-0000-000000000012', 'wet-trail', 'Wet trail', 'A wet trail', 'أثر مبلل', 68, 52, 20, 22, 'Small wet footprints lead toward the garden shed.', 'آثار أقدام مبللة تتجه نحو مخزن الحديقة.', 'The trail links the window to the missing blueprint.', 'TEMPORAL', 5, '{"requires_evidence":["10000000-0000-0000-0000-000000000032"]}'::jsonb)
+    ('10000000-0000-0000-0000-000000000033', '10000000-0000-0000-0000-000000000012', 'wet-trail', 'Wet trail', 'A wet trail', 'أثر مبلل', 68, 52, 20, 22, 'Small wet footprints lead toward the garden shed.', 'آثار أقدام مبللة تتجه نحو مخزن الحديقة.', 'The trail links the window to the missing blueprint.', 'INFERENCE', 5, '{"requires_evidence":["10000000-0000-0000-0000-000000000032"]}'::jsonb)
   ON CONFLICT (id) DO NOTHING;
 
   INSERT INTO detective_evidence_relations (id, version_id, from_evidence_id, to_evidence_id, relation_type, public_explanation)
@@ -77,8 +77,8 @@ BEGIN
   INSERT INTO detective_timeline_events (id, version_id, event_key, label, label_ar, window_key, position)
   VALUES
     ('10000000-0000-0000-0000-0000000000a1', '10000000-0000-0000-0000-000000000002', 'rain', 'Rain begins', 'يبدأ المطر', '18:00', 1),
-    ('10000000-0000-0000-0000-0000000000a2', '10000000-0000-0000-0000-000000000002', 'window', 'Window opens', '18:05', 2),
-    ('10000000-0000-0000-0000-0000000000a3', '10000000-0000-0000-0000-000000000002', 'trail', 'Trail appears', '18:10', 3)
+    ('10000000-0000-0000-0000-0000000000a2', '10000000-0000-0000-0000-000000000002', 'window', 'Window opens', 'تُفتح النافذة', '18:05', 2),
+    ('10000000-0000-0000-0000-0000000000a3', '10000000-0000-0000-0000-000000000002', 'trail', 'Trail appears', 'يظهر الأثر', '18:10', 3)
   ON CONFLICT (id) DO NOTHING;
 
   INSERT INTO detective_sessions (id, room_id, version_id, mode, sharing, status, started_at, created_by)
