@@ -42,6 +42,9 @@ import ContentAnalytics from './pages/admin/ContentAnalytics'
 import ContentCategories from './pages/admin/ContentCategories'
 import DetectiveCatalog from './pages/DetectiveCatalog'
 import DetectiveSession from './pages/DetectiveSession'
+import DetectiveCasePreview from './pages/DetectiveCase'
+import DetectiveReportPage from './pages/DetectiveReport'
+import DetectiveHistory from './pages/DetectiveHistory'
 import DetectiveStudio from './pages/admin/DetectiveStudio'
 import DetectiveCaseEditor from './pages/admin/DetectiveCaseEditor'
 
@@ -71,7 +74,10 @@ export default function App() {
           <Route path="/bakasa/join/:code" element={<RequirePlayer><BakasaJoin /></RequirePlayer>} />
           <Route path="/bakasa/room/:roomId" element={<RequirePlayer><BakasaRoom /></RequirePlayer>} />
           <Route path="/bakasa/history" element={<RequirePlayer><BakasaHistory /></RequirePlayer>} />
-          <Route path="/detective" element={<RequirePlayer><DetectiveCatalog /></RequirePlayer>} />
+          <Route path="/detective" element={<DetectiveCatalog />} />
+          <Route path="/detective/case/:id" element={<DetectiveCasePreview />} />
+          <Route path="/detective/report/:sessionId" element={<RequirePlayer><DetectiveReportPage /></RequirePlayer>} />
+          <Route path="/detective/history" element={<RequirePlayer><DetectiveHistory /></RequirePlayer>} />
           <Route path="/detective/session/:sessionId" element={<RequirePlayer><DetectiveSession /></RequirePlayer>} />
         </>
       )}
