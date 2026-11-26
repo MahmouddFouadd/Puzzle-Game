@@ -101,7 +101,7 @@ for (const qq of pack.stages_questions) {
   if (!stageId[qq.stage]) fail(`question stage ${qq.stage}`)
   let type = qq.type, options = (qq.options ?? []).map((o) => ({ id: o.id, text: en(o.text, o.text_ar), text_ar: o.text_ar ?? o.text }))
   let key = qq.answer_key, prompt = qq.prompt, promptAr = qq.prompt_ar
-  if (type === 'EVENT_ORDERING') {
+  if (type === 'EVENT_ORDERING' || type === 'CHRONOLOGICAL_REASONING') {
     const order = key.order, byId = Object.fromEntries(options.map((o) => [o.id, o]))
     if (!order?.every((x) => byId[x])) fail(`ordering ${qq.position}`)
     const rot = (a, n) => a.slice(n).concat(a.slice(0, n))

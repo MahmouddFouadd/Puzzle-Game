@@ -5,6 +5,7 @@ import { boardLink, detectiveError, finishDetective, inspectScene, loadDetective
   type DetectiveEvidence, type DetectivePayload, type DetectiveQuestion, type HintResult, type Relation } from '../detective/api'
 import { SceneViewer } from '../detective/SceneViewer'
 import { EvidenceCrop } from '../detective/EvidenceCrop'
+import { seededShuffle } from '../lib/shuffle'
 import { EvidenceBoard, RELATIONS } from '../detective/Board'
 import { imageUrl } from './DetectiveCatalog'
 import { PartyBoard, usePartyState } from './DetectiveParty'
@@ -22,7 +23,7 @@ function useElapsed(start: string | undefined, end: string | null | undefined) {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 }
 
-function QuestionCard({ q, found, ar, busy, onSubmit }: { q: DetectiveQuestion; found: DetectiveEvidence[]; ar: boolean; busy: boolean; onSubmit: (q: DetectiveQuestion, a: Record<string, unknown>) => void }) {
+function QuestionCard({ q, found, ar, busy, onSubmit, shuffleSeed }: { shuffleSeed: string; q: DetectiveQuestion; found: DetectiveEvidence[]; ar: boolean; busy: boolean; onSubmit: (q: DetectiveQuestion, a: Record<string, unknown>) => void }) {
   const [opt, setOpt] = useState<string | null>(null)
   const [text, setText] = useState('')
   const [rel, setRel] = useState<{ from: string; to: string; relation: Relation | '' }>({ from: '', to: '', relation: '' })
@@ -51,7 +52,7 @@ function QuestionCard({ q, found, ar, busy, onSubmit }: { q: DetectiveQuestion; 
           {q.question_type === 'TRUE_FALSE' && <div className="grid grid-cols-2 gap-2">{[['true', ar ? 'صح' : 'True'], ['false', ar ? 'خطأ' : 'False']].map(([v, l]) => (
             <button key={v} type="button" className="det-btn-ghost" aria-pressed={opt === v} style={opt === v ? { borderColor: '#2dd4bf', background: 'rgba(45,212,191,.15)' } : undefined} onClick={() => setOpt(v)}>{l}</button>))}</div>}
           {q.question_type !== 'TRUE_FALSE' && q.question_type !== 'EVIDENCE_RELATIONSHIP' && q.options.length > 0 && (
-            <div role="radiogroup" className="grid gap-2">{q.options.map((o) => (
+            <div role="radiogroup" className="grid gap-2">{seededShuffle(q.options, `${shuffleSeed}:${q.id}`).map((o) => (
               <button key={o.id} type="button" role="radio" aria-checked={opt === o.id} onClick={() => setOpt(o.id)}
                 className={`rounded-lg border px-3 py-2.5 text-start text-sm transition ${opt === o.id ? 'border-[#2dd4bf] bg-[#2dd4bf]/15' : 'border-[#2f4462] bg-[#14233a] hover:bg-[#1b2e4b]'}`}>{optLabel(o)}</button>))}</div>)}
           {q.question_type !== 'TRUE_FALSE' && q.question_type !== 'EVIDENCE_RELATIONSHIP' && q.options.length === 0 && (
@@ -239,7 +240,7 @@ export default function DetectiveSession() {
           {tab === 'questions' && (
             <div className="space-y-3" role="tabpanel">
               {stage && <p className="text-sm text-[#9fb0c4]">{ar ? `المرحلة الحالية: ${stage.title_ar}` : `Current stage: ${stage.title}`}</p>}
-              {stageQs.map((q) => <QuestionCard key={q.id} q={q} found={found} ar={ar} busy={busy} onSubmit={(qq, a) => void submit(qq, a)} />)}
+              {stageQs.map((q) => <QuestionCard key={q.id} shuffleSeed={p.session.id} q={q} found={found} ar={ar} busy={busy} onSubmit={(qq, a) => void submit(qq, a)} />)}
               {p.questions.some((q) => q.locked) && <p className="rounded-lg bg-[#14233a] p-3 text-center text-sm text-[#9fb0c4]">🔒 {ar ? `${p.questions.filter((q) => q.locked).length} أسئلة هتتفتح لما تخلّص المرحلة الحالية` : `${p.questions.filter((q) => q.locked).length} questions unlock after this stage`}</p>}
               {finalAnswered && <button type="button" className="det-btn w-full text-lg" disabled={busy} onClick={() => void finish()}>🗂️ {ar ? 'اقفل القضية واعرف الحل' : 'Close the case & reveal the solution'}</button>}
             </div>
