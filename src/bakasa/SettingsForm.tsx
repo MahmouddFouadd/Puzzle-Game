@@ -63,20 +63,11 @@ export function SettingsForm({ value, onChange }: { value: BakasaSettings; onCha
       <details className="rounded-2xl border border-white/10 p-4">
         <summary className="cursor-pointer font-semibold text-bk-accent">{ar ? 'إعدادات متقدمة (الوقت والتصويت)' : 'Advanced (timers & voting)'}</summary>
         <div className="mt-4 space-y-3">
-          <Stepper label={ar ? 'لفّات التلميحات' : 'Clue laps'} value={value.clue_laps} min={1} max={4} onChange={(v) => set('clue_laps', v)} />
-          <Stepper label={ar ? 'وقت كل دور' : 'Turn time'} value={value.turn_seconds} min={15} max={180} step={15} suffix={ar ? 'ث' : 's'} onChange={(v) => set('turn_seconds', v)} />
-          <Stepper label={ar ? 'وقت النقاش' : 'Discussion'} value={value.discussion_seconds / 60} min={1} max={20} suffix={ar ? 'د' : 'm'} onChange={(v) => set('discussion_seconds', v * 60)} />
+          <Stepper label={ar ? 'وقت كل سؤال وإجابة' : 'Time per question'} value={value.turn_seconds} min={15} max={180} step={15} suffix={ar ? 'ث' : 's'} onChange={(v) => set('turn_seconds', v)} />
           <Stepper label={ar ? 'وقت التصويت' : 'Voting time'} value={value.voting_seconds} min={20} max={300} step={10} suffix={ar ? 'ث' : 's'} onChange={(v) => set('voting_seconds', v)} />
-          <Toggle label={ar ? 'فرصة أخيرة للبِكس يخمّن الكلمة' : 'Spy final guess'} checked={value.final_guess} onChange={(v) => set('final_guess', v)} />
+          <Toggle label={ar ? 'البِكس يخمّن الكلمة بعد التصويت' : 'Spy guesses the word after voting'} checked={value.final_guess} onChange={(v) => set('final_guess', v)} />
           {value.final_guess && <Stepper label={ar ? 'وقت التخمين' : 'Guess time'} value={value.guess_seconds} min={10} max={120} step={5} suffix={ar ? 'ث' : 's'} onChange={(v) => set('guess_seconds', v)} />}
           <Toggle label={ar ? 'مسموح تغيير الصوت قبل القفل' : 'Allow changing votes'} checked={value.allow_vote_change} onChange={(v) => set('allow_vote_change', v)} />
-          <label className="flex items-center justify-between gap-3 text-sm">
-            <span>{ar ? 'لو حصل تعادل' : 'On a tie'}</span>
-            <select className="bk-input w-auto py-2 text-sm" value={value.tie_rule} onChange={(e) => set('tie_rule', e.target.value as BakasaSettings['tie_rule'])}>
-              <option value="REVOTE">{ar ? 'إعادة تصويت مرة' : 'Revote once'}</option>
-              <option value="SPY_WINS">{ar ? 'البِكس يكسب' : 'Spy wins'}</option>
-            </select>
-          </label>
         </div>
       </details>
     </div>
@@ -91,8 +82,8 @@ export function SettingsSummary({ s }: { s: BakasaSettings }) {
     : (cats ?? []).filter((c) => s.category_ids.includes(c.id)).map((c) => `${c.emoji} ${ar ? c.name_ar : c.name_en}`).join('، ')
   const items: [string, string][] = [
     ['🕵️', ar ? `${s.spies} بِكس` : `${s.spies} spy`], ['🔁', ar ? `${s.rounds} جولات` : `${s.rounds} rounds`],
-    ['👥', `${s.min_players}–${s.max_players}`], ['💬', ar ? `${s.clue_laps} لفّة × ${s.turn_seconds}ث` : `${s.clue_laps} laps × ${s.turn_seconds}s`],
-    ['🗳️', `${s.voting_seconds}${ar ? 'ث' : 's'}`], ['🎯', s.final_guess ? (ar ? 'تخمين أخير' : 'Final guess') : (ar ? 'بدون تخمين' : 'No guess')]
+    ['👥', `${s.min_players}–${s.max_players}`], ['💬', ar ? `${s.turn_seconds}ث لكل سؤال` : `${s.turn_seconds}s per question`],
+    ['🗳️', `${s.voting_seconds}${ar ? 'ث' : 's'}`], ['🎯', s.final_guess ? (ar ? 'البِكس يخمّن' : 'Spy guesses') : (ar ? 'بدون تخمين' : 'No guess')]
   ]
   return (
     <div className="space-y-2">

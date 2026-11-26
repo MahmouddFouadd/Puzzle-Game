@@ -6,10 +6,10 @@ import { Avatar, BakasaLogo, SoundToggle } from '../../bakasa/ui'
 import { useCategories } from '../../bakasa/SettingsForm'
 
 const DEMO = [
-  { ar: 'كل واحد بياخد دوره في السر', en: 'Everyone gets a secret role', icon: '🃏' },
-  { ar: 'اسألوا بعض وادّوا تلميحات', en: 'Ask questions & give clues', icon: '💬' },
-  { ar: 'صوّتوا: مين البِكس؟', en: 'Vote: who is the spy?', icon: '🗳️' },
-  { ar: 'اكشفوا البِكس… أو يضحك عليكم!', en: 'Unmask the spy… or get fooled!', icon: '🎉' }
+  { ar: 'كل واحد يخربش كارته ويعرف: بِكس ولا الكلمة؟', en: 'Everyone scratches a card: spy or the word?', icon: '🃏' },
+  { ar: 'فترة الأسئلة: "محمود اسأل فتحي"… لحد ما الكل يسأل', en: 'Questions: "Mahmoud, ask Fathi"… until everyone asks', icon: '💬' },
+  { ar: 'كل واحد يصوّت لوحده: مين البِكس؟ الصح ياخد +2', en: 'Everyone votes alone: who is the spy? Right = +2', icon: '🗳️' },
+  { ar: 'البِكس يخمّن الكلمة من 12 اقتراح… والسكور يظهر', en: 'The spy guesses the word from 12 options… then scores', icon: '🎉' }
 ]
 
 export default function BakasaIntro() {

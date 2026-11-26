@@ -13,15 +13,17 @@ export const DEFAULT_SETTINGS: BakasaSettings = {
 }
 
 export interface BakasaPlayer { user_id: string; nickname: string; avatar: string; seat: number; is_ready: boolean; status: 'ACTIVE' | 'LEFT'; score: number; online: boolean }
-export interface BakasaMessage { id: number; user_id: string; body: string; at: string }
+export interface BakasaMessage { id: number; user_id: string; body: string; at: string; kind?: 'CLUE' | 'QUESTION' | 'ANSWER'; target?: string | null }
 export interface BakasaReveal {
   spy_ids: string[]; word_ar: string; word_en: string; accused: string | null; spy_caught: boolean | null
   guess_ar: string | null; guess_en: string | null; guess_correct: boolean | null; winner: 'PLAYERS' | 'SPY' | 'ABANDONED'
   votes: Record<string, number>; score_deltas: Record<string, number>; duration_seconds: number
+  guesses: Record<string, { correct: boolean; word_ar: string; word_en: string }>; ballots: Record<string, string>
 }
 export interface BakasaRound {
   id: string; round_no: number; turn_order: string[]; revote: number; category_ar: string; category_en: string; emoji: string; color: string
-  current_turn: string | null; in_round: boolean; accused: string | null; messages: BakasaMessage[]
+  current_turn: string | null; current_target: string | null; questions_done: boolean; q_lap: number; pair_has_question: boolean
+  guessed_count: number; spies_total: number; in_round: boolean; accused: string | null; messages: BakasaMessage[]
   votes_cast: number; voters_total: number; my_vote: string | null; reveal: BakasaReveal | null
 }
 export interface BakasaState {
@@ -54,6 +56,7 @@ export const previewRoom = (code: string) => rpc<{ found: boolean; room_id?: str
 export const joinRoom = (code: string, nickname: string, avatar: string) => rpc<{ status: string; room_id?: string }>('bakasa_join_room', { p_code: code, p_nickname: nickname, p_avatar: avatar })
 export const loadState = (room: string) => rpc<BakasaState>('bakasa_state', { p_room: room })
 export const myRole = (room: string) => rpc<BakasaRole>('bakasa_my_role', { p_room: room })
+export const markSeen = (room: string) => rpc<void>('bakasa_mark_seen', { p_room: room })
 export const setReady = (room: string, ready: boolean) => rpc<void>('bakasa_set_ready', { p_room: room, p_ready: ready })
 export const setAvatar = (room: string, avatar: string) => rpc<void>('bakasa_set_avatar', { p_room: room, p_avatar: avatar })
 export const updateSettings = (room: string, name: string, settings: BakasaSettings) => rpc<BakasaSettings>('bakasa_update_settings', { p_room: room, p_name: name, p_settings: settings })
@@ -62,6 +65,8 @@ export const kickPlayer = (room: string, user: string) => rpc<void>('bakasa_kick
 export const leaveRoom = (room: string) => rpc<void>('bakasa_leave_room', { p_room: room })
 export const startRound = (room: string) => rpc<void>('bakasa_start_round', { p_room: room })
 export const advance = (room: string, force = false) => rpc<void>('bakasa_advance', { p_room: room, p_force: force })
+export const pairDone = (room: string) => rpc<void>('bakasa_pair_done', { p_room: room })
+export const moreQuestions = (room: string) => rpc<void>('bakasa_more_questions', { p_room: room })
 export const skipTurn = (room: string) => rpc<void>('bakasa_skip_turn', { p_room: room })
 export const postClue = (room: string, body: string) => rpc<void>('bakasa_post_clue', { p_room: room, p_body: body })
 export const castVote = (room: string, suspect: string) => rpc<void>('bakasa_vote', { p_room: room, p_suspect: suspect })
@@ -82,6 +87,7 @@ export function bakasaError(e: unknown, ar: boolean): string {
     wrong_phase: ['المرحلة اتغيرت. استنى ثانية.', 'The phase has changed. One moment.'],
     cannot_vote_self: ['مينفعش تصوّت لنفسك!', 'You cannot vote for yourself!'],
     already_voted: ['انت صوّت خلاص.', 'You already voted.'],
+    already_guessed: ['انت خمّنت خلاص.', 'You already guessed.'],
     round_in_progress: ['فيه جولة شغالة دلوقتي.', 'A round is in progress.'],
     match_finished: ['المباراة خلصت. ابدأ مباراة جديدة.', 'The match is over. Start a rematch.'],
     forbidden: ['الإجراء ده للمضيف بس.', 'Only the host can do that.'],
