@@ -1,0 +1,81 @@
+/* FRIENDS ZONE design tokens. Fonts are self-hosted (OFL-1.1) so the Android app works offline. */
+@font-face { font-family: 'FZ Display'; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/baloo-bhaijaan-2-arabic-600-normal.woff2) format('woff2'); unicode-range: U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC; }
+@font-face { font-family: 'FZ Display'; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/baloo-bhaijaan-2-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'FZ Display'; font-style: normal; font-weight: 800; font-display: swap; src: url(/fonts/baloo-bhaijaan-2-arabic-800-normal.woff2) format('woff2'); unicode-range: U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC; }
+@font-face { font-family: 'FZ Display'; font-style: normal; font-weight: 800; font-display: swap; src: url(/fonts/baloo-bhaijaan-2-latin-800-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'FZ Text'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/cairo-arabic-400-normal.woff2) format('woff2'); unicode-range: U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC; }
+@font-face { font-family: 'FZ Text'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/cairo-latin-400-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'FZ Text'; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/cairo-arabic-600-normal.woff2) format('woff2'); unicode-range: U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC; }
+@font-face { font-family: 'FZ Text'; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/cairo-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'FZ Text'; font-style: normal; font-weight: 700; font-display: swap; src: url(/fonts/cairo-arabic-700-normal.woff2) format('woff2'); unicode-range: U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC; }
+@font-face { font-family: 'FZ Text'; font-style: normal; font-weight: 700; font-display: swap; src: url(/fonts/cairo-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+:root {
+  /* brand palette */
+  --fz-navy: #101426;        /* Midnight Navy – app background */
+  --fz-purple: #6D4AFF;      /* Deep Purple – primary */
+  --fz-cyan: #20D5D2;        /* Electric Cyan – secondary / success-ish accents */
+  --fz-blue: #3887FF;        /* Neon Blue – links, info, gradient end */
+  --fz-white: #F5F5FA;       /* Soft White – text on dark */
+  --fz-gray: #A5A9BB;        /* Secondary Gray – muted text */
+  --fz-gold: #E5B85C;        /* Accent Gold – rewards, highlights */
+
+  /* surfaces (dark first) */
+  --fz-bg: var(--fz-navy);
+  --fz-surface-1: #171C33;   /* cards */
+  --fz-surface-2: #1F2542;   /* raised / inputs */
+  --fz-surface-3: #2A3156;   /* hover, chips */
+  --fz-line: rgba(245, 245, 250, 0.10);
+  --fz-line-strong: rgba(245, 245, 250, 0.20);
+  --fz-text: var(--fz-white);
+  --fz-text-muted: var(--fz-gray);
+
+  /* status */
+  --fz-success: #2FD17D;
+  --fz-warning: #F5A524;
+  --fz-danger: #FF5470;
+  --fz-info: var(--fz-blue);
+
+  /* per-mode accents (one system, one accent each) */
+  --fz-mode-story: #3887FF;
+  --fz-mode-detective: #20D5D2;
+  --fz-mode-bakasa: #FF7A45;
+  --fz-mode-multiplayer: #6D4AFF;
+
+  /* gradients – used sparingly */
+  --fz-grad-brand: linear-gradient(135deg, #7B55FF 0%, #6D4AFF 45%, #3887FF 100%);
+  --fz-grad-zone: linear-gradient(90deg, #20D5D2 0%, #3887FF 100%);
+  --fz-grad-gold: linear-gradient(135deg, #F3D28C 0%, #E5B85C 60%, #C9963D 100%);
+
+  /* type */
+  --fz-font-display: 'FZ Display', 'Baloo Bhaijaan 2', 'Cairo', system-ui, sans-serif;
+  --fz-font-text: 'FZ Text', 'Cairo', system-ui, sans-serif;
+  --fz-text-xs: 0.75rem; --fz-text-sm: 0.875rem; --fz-text-md: 1rem; --fz-text-lg: 1.125rem;
+  --fz-text-xl: 1.375rem; --fz-text-2xl: 1.75rem; --fz-text-3xl: 2.25rem; --fz-text-4xl: 3rem;
+
+  /* spacing (4px grid), radii, shadows */
+  --fz-space-1: 4px; --fz-space-2: 8px; --fz-space-3: 12px; --fz-space-4: 16px; --fz-space-5: 24px; --fz-space-6: 32px; --fz-space-7: 48px;
+  --fz-radius-sm: 10px; --fz-radius-md: 14px; --fz-radius-lg: 20px; --fz-radius-xl: 28px; --fz-radius-pill: 999px;
+  --fz-shadow-1: 0 2px 8px rgba(5, 8, 20, 0.35);
+  --fz-shadow-2: 0 10px 30px rgba(5, 8, 20, 0.45);
+  --fz-shadow-glow: 0 8px 28px rgba(109, 74, 255, 0.35);
+  --fz-focus: 0 0 0 3px rgba(32, 213, 210, 0.55);
+
+  /* motion */
+  --fz-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fz-dur-fast: 120ms; --fz-dur: 220ms; --fz-dur-slow: 420ms;
+
+  /* layout */
+  --fz-content-max: 1120px; --fz-reading-max: 720px;
+  --fz-safe-top: env(safe-area-inset-top, 0px); --fz-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --fz-dur-fast: 0ms; --fz-dur: 0ms; --fz-dur-slow: 0ms; }
+}
+
+/* loader: the two friends travel the zone ring */
+@keyframes fz-orbit { to { transform: rotate(360deg); } }
+@keyframes fz-pulse { 0%, 100% { opacity: .55; transform: scale(.96); } 50% { opacity: 1; transform: scale(1); } }
+.fz-loader-ring { transform-origin: 256px 256px; animation: fz-orbit 1.6s var(--fz-ease) infinite; }
+.fz-loader-z { animation: fz-pulse 1.6s ease-in-out infinite; transform-origin: 256px 256px; }
+@media (prefers-reduced-motion: reduce) { .fz-loader-ring, .fz-loader-z { animation: none; } }
