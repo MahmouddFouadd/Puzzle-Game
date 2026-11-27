@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 // @ts-expect-error plain ESM helper shared with the Node importer
 import { normalizePack, packVersion, validatePack } from '../../scripts/detective-pack-lib.mjs'
@@ -22,6 +22,16 @@ describe('detective case packs', () => {
     const pack = read('supabase/tests/fixtures/hybrid-mini.json')
     expect(packVersion(pack)).toBe(2)
     expect(validatePack(pack).errors).toEqual([])
+  })
+
+  it('accepts case 01 (Room 307) with all of its images', () => {
+    const pack = read('supabase/seed/packs/room-307.json')
+    const assetExists = (n: string) => existsSync(new URL(`../../public/demo/detective/room-307/${n}.webp`, import.meta.url))
+    const { errors } = validatePack(pack, { assetExists })
+    expect(errors).toEqual([])
+    expect(pack.scenes.flatMap((s: { evidence: unknown[] }) => s.evidence)).toHaveLength(12)
+    expect(pack.lab_procedures.length).toBeGreaterThanOrEqual(2)
+    expect(pack.stages_questions).toHaveLength(9)
   })
 
   it('reports broken references, bad hotspots and duplicate keys', () => {

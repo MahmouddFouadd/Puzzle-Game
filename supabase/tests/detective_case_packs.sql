@@ -5,7 +5,7 @@ do $$
 declare c record; v_session uuid; s record; e record; qq record; r jsonb; v_payload jsonb; v_rep jsonb; v_ans jsonb; v_found int; v_total int;
 begin
   perform set_config('app.uid', '00000000-0000-0000-0000-0000000000a1', false);
-  for c in select id, slug from detective_cases where slug in ('the-blue-ring-heist', 'the-clock-that-stopped', 'the-missing-180', 'the-blue-moonflower-seed') order by slug loop
+  for c in select id, slug from detective_cases where slug in ('the-blue-ring-heist', 'the-clock-that-stopped', 'the-missing-180', 'the-blue-moonflower-seed', 'room-307') order by slug loop
     perform publish_detective_case(c.id);
     perform set_config('app.uid', '00000000-0000-0000-0000-0000000000d1', false);
     v_session := (start_detective_session(c.id, 'SOLO')->>'session_id')::uuid;
@@ -33,6 +33,9 @@ begin
       r := submit_detective_answer(v_session, qq.id, v_ans, gen_random_uuid());
       if not (r->>'is_correct')::boolean then raise exception 'FAIL % question % (%) graded wrong', c.slug, qq.position, qq.question_type; end if;
     end loop;
+    -- v2 packs with an accusation stage: submit the authored correct verdict
+    perform detective_submit_verdict(v_session, k.suspect_id, k.motive_answer, k.method_answer, k.key_evidence, k.timeline_order)
+      from detective_verdict_criteria k join detective_case_versions v on v.id = k.version_id where v.case_id = c.id;
     v_rep := detective_finish(v_session);
     if (v_rep->>'questions_correct')::int <> (v_rep->>'questions_total')::int or (v_rep->>'conclusion_correct')::boolean is not true then raise exception 'FAIL % report %', c.slug, v_rep; end if;
     raise notice 'PASS % : % clues, % questions, score %', c.slug, v_total, v_rep->>'questions_total', v_rep->>'score';
