@@ -1,0 +1,1128 @@
+{
+ "pack_version": 2,
+ "case": {
+  "slug": "room-307",
+  "title": "The Last Night in Room 307",
+  "title_ar": "آخر ليلة في الغرفة 307",
+  "case_type": "FULL",
+  "difficulty": 3,
+  "age_min": 16,
+  "age_max": 99,
+  "estimated_minutes": 30,
+  "category": "Murder",
+  "category_ar": "جريمة قتل",
+  "status": "DRAFT",
+  "description": "A hotel owner is found dead in room 307 of his own Cairo hotel. A knife in a waste bag seems to name the killer, but does it?",
+  "description_ar": "مالك فندق فاخر في القاهرة يُعثر عليه مقتولًا في الغرفة 307 داخل فندقه. سكين في كيس قمامة تبدو كأنها تشير إلى القاتل… لكن هل هي الحقيقة؟",
+  "briefing": "06:10. Room service found Adel Mansour, owner of the Nile Crown Hotel, dead in room 307. He was staying there the night before a 9:00 board meeting. The hotel is sealed and three people had reason to be near him that night. Search the four locations, send the evidence to the lab, question the suspects and make your accusation. This is a fictional case.",
+  "briefing_ar": "الساعة 6:10 صباحًا. عامل خدمة الغرف وجد عادل منصور، مالك فندق تاج النيل، مقتولًا في الغرفة 307. كان بايت في الفندق ليلة اجتماع مجلس الإدارة الساعة 9. الفندق مقفول، وفيه تلات أشخاص كان عندهم سبب يقربوا منه الليلة دي. افحص الأماكن الأربعة، ابعت الأدلة للمعمل، استجوب المشتبه بهم، وقدّم اتهامك. القضية خيالية بالكامل.",
+  "objective": "Find who killed Adel Mansour, why, how, and prove it with evidence.",
+  "objective_ar": "اكتشف مين قتل عادل منصور، وليه، وإزاي، وأثبت ده بالأدلة.",
+  "cover_image": "cover"
+ },
+ "settings": {
+  "stages": [
+   "BRIEFING",
+   "CRIME_SCENE",
+   "EVIDENCE",
+   "LAB",
+   "INTERROGATION",
+   "BOARD",
+   "DEDUCTION",
+   "VERDICT",
+   "RESOLUTION"
+  ],
+  "guidance": {
+   "max_hints": 4,
+   "cooldown_seconds": 45,
+   "area_hints": true,
+   "area_penalty": -4
+  }
+ },
+ "stages": [
+  {
+   "stage_key": "scene",
+   "position": 1,
+   "title": "Crime scene",
+   "title_ar": "مسرح الجريمة",
+   "unlock_rule": {}
+  },
+  {
+   "stage_key": "lab",
+   "position": 2,
+   "title": "Forensic lab",
+   "title_ar": "المعمل الجنائي",
+   "unlock_rule": {
+    "requires_stage": "scene"
+   }
+  },
+  {
+   "stage_key": "interrogation",
+   "position": 3,
+   "title": "Interrogation",
+   "title_ar": "الاستجواب",
+   "unlock_rule": {
+    "requires_stage": "lab"
+   }
+  },
+  {
+   "stage_key": "accusation",
+   "position": 4,
+   "title": "Accusation",
+   "title_ar": "الاتهام",
+   "unlock_rule": {
+    "requires_stage": "interrogation"
+   }
+  }
+ ],
+ "scenes": [
+  {
+   "position": 1,
+   "title": "Room 307",
+   "title_ar": "الغرفة 307",
+   "introduction": "The victim's room as the first officers found it. Nothing has been moved except the knife, already bagged.",
+   "introduction_ar": "الغرفة زي ما لقاها أول ظباط وصلوا. محدش حرّك حاجة غير السكين اللي اتحطت في كيس الأدلة.",
+   "evidence": [
+    {
+     "key": "knife-bag",
+     "title": "Kitchen knife (bagged)",
+     "title_ar": "سكين مطبخ في كيس أدلة",
+     "x": 0,
+     "y": 60,
+     "width": 27,
+     "height": 30,
+     "classification": "FACT",
+     "importance": 5,
+     "description": "A long kitchen knife with dried blood on the blade. It was recovered from a waste bag in the corridor and bagged here.",
+     "description_ar": "سكين مطبخ طويلة على نصلها دم ناشف. اتلقت في كيس قمامة في الطرقة واتحرزت هنا.",
+     "admin_explanation": "The weapon, from the hotel kitchen; wiped or held with gloves.",
+     "admin_explanation_ar": "سلاح الجريمة. من مطبخ الفندق، ومفيش عليها بصمات واضحة لأنها اتمسحت أو اتمسكت بجوانتي."
+    },
+    {
+     "key": "blood-drops",
+     "title": "Blood drops by the bathroom",
+     "title_ar": "نقط دم جنب باب الحمام",
+     "x": 43.5,
+     "y": 75,
+     "width": 11.5,
+     "height": 11,
+     "classification": "OBSERVATION",
+     "importance": 4,
+     "description": "Small round drops on the tiles between the bathroom door and the entrance, as if they fell from something carried.",
+     "description_ar": "نقط دم صغيرة مدورة على البلاط بين باب الحمام والمدخل، كأنها نقطت من حاجة حد كان شايلها.",
+     "admin_explanation": "Drops lead from inside the room to the door: the weapon was carried out.",
+     "admin_explanation_ar": "اتجاه النقط من جوه الأوضة للباب: الأداة اتشالت لبره بعد الجريمة."
+    },
+    {
+     "key": "stained-towel",
+     "title": "Stained hand towel",
+     "title_ar": "فوطة عليها بقعة",
+     "x": 60.5,
+     "y": 69,
+     "width": 14.5,
+     "height": 12.5,
+     "classification": "OBSERVATION",
+     "importance": 4,
+     "description": "A white hotel towel with a small red stain, dropped on the floor near the door.",
+     "description_ar": "فوطة بيضا من فوط الفندق عليها بقعة حمرا صغيرة، واقعة على الأرض جنب الباب.",
+     "admin_explanation": "Someone wiped a hand or the knife before leaving; from third-floor stock.",
+     "admin_explanation_ar": "حد مسح إيده أو السكين قبل ما يخرج. مأخوذة من مخزون الدور التالت."
+    },
+    {
+     "key": "key-card",
+     "title": "Master key card on the floor",
+     "title_ar": "كارت ماستر على الأرض",
+     "x": 76.5,
+     "y": 85.5,
+     "width": 7,
+     "height": 8,
+     "classification": "FACT",
+     "importance": 5,
+     "description": "A black master key card marked HK-02 lies on the floor inside the door. It opens every room on the floor.",
+     "description_ar": "كارت ماستر أسود مكتوب عليه HK-02 واقع على الأرض جوه الباب. بيفتح كل أوض الدور.",
+     "admin_explanation": "HK-02 belongs to housekeeping, but it was re-encoded at 23:52 from the manager's account.",
+     "admin_explanation_ar": "HK-02 مسجل على عربة التدبير المنزلي (هدى)، لكن سجل الأمن يثبت إن الكارت اتبرمج من جديد الساعة 23:52 من حساب المدير."
+    }
+   ]
+  },
+  {
+   "position": 2,
+   "title": "Third-floor service corridor",
+   "title_ar": "طرقة الخدمة في الدور التالت",
+   "introduction": "The corridor outside 307. The housekeeping cart was left here overnight.",
+   "introduction_ar": "الطرقة اللي قدام 307. عربة التدبير المنزلي فضلت مركونة هنا طول الليل.",
+   "evidence": [
+    {
+     "key": "waste-bag",
+     "title": "Black waste bag",
+     "title_ar": "كيس القمامة الأسود",
+     "x": 52.8,
+     "y": 57.2,
+     "width": 14.7,
+     "height": 21.1,
+     "classification": "FACT",
+     "importance": 4,
+     "description": "The bag where the knife was found, wrapped in a towel, beside the housekeeping cart.",
+     "description_ar": "الكيس اللي اتلقت فيه السكين ملفوفة في فوطة، جنب عربة التدبير المنزلي.",
+     "admin_explanation": "Dumping the weapon in housekeeping's bag was meant to point at Hoda.",
+     "admin_explanation_ar": "رمي السلاح في كيس عربة هدى كان مقصود عشان الشبهة تروح ناحيتها."
+    },
+    {
+     "key": "gloves",
+     "title": "Blue latex gloves",
+     "title_ar": "جوانتي لاتكس أزرق",
+     "x": 49,
+     "y": 82,
+     "width": 11,
+     "height": 8,
+     "classification": "OBSERVATION",
+     "importance": 4,
+     "description": "A pair of housekeeping latex gloves on the carpet, size L.",
+     "description_ar": "جوز جوانتي لاتكس من بتوع التدبير المنزلي على الموكيت، مقاس L.",
+     "admin_explanation": "Hoda wears size S; the gloves were left to suggest a cleaner did it.",
+     "admin_explanation_ar": "هدى بتلبس مقاس S. الجوانتي اتساب عشان يوحي إن عاملة نضافة هي اللي عملتها."
+    },
+    {
+     "key": "blood-trail",
+     "title": "Trail of blood drops",
+     "title_ar": "خط نقط دم",
+     "x": 36.5,
+     "y": 63.5,
+     "width": 10.5,
+     "height": 16,
+     "classification": "OBSERVATION",
+     "importance": 3,
+     "description": "A line of drops on the carpet from the door of 307 toward the cart.",
+     "description_ar": "خط نقط دم على الموكيت من باب 307 لحد العربة.",
+     "admin_explanation": "Completes the weapon's path: from the room to the cart.",
+     "admin_explanation_ar": "يكمل مسار السلاح: من الأوضة للعربة، مش من العربة للأوضة."
+    }
+   ]
+  },
+  {
+   "position": 3,
+   "title": "Security room",
+   "title_ar": "غرفة الأمن",
+   "introduction": "The hotel's CCTV and key-card control room. The night guard was on rounds from 23:45.",
+   "introduction_ar": "غرفة الكاميرات وبرمجة الكروت. حارس الليل كان بيلف في الفندق من 23:45.",
+   "evidence": [
+    {
+     "key": "cctv",
+     "title": "Corridor cameras",
+     "title_ar": "شاشات كاميرات الطرق",
+     "x": 0,
+     "y": 0,
+     "width": 65.5,
+     "height": 42,
+     "classification": "FACT",
+     "importance": 5,
+     "description": "The third-floor camera recording has a gap from 00:05 to 00:35.",
+     "description_ar": "تسجيل كاميرا الدور التالت فيه فراغ من 00:05 لـ 00:35.",
+     "admin_explanation": "The camera was disabled from the manager's admin account.",
+     "admin_explanation_ar": "الكاميرا اتقفلت من حساب الأدمن الخاص بالمدير. محدش تاني عنده الصلاحية دي بالليل."
+    },
+    {
+     "key": "access-log",
+     "title": "Key-card encoding log",
+     "title_ar": "سجل برمجة الكروت",
+     "x": 6.5,
+     "y": 69,
+     "width": 41,
+     "height": 31,
+     "classification": "FACT",
+     "importance": 5,
+     "description": "Printed log of every key card encoded tonight, with the account that encoded it.",
+     "description_ar": "سجل مطبوع بكل الكروت اللي اتبرمجت الليلة، وكل كارت مين برمجه.",
+     "admin_explanation": "23:52 – HK-02 encoded by S.KAMAL, contradicting Sherif's 23:30 departure.",
+     "admin_explanation_ar": "23:52 – برمجة HK-02 من حساب S.KAMAL. ده بيكذب قول شريف إنه مشي 23:30."
+    },
+    {
+     "key": "broken-card",
+     "title": "Snapped staff card",
+     "title_ar": "كارت موظف مكسور",
+     "x": 48,
+     "y": 65,
+     "width": 28,
+     "height": 27,
+     "classification": "FACT",
+     "importance": 3,
+     "description": "Hoda Samir's personal staff card, snapped in two, logged as reported broken at 22:50.",
+     "description_ar": "كارت هدى سمير الشخصي مكسور نصين، ومتسجل إنها بلّغت عنه 22:50.",
+     "admin_explanation": "Shows Hoda had no working card after 22:50 and had handed HK-02 back.",
+     "admin_explanation_ar": "يثبت إن هدى مكانش معاها كارت شغال بعد 22:50 وسلّمت كارت العربة HK-02 للأمن."
+    }
+   ]
+  },
+  {
+   "position": 4,
+   "title": "Manager's office",
+   "title_ar": "مكتب المدير",
+   "introduction": "Sherif Kamal's office on the mezzanine, searched at 07:30.",
+   "introduction_ar": "مكتب شريف كمال في الميزانين، اتفتش الساعة 7:30.",
+   "evidence": [
+    {
+     "key": "ledgers",
+     "title": "Two sets of ledgers",
+     "title_ar": "دفترين حسابات",
+     "x": 34.5,
+     "y": 29.5,
+     "width": 37,
+     "height": 19.5,
+     "classification": "FACT",
+     "importance": 5,
+     "description": "Two ledgers for the same months with different totals, next to invoices from a supplier that does not exist.",
+     "description_ar": "دفترين حسابات لنفس الشهور بأرقام مختلفة، وجنبهم فواتير من مورّد مالوش وجود.",
+     "admin_explanation": "Motive: embezzlement through fake invoices Adel meant to present at 9:00.",
+     "admin_explanation_ar": "الدافع: اختلاس بفواتير وهمية. عادل كان هيعرضها في اجتماع 9 الصبح."
+    },
+    {
+     "key": "jacket-stain",
+     "title": "Stain on the jacket cuff",
+     "title_ar": "بقعة على كُم الجاكيت",
+     "x": 26.5,
+     "y": 67,
+     "width": 8,
+     "height": 13,
+     "classification": "OBSERVATION",
+     "importance": 5,
+     "description": "A small dark stain on the cuff of the suit jacket left on the office chair.",
+     "description_ar": "بقعة غامقة صغيرة على كُم جاكيت البدلة المتساب على كرسي المكتب.",
+     "admin_explanation": "Lab: consistent with the victim's blood, not Sherif's.",
+     "admin_explanation_ar": "تحليل الدم بيقول إنها متوافقة مع دم الضحية، مش دم شريف."
+    }
+   ]
+  }
+ ],
+ "suspects": [
+  {
+   "key": "sherif",
+   "name": "Sherif Kamal",
+   "name_ar": "شريف كمال",
+   "relationship": "Hotel manager",
+   "relationship_ar": "مدير الفندق",
+   "description_ar": "مدير الفندق من 6 سنين، وعنده صلاحية أدمن على الكاميرات وبرمجة الكروت.",
+   "background_ar": "كان مسؤول عن المشتريات والمدفوعات. عادل طلب منه ملفات المورّدين قبل الاجتماع بيومين.",
+   "motive": "Adel was about to expose fake supplier invoices he approved.",
+   "motive_ar": "عادل كان هيكشف فواتير مورّد وهمي هو اللي كان بيعتمدها.",
+   "alibi_ar": "قال إنه قفل مكتبه ومشي 23:30 وروّح على طول.",
+   "timeline": {
+    "23:30": "قال إنه مشي",
+    "23:52": "حسابه برمج كارت HK-02",
+    "00:05": "كاميرا الدور التالت اتقفلت من حسابه"
+   }
+  },
+  {
+   "key": "hoda",
+   "name": "Hoda Samir",
+   "name_ar": "هدى سمير",
+   "relationship": "Housekeeping supervisor",
+   "relationship_ar": "مشرفة التدبير المنزلي",
+   "description_ar": "مسؤولة عن الدور التالت، وعربتها وكيس القمامة بتاعها اتلقى فيه السكين.",
+   "background_ar": "عادل كان اشتكى من تأخير نضافة الأوض الأسبوع اللي فات، وكتب لها إنذار.",
+   "motive": "A written warning from the victim the week before.",
+   "motive_ar": "إنذار مكتوب من الضحية الأسبوع اللي فات.",
+   "alibi_ar": "خلّصت شيفتها 23:00، سلّمت كارت العربة HK-02 للأمن، وبصمت خروج 23:04.",
+   "timeline": {
+    "22:50": "بلّغت إن كارتها الشخصي اتكسر",
+    "23:00": "سلّمت HK-02 للأمن",
+    "23:04": "بصمة خروج"
+   }
+  },
+  {
+   "key": "tarek",
+   "name": "Tarek Fahmy",
+   "name_ar": "طارق فهمي",
+   "relationship": "Business partner",
+   "relationship_ar": "شريك الضحية",
+   "description_ar": "شريك عادل في الفندق بنسبة 30%، واتخانقوا على العشا قدام الناس.",
+   "background_ar": "كان عايز يبيع حصته وعادل رافض. عادل قاله على العشا إن فيه فلوس ناقصة وإنه هيعرف مين ورا ده بكرة.",
+   "motive": "A public argument over selling his shares.",
+   "motive_ar": "خناقة قدام الناس على بيع حصته.",
+   "alibi_ar": "قال إنه خرج من الفندق 23:05 وروّح بعربيته.",
+   "timeline": {
+    "22:40": "خناقة مع عادل في المطعم",
+    "23:05": "استلم عربيته من الفاليه"
+   }
+  }
+ ],
+ "statements": [
+  {
+   "suspect": "sherif",
+   "statement": "I locked my office at 23:30 and went straight home. I never came back that night.",
+   "statement_ar": "قفلت مكتبي 23:30 وروّحت على طول. مارجعتش الفندق خالص الليلة دي.",
+   "truth_status": "FALSE",
+   "conflicting_evidence": [
+    "access-log",
+    "cctv",
+    "jacket-stain"
+   ],
+   "admin_explanation_ar": "حسابه برمج HK-02 الساعة 23:52 وقفل الكاميرا 00:05، والدم على كُمّه متوافق مع دم الضحية."
+  },
+  {
+   "suspect": "hoda",
+   "statement": "I finished at 23:00, gave the cart card to security and clocked out. My own card broke earlier.",
+   "statement_ar": "خلّصت 23:00، سلّمت كارت العربة للأمن وبصمت خروج. وكارتي الشخصي كان اتكسر قبلها.",
+   "truth_status": "TRUE",
+   "conflicting_evidence": [],
+   "admin_explanation_ar": "الكارت المكسور وسجل الأمن بيأكدوا كلامها. الجوانتي مش مقاسها."
+  },
+  {
+   "suspect": "tarek",
+   "statement": "We argued, yes. I left at 23:05; the valet will tell you. Adel said money was missing and he'd name someone tomorrow.",
+   "statement_ar": "أيوه اتخانقنا. أنا مشيت 23:05 والفاليه يشهد. عادل قالي إن فيه فلوس ناقصة وإنه هيقول مين بكرة.",
+   "truth_status": "TRUE",
+   "conflicting_evidence": [],
+   "admin_explanation_ar": "خروجه قبل الجريمة بساعة، وكلامه عن الفلوس الناقصة بيشاور على الدافع الحقيقي."
+  }
+ ],
+ "relations": [
+  {
+   "from": "knife-bag",
+   "to": "waste-bag",
+   "relation_type": "CONTEXTUAL",
+   "public_explanation_ar": "السكين اتلقت في الكيس ده، يعني اترمت بعد الجريمة."
+  },
+  {
+   "from": "blood-drops",
+   "to": "blood-trail",
+   "relation_type": "SUPPORTS",
+   "public_explanation_ar": "النقط في الأوضة وفي الطرقة مسار واحد: من 307 للعربة."
+  },
+  {
+   "from": "key-card",
+   "to": "access-log",
+   "relation_type": "SUPPORTS",
+   "public_explanation_ar": "الكارت اللي فتح الأوضة اتبرمج من حساب المدير 23:52."
+  },
+  {
+   "from": "access-log",
+   "to": "broken-card",
+   "relation_type": "CONTEXTUAL",
+   "public_explanation_ar": "هدى كانت سلّمت HK-02 وكارتها مكسور، فمكانش معاها كارت شغال."
+  },
+  {
+   "from": "cctv",
+   "to": "access-log",
+   "relation_type": "TEMPORAL",
+   "public_explanation_ar": "برمجة الكارت 23:52 ثم قفل الكاميرا 00:05: نفس الحساب ونفس الخطة."
+  },
+  {
+   "from": "jacket-stain",
+   "to": "knife-bag",
+   "relation_type": "SUPPORTS",
+   "public_explanation_ar": "الدم على الجاكيت والدم على السكين متوافقين مع دم الضحية."
+  },
+  {
+   "from": "gloves",
+   "to": "broken-card",
+   "relation_type": "CONTRADICTS",
+   "public_explanation_ar": "الأدلة اللي بتشاور على هدى (الجوانتي) بيناقضها إنها مكانش معاها كارت ومقاسها مختلف."
+  },
+  {
+   "from": "ledgers",
+   "to": "jacket-stain",
+   "relation_type": "CONTEXTUAL",
+   "public_explanation_ar": "الدافع والدليل المادي في نفس المكتب."
+  }
+ ],
+ "stages_questions": [
+  {
+   "stage": "scene",
+   "position": 1,
+   "type": "MULTIPLE_CHOICE",
+   "prompt_ar": "إيه اللي نقط الدم في الأوضة والطرقة بتقوله عن السكين؟",
+   "options": [
+    {
+     "id": "a",
+     "text": "It was carried from room 307 out to the cart",
+     "text_ar": "اتشالت من الأوضة 307 لبره ناحية العربة"
+    },
+    {
+     "id": "b",
+     "text": "It was brought from the cart into the room",
+     "text_ar": "اتجابت من العربة لجوه الأوضة"
+    },
+    {
+     "id": "c",
+     "text": "The victim walked to the corridor himself",
+     "text_ar": "الضحية خرج للطرقة بنفسه"
+    }
+   ],
+   "answer_key": {
+    "option_id": "a"
+   },
+   "associated_evidence": [
+    "blood-drops",
+    "blood-trail"
+   ],
+   "points": 10,
+   "penalty": -3,
+   "explanation_ar": "النقط بتبدأ جوه الأوضة وتكمل في الطرقة لحد العربة: السلاح اتشال لبره بعد الجريمة."
+  },
+  {
+   "stage": "scene",
+   "position": 2,
+   "type": "TRUE_FALSE",
+   "prompt_ar": "وجود السكين في كيس قمامة عربة هدى يثبت إنها القاتلة.",
+   "options": [],
+   "answer_key": {
+    "value": "false"
+   },
+   "associated_evidence": [
+    "waste-bag",
+    "knife-bag"
+   ],
+   "points": 10,
+   "penalty": -3,
+   "explanation_ar": "مكان الدليل لوحده مش بيثبت مين حطه. أي حد عدّى في الطرقة كان يقدر يرميها في الكيس."
+  },
+  {
+   "stage": "lab",
+   "position": 1,
+   "type": "MULTIPLE_CHOICE",
+   "prompt_ar": "تقرير جوانتي اللاتكس بيقول إيه؟",
+   "options": [
+    {
+     "id": "a",
+     "text": "Hoda is excluded; the partial profile is consistent with Sherif",
+     "text_ar": "هدى مستبعدة، والبصمة الوراثية الجزئية متوافقة مع شريف"
+    },
+    {
+     "id": "b",
+     "text": "The gloves prove Hoda was in the room",
+     "text_ar": "الجوانتي بيثبت إن هدى كانت في الأوضة"
+    },
+    {
+     "id": "c",
+     "text": "No human traces were found",
+     "text_ar": "مفيش أي آثار بشرية"
+    }
+   ],
+   "answer_key": {
+    "option_id": "a"
+   },
+   "associated_evidence": [
+    "gloves"
+   ],
+   "points": 15,
+   "penalty": -4,
+   "explanation_ar": "النتيجة الجزئية مش دليل إدانة لوحدها، لكنها بتستبعد هدى وبتتوافق مع شريف."
+  },
+  {
+   "stage": "lab",
+   "position": 2,
+   "type": "EVIDENCE_RELATIONSHIP",
+   "prompt_ar": "إيه العلاقة بين كارت HK-02 اللي على الأرض وسجل برمجة الكروت؟",
+   "options": [],
+   "answer_key": {
+    "from": "key-card",
+    "to": "access-log",
+    "relation": "SUPPORTS"
+   },
+   "associated_evidence": [
+    "key-card",
+    "access-log"
+   ],
+   "points": 15,
+   "penalty": -4,
+   "explanation_ar": "السجل بيقول إن الكارت ده نفسه اتبرمج 23:52 من حساب المدير."
+  },
+  {
+   "stage": "lab",
+   "position": 3,
+   "type": "TRUE_FALSE",
+   "prompt_ar": "الدم على كُم الجاكيت متوافق مع دم الضحية، وده لوحده كفاية عشان نثبت إن صاحب الجاكيت قتله.",
+   "options": [],
+   "answer_key": {
+    "value": "false"
+   },
+   "associated_evidence": [
+    "jacket-stain"
+   ],
+   "points": 10,
+   "penalty": -3,
+   "explanation_ar": "التوافق بيربط الجاكيت بالجريمة، لكن الإثبات محتاج أدلة تانية: السجل والكاميرا والكارت."
+  },
+  {
+   "stage": "interrogation",
+   "position": 1,
+   "type": "CONTRADICTION_IDENTIFICATION",
+   "prompt_ar": "أي دليل بيناقض قول شريف إنه مشي 23:30؟",
+   "options": [
+    {
+     "id": "a",
+     "text": "HK-02 encoded from his account at 23:52",
+     "text_ar": "HK-02 اتبرمج من حسابه 23:52"
+    },
+    {
+     "id": "b",
+     "text": "Hoda's broken card",
+     "text_ar": "كارت هدى المكسور"
+    },
+    {
+     "id": "c",
+     "text": "The argument at dinner",
+     "text_ar": "خناقة العشا"
+    }
+   ],
+   "answer_key": {
+    "option_id": "a"
+   },
+   "associated_evidence": [
+    "access-log"
+   ],
+   "points": 15,
+   "penalty": -4,
+   "explanation_ar": "محدش يقدر يبرمج كارت من حساب شريف إلا وهو في الفندق ومسجّل دخول."
+  },
+  {
+   "stage": "interrogation",
+   "position": 2,
+   "type": "MULTIPLE_CHOICE",
+   "prompt_ar": "ليه خناقة طارق مع الضحية مش كفاية عشان نتهمه؟",
+   "options": [
+    {
+     "id": "a",
+     "text": "He left at 23:05, an hour before the camera gap",
+     "text_ar": "مشي 23:05، قبل فراغ الكاميرا بساعة"
+    },
+    {
+     "id": "b",
+     "text": "He has no shares in the hotel",
+     "text_ar": "معندوش حصة في الفندق"
+    },
+    {
+     "id": "c",
+     "text": "He was the one who called the police",
+     "text_ar": "هو اللي بلّغ البوليس"
+    }
+   ],
+   "answer_key": {
+    "option_id": "a"
+   },
+   "associated_evidence": [
+    "cctv"
+   ],
+   "points": 10,
+   "penalty": -3,
+   "explanation_ar": "الخناقة دافع محتمل، لكن التوقيت المستقل (الفاليه والكاميرا) بيخرجه برة وقت الجريمة."
+  },
+  {
+   "stage": "accusation",
+   "position": 1,
+   "type": "EVENT_ORDERING",
+   "prompt_ar": "رتّب الأحداث من الأقدم للأحدث.",
+   "options": [
+    {
+     "id": "a",
+     "text": "HK-02 re-encoded from the manager's account",
+     "text_ar": "HK-02 اتبرمج من حساب المدير"
+    },
+    {
+     "id": "b",
+     "text": "Third-floor camera switched off",
+     "text_ar": "كاميرا الدور التالت اتقفلت"
+    },
+    {
+     "id": "c",
+     "text": "Room 307 opened with HK-02",
+     "text_ar": "الأوضة 307 اتفتحت بـ HK-02"
+    },
+    {
+     "id": "d",
+     "text": "Knife dumped in the housekeeping bag",
+     "text_ar": "السكين اترمت في كيس التدبير المنزلي"
+    }
+   ],
+   "answer_key": {
+    "order": [
+     "a",
+     "b",
+     "c",
+     "d"
+    ]
+   },
+   "associated_evidence": [
+    "access-log",
+    "cctv",
+    "key-card",
+    "waste-bag"
+   ],
+   "points": 15,
+   "penalty": -4
+  },
+  {
+   "stage": "accusation",
+   "position": 2,
+   "type": "FINAL_CONCLUSION",
+   "prompt_ar": "إيه أفضل تفسير لمقتل عادل منصور؟",
+   "options": [
+    {
+     "id": "a",
+     "text": "Sherif re-encoded the master card, cut the camera, killed Adel to hide his fraud and framed housekeeping",
+     "text_ar": "شريف برمج الكارت الماستر وقفل الكاميرا وقتل عادل عشان يخبّي الاختلاس، وحاول يلبّسها للتدبير المنزلي"
+    },
+    {
+     "id": "b",
+     "text": "Hoda killed Adel over the warning and hid the knife in her cart",
+     "text_ar": "هدى قتلت عادل بسبب الإنذار وخبّت السكين في عربيتها"
+    },
+    {
+     "id": "c",
+     "text": "Tarek came back after the argument and killed Adel",
+     "text_ar": "طارق رجع بعد الخناقة وقتل عادل"
+    }
+   ],
+   "answer_key": {
+    "option_id": "a"
+   },
+   "associated_evidence": [
+    "access-log",
+    "cctv",
+    "jacket-stain",
+    "ledgers"
+   ],
+   "points": 25,
+   "penalty": -6
+  }
+ ],
+ "hints": [
+  {
+   "stage": "scene",
+   "position": 1,
+   "level": 1,
+   "penalty": -1,
+   "hint_text_ar": "ابدأ بالمكان اللي اتلقى فيه السلاح، وبعدين اسأل نفسك: مين كان يقدر يفتح باب الأوضة؟"
+  },
+  {
+   "stage": "lab",
+   "position": 1,
+   "level": 2,
+   "penalty": -2,
+   "hint_text_ar": "الكارت اللي على الأرض اسمه مكتوب عليه. دوّر على اسمه في غرفة الأمن."
+  },
+  {
+   "stage": "interrogation",
+   "position": 1,
+   "level": 2,
+   "penalty": -2,
+   "hint_text_ar": "قارن الساعة اللي كل واحد قال إنه مشي فيها بالسجلات اللي مالهاش مصلحة تكذب."
+  },
+  {
+   "stage": "accusation",
+   "position": 1,
+   "level": 3,
+   "penalty": -3,
+   "hint_text_ar": "الدافع في المكتب، والدليل المادي على الكرسي، والتوقيت في غرفة الأمن."
+  }
+ ],
+ "timeline_events": [
+  {
+   "event_key": "dinner_argument",
+   "position": 1,
+   "label": "Adel and Tarek argue at dinner",
+   "label_ar": "خناقة عادل وطارق على العشا",
+   "window_key": "22:40"
+  },
+  {
+   "event_key": "hoda_card_broken",
+   "position": 2,
+   "label": "Hoda reports her card broken",
+   "label_ar": "هدى بتبلّغ إن كارتها اتكسر",
+   "window_key": "22:50"
+  },
+  {
+   "event_key": "hoda_leaves",
+   "position": 3,
+   "label": "Hoda hands in HK-02 and clocks out",
+   "label_ar": "هدى بتسلّم HK-02 وتبصم خروج",
+   "window_key": "23:04"
+  },
+  {
+   "event_key": "tarek_leaves",
+   "position": 4,
+   "label": "Tarek collects his car",
+   "label_ar": "طارق بيستلم عربيته",
+   "window_key": "23:05"
+  },
+  {
+   "event_key": "card_encoded",
+   "position": 5,
+   "label": "HK-02 re-encoded from S.KAMAL",
+   "label_ar": "HK-02 بيتبرمج من حساب S.KAMAL",
+   "window_key": "23:52"
+  },
+  {
+   "event_key": "camera_off",
+   "position": 6,
+   "label": "Third-floor camera off",
+   "label_ar": "كاميرا الدور التالت بتتقفل",
+   "window_key": "00:05"
+  },
+  {
+   "event_key": "room_entered",
+   "position": 7,
+   "label": "Room 307 opened with HK-02",
+   "label_ar": "الأوضة 307 بتتفتح بـ HK-02",
+   "window_key": "00:12"
+  },
+  {
+   "event_key": "knife_dumped",
+   "position": 8,
+   "label": "Knife dumped in the housekeeping bag",
+   "label_ar": "السكين بتترمي في كيس العربة",
+   "window_key": "00:31"
+  },
+  {
+   "event_key": "body_found",
+   "position": 9,
+   "label": "Room service finds the body",
+   "label_ar": "خدمة الغرف بتلاقي الجثة",
+   "window_key": "06:10"
+  }
+ ],
+ "solution": {
+  "public_reveal": "Sherif Kamal killed Adel Mansour. Adel had found fake supplier invoices Sherif approved and planned to expose them at the 9:00 board meeting. At 23:52 Sherif re-encoded the housekeeping master card HK-02 from his own account, switched off the third-floor camera at 00:05, entered room 307 at 00:12 and stabbed Adel with a kitchen knife. He wiped it with a towel and dumped it in the housekeeping bag with size-L gloves to frame Hoda. A stain on his jacket cuff is consistent with Adel's blood.",
+  "public_reveal_ar": "شريف كمال هو اللي قتل عادل منصور. عادل اكتشف فواتير مورّد وهمي شريف كان بيعتمدها، وكان ناوي يكشفها في اجتماع 9 الصبح. الساعة 23:52 شريف برمج كارت التدبير المنزلي الماستر HK-02 من حسابه، وقفل كاميرا الدور التالت 00:05، ودخل الأوضة 307 الساعة 00:12 وطعن عادل بسكينة من المطبخ. مسحها بفوطة ورماها في كيس عربة التدبير المنزلي مع جوانتي مقاس L عشان يلبّسها لهدى. والبقعة على كُم الجاكيت بتاعه متوافقة مع دم عادل.",
+  "educational_explanation": "No single clue convicts. The bag points at housekeeping, but location alone proves nothing. Independent records (key-card log, camera log, valet, clock-out) fix who could act when; lab results are 'consistent with', not certainty; together they converge on one person.",
+  "educational_explanation_ar": "مفيش دليل واحد لوحده بيدين حد. الكيس بيشاور على التدبير المنزلي، بس مكان الدليل لوحده مش إثبات. السجلات المستقلة (برمجة الكروت، الكاميرا، الفاليه، البصمة) بتحدد مين كان يقدر يعمل إيه وإمتى، ونتايج المعمل بتقول «متوافق» مش «أكيد». لما كل ده يتجمع بيشاور على شخص واحد.",
+  "alternative_hypotheses": [
+   {
+    "ar": "هدى سمير هي القاتلة.",
+    "en": "Hoda Samir is the killer.",
+    "why_wrong_ar": "كارتها كان مكسور وسلّمت HK-02 وبصمت خروج 23:04، والجوانتي مش مقاسها والبصمة الوراثية بتستبعدها.",
+    "why_wrong_en": "Her card was broken, she had returned HK-02 and clocked out at 23:04; the gloves are not her size and the DNA excludes her."
+   },
+   {
+    "ar": "طارق فهمي رجع وقتله.",
+    "en": "Tarek Fahmy came back and killed him.",
+    "why_wrong_ar": "مشي 23:05 حسب الفاليه، ومعندوش صلاحية على الكاميرات ولا على برمجة الكروت.",
+    "why_wrong_en": "He left at 23:05 per the valet, and has no access to cameras or card encoding."
+   }
+  ]
+ },
+ "lab_procedures": [
+  {
+   "key": "blood-knife",
+   "evidence": "knife-bag",
+   "exam_type": "BLOOD",
+   "title": "Blood on the knife",
+   "title_ar": "تحليل الدم على السكين",
+   "result": "Human blood consistent with the victim. No usable fingerprints: the handle was wiped or held with gloves.",
+   "result_ar": "دم بشري متوافق مع دم الضحية. مفيش بصمات صالحة: المقبض اتمسح أو اتمسك بجوانتي.",
+   "report": {
+    "sample_ids": [
+     "S-307-01"
+    ],
+    "findings_ar": [
+     "العينة دم بشري",
+     "متوافقة مع عينة الضحية المرجعية",
+     "لا توجد بصمات قابلة للمقارنة"
+    ],
+    "limitations_ar": "عدم وجود بصمات لا يستبعد أي شخص."
+   },
+   "points": 10
+  },
+  {
+   "key": "towel-blood",
+   "evidence": "stained-towel",
+   "exam_type": "BLOOD",
+   "title": "Stain on the towel",
+   "title_ar": "بقعة الفوطة",
+   "result": "Blood consistent with the victim, smeared as if a blade was wiped. Towel lot code: third-floor housekeeping stock.",
+   "result_ar": "دم متوافق مع الضحية، ممسوح كأن حد مسح بيه نصل. كود الدفعة: مخزون التدبير المنزلي للدور التالت.",
+   "report": {
+    "sample_ids": [
+     "S-307-02"
+    ],
+    "findings_ar": [
+     "أثر مسح نصل",
+     "من مخزون الدور التالت"
+    ],
+    "limitations_ar": "مخزون الدور التالت متاح لأي حد عدّى على العربة."
+   },
+   "points": 5
+  },
+  {
+   "key": "glove-dna",
+   "evidence": "gloves",
+   "exam_type": "DNA",
+   "title": "Skin cells inside the gloves",
+   "title_ar": "خلايا جلد جوه الجوانتي",
+   "result": "Partial profile. Hoda Samir is excluded. The partial profile is consistent with Sherif Kamal's reference sample (limited markers).",
+   "result_ar": "بصمة وراثية جزئية. هدى سمير مستبعدة. البصمة الجزئية متوافقة مع عينة شريف كمال المرجعية (عدد علامات محدود).",
+   "report": {
+    "sample_ids": [
+     "S-307-03"
+    ],
+    "findings_ar": [
+     "هدى سمير: مستبعدة",
+     "شريف كمال: متوافق (جزئي)"
+    ],
+    "limitations_ar": "النتيجة الجزئية لا تكفي وحدها للإدانة."
+   },
+   "release_seconds": 30,
+   "points": 15
+  },
+  {
+   "key": "card-prints",
+   "evidence": "key-card",
+   "exam_type": "FINGERPRINT",
+   "title": "Prints on master card HK-02",
+   "title_ar": "بصمات كارت HK-02",
+   "result": "One partial thumbprint near the chip, consistent with Sherif Kamal on 9 points. Not enough for a positive identification.",
+   "result_ar": "بصمة إبهام جزئية جنب الشريحة، متوافقة مع شريف كمال في 9 نقاط. مش كفاية لتحديد قاطع.",
+   "report": {
+    "sample_ids": [
+     "F-307-01"
+    ],
+    "findings_ar": [
+     "بصمة جزئية واحدة",
+     "9 نقاط توافق مع شريف كمال"
+    ],
+    "limitations_ar": "أقل من الحد المطلوب للتحديد القاطع."
+   },
+   "points": 10
+  },
+  {
+   "key": "jacket-blood",
+   "evidence": "jacket-stain",
+   "exam_type": "BLOOD",
+   "title": "Stain on the jacket cuff",
+   "title_ar": "بقعة كُم الجاكيت",
+   "result": "Human blood consistent with the victim; not consistent with Sherif Kamal's own sample.",
+   "result_ar": "دم بشري متوافق مع الضحية، ومش متوافق مع عينة شريف كمال نفسه.",
+   "report": {
+    "sample_ids": [
+     "S-307-04"
+    ],
+    "findings_ar": [
+     "متوافق مع الضحية",
+     "غير متوافق مع صاحب الجاكيت"
+    ],
+    "limitations_ar": "يربط الجاكيت بالدم، لا يحدد وقت حدوث البقعة."
+   },
+   "points": 15
+  },
+  {
+   "key": "camera-log",
+   "evidence": "cctv",
+   "exam_type": "DIGITAL",
+   "title": "Camera system audit",
+   "title_ar": "فحص نظام الكاميرات",
+   "result": "Camera 3F-02 disabled at 00:05 and re-enabled at 00:35 from the admin account S.KAMAL, logged in at the security room terminal.",
+   "result_ar": "كاميرا 3F-02 اتقفلت 00:05 واتفتحت 00:35 من حساب الأدمن S.KAMAL، من جهاز غرفة الأمن.",
+   "report": {
+    "sample_ids": [
+     "D-307-01"
+    ],
+    "findings_ar": [
+     "00:05 إيقاف",
+     "00:35 تشغيل",
+     "الحساب: S.KAMAL"
+    ],
+    "limitations_ar": "السجل يثبت الحساب المستخدم، والربط بالشخص يحتاج أدلة أخرى."
+   },
+   "points": 15
+  },
+  {
+   "key": "encoder-log",
+   "evidence": "access-log",
+   "exam_type": "DOCUMENT",
+   "title": "Key-card encoder log",
+   "title_ar": "سجل جهاز برمجة الكروت",
+   "result": "HK-02 was returned at 23:00 and re-encoded at 23:52 by S.KAMAL. HK-02 then opened room 307 at 00:12.",
+   "result_ar": "HK-02 اترجع للأمن 23:00 واتبرمج تاني 23:52 من S.KAMAL. وبعدها فتح الأوضة 307 الساعة 00:12.",
+   "report": {
+    "sample_ids": [
+     "D-307-02"
+    ],
+    "findings_ar": [
+     "23:00 تسليم HK-02",
+     "23:52 إعادة برمجة – S.KAMAL",
+     "00:12 فتح 307"
+    ],
+    "limitations_ar": "لا يوجد."
+   },
+   "points": 15
+  },
+  {
+   "key": "time-of-death",
+   "evidence": null,
+   "exam_type": "TIME_OF_DEATH",
+   "title": "Medical examiner summary",
+   "title_ar": "ملخص الطبيب الشرعي",
+   "result": "Estimated time of death between 00:00 and 01:00. A single stab wound; no signs of a long struggle.",
+   "result_ar": "وقت الوفاة التقريبي بين 00:00 و 01:00. طعنة واحدة ومفيش علامات مقاومة طويلة.",
+   "report": {
+    "sample_ids": [
+     "ME-307"
+    ],
+    "findings_ar": [
+     "نافذة الوفاة 00:00–01:00",
+     "طعنة واحدة"
+    ],
+    "limitations_ar": "تقدير بهامش ساعة."
+   },
+   "points": 5
+  },
+  {
+   "key": "ledger-audit",
+   "evidence": "ledgers",
+   "exam_type": "DOCUMENT",
+   "title": "Ledger comparison",
+   "title_ar": "مقارنة الدفاتر",
+   "result": "EGP 4.2M paid to 'Delta Supplies', which has no registration. Every invoice was approved by Sherif Kamal.",
+   "result_ar": "4.2 مليون جنيه اتدفعوا لـ«دلتا للتوريدات» ومالهاش سجل تجاري. كل الفواتير معتمدة من شريف كمال.",
+   "report": {
+    "sample_ids": [
+     "D-307-03"
+    ],
+    "findings_ar": [
+     "مورّد غير مسجل",
+     "اعتماد: شريف كمال"
+    ],
+    "limitations_ar": "يثبت الدافع، لا يثبت القتل."
+   },
+   "points": 10
+  }
+ ],
+ "confrontations": [
+  {
+   "suspect": "sherif",
+   "evidence": "access-log",
+   "response": "Fine… I came back for a file. I encoded a card to check a room, nothing more.",
+   "response_ar": "طيب… رجعت آخد ملف. برمجت كارت أبص بيه على أوضة، مش أكتر.",
+   "reveals_contradiction": true,
+   "points": 15
+  },
+  {
+   "suspect": "sherif",
+   "evidence": "jacket-stain",
+   "response": "I cut my hand on a frame last week.",
+   "response_ar": "اتعورت في إيدي من برواز الأسبوع اللي فات.",
+   "reveals_contradiction": true,
+   "points": 15
+  },
+  {
+   "suspect": "sherif",
+   "evidence": "ledgers",
+   "response": "Accounting mistakes. Adel liked to make a drama of everything.",
+   "response_ar": "غلطات محاسبة. عادل كان بيحب يعمل من كل حاجة مشكلة.",
+   "reveals_contradiction": false,
+   "points": 5
+  },
+  {
+   "suspect": "sherif",
+   "evidence": "cctv",
+   "response": "Cameras go off all the time in this old building.",
+   "response_ar": "الكاميرات بتفصل على طول في المبنى القديم ده.",
+   "reveals_contradiction": true,
+   "points": 10
+  },
+  {
+   "suspect": "hoda",
+   "evidence": "gloves",
+   "response": "Those are size L. I wear small – look at my locker.",
+   "response_ar": "دي مقاس L. أنا بلبس سمول، شوفوا اللوكر بتاعي.",
+   "reveals_contradiction": false,
+   "points": 10
+  },
+  {
+   "suspect": "hoda",
+   "evidence": "key-card",
+   "response": "I handed HK-02 to security at 11. Someone took it after me.",
+   "response_ar": "أنا سلّمت HK-02 للأمن الساعة 11. حد أخده بعدي.",
+   "reveals_contradiction": false,
+   "points": 10
+  },
+  {
+   "suspect": "hoda",
+   "evidence": "waste-bag",
+   "response": "Anyone passing can throw something in that bag. I was home by then.",
+   "response_ar": "أي حد معدّي يقدر يرمي حاجة في الكيس ده. أنا كنت في البيت ساعتها.",
+   "reveals_contradiction": false,
+   "points": 5
+  },
+  {
+   "suspect": "tarek",
+   "evidence": "ledgers",
+   "response": "So that's the missing money. Adel said he'd name someone at the meeting.",
+   "response_ar": "يبقى دي الفلوس الناقصة. عادل قال إنه هيقول الاسم في الاجتماع.",
+   "reveals_contradiction": false,
+   "points": 10
+  },
+  {
+   "suspect": "tarek",
+   "evidence": "knife-bag",
+   "response": "I was gone by eleven. Ask the valet.",
+   "response_ar": "أنا كنت مشيت قبل 11. اسألوا الفاليه.",
+   "reveals_contradiction": false,
+   "points": 5
+  }
+ ],
+ "verdict": {
+  "suspect": "sherif",
+  "motives": [
+   {
+    "id": "fraud",
+    "text": "To stop Adel exposing his embezzlement",
+    "text_ar": "عشان يمنع عادل يكشف الاختلاس"
+   },
+   {
+    "id": "warning",
+    "text": "Revenge for a written warning",
+    "text_ar": "انتقام من إنذار مكتوب"
+   },
+   {
+    "id": "shares",
+    "text": "A dispute over selling shares",
+    "text_ar": "خلاف على بيع الحصة"
+   },
+   {
+    "id": "robbery",
+    "text": "Robbery",
+    "text_ar": "سرقة"
+   }
+  ],
+  "motive": "fraud",
+  "methods": [
+   {
+    "id": "masterkey-knife",
+    "text": "Entered with a re-encoded master card and stabbed him with a kitchen knife",
+    "text_ar": "دخل بكارت ماستر متبرمج من جديد وطعنه بسكينة مطبخ"
+   },
+   {
+    "id": "invited-in",
+    "text": "Was let in by the victim and argued",
+    "text_ar": "الضحية فتح له الباب واتخانقوا"
+   },
+   {
+    "id": "balcony",
+    "text": "Came in through the balcony",
+    "text_ar": "دخل من البلكونة"
+   }
+  ],
+  "method": "masterkey-knife",
+  "key_evidence": [
+   "access-log",
+   "cctv",
+   "jacket-stain",
+   "key-card",
+   "ledgers"
+  ],
+  "timeline": [
+   "card_encoded",
+   "camera_off",
+   "room_entered",
+   "knife_dumped"
+  ],
+  "weights": {
+   "suspect": 40,
+   "motive": 15,
+   "method": 15,
+   "evidence": 20,
+   "timeline": 10
+  }
+ }
+}

@@ -9,9 +9,9 @@ insert into auth.users(id) values ('00000000-0000-0000-0000-0000000000a1'),('000
   ('00000000-0000-0000-0000-0000000000d2'),('00000000-0000-0000-0000-0000000000d3') on conflict do nothing;
 insert into user_roles(user_id, role) values ('00000000-0000-0000-0000-0000000000a1','SUPER_ADMIN') on conflict do nothing;
 SQL
-for s in blue_ring_heist clock_that_stopped missing_180 blue_moonflower_seed; do psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$HERE/../seed/detective_$s.sql"; done
+for s in blue_ring_heist clock_that_stopped missing_180 blue_moonflower_seed room_307; do psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$HERE/../seed/detective_$s.sql"; done
 psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$HERE/fixtures/hybrid_mini.sql"
-for f in detective_case_packs detective_hybrid; do
+for f in detective_case_packs detective_hybrid detective_room_307; do
   echo "##### $f"
   psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$HERE/$f.sql" 2>&1 | sed 's/^psql:[^ ]* //'
 done
