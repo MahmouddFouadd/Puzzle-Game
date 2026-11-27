@@ -19,7 +19,7 @@ export function defaultLandingPath(variant: AppVariant): string {
 
 export function defaultAuthenticatedPath(variant: AppVariant): string {
   if (variant === 'user') return '/join'
-  return variant === 'admin' ? '/admin/stories' : '/admin'
+  return '/admin'
 }
 
 export const APP_VARIANT = resolveAppVariant(import.meta.env.VITE_APP_VARIANT)
