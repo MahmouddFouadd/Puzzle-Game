@@ -1,4 +1,4 @@
-# Case 01 — آخر ليلة في الغرفة 307 (The Last Night in Room 307)
+# Case 01 — آخر ليلة في الغرفة 307 – الإصدار 2 (The Last Night in Room 307 – Version 2)
 
 Pilot case for the hybrid Detective mode. Fictional; restrained, non-graphic imagery; age 16+, ~30 min.
 Pack: `supabase/seed/packs/room-307.json` (pack v2) → `supabase/seed/detective_room_307.sql` (DRAFT). Art: `public/demo/detective/room-307/` (preview: `room-307-preview.jpg`).
