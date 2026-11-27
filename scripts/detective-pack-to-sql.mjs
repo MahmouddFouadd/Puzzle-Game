@@ -16,12 +16,20 @@
  * - Missing English text falls back to the Arabic text (the app is Arabic-first).
  */
 import { createHash } from 'node:crypto'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
+import { normalizePack, validatePack } from './detective-pack-lib.mjs'
 
 const [packPath, folder, boxesPath] = process.argv.slice(2)
 if (!packPath || !folder) { console.error('usage: detective-pack-to-sql.mjs <pack.json> <slug-folder> [boxes.json]'); process.exit(2) }
-const pack = JSON.parse(readFileSync(packPath, 'utf8'))
 const boxes = boxesPath ? JSON.parse(readFileSync(boxesPath, 'utf8')) : {}
+const rawPack = JSON.parse(readFileSync(packPath, 'utf8'))
+{
+  const asset = (name) => existsSync(new URL(`../public/demo/detective/${folder}/${name}.webp`, import.meta.url))
+  const { errors, warnings } = validatePack(rawPack, { boxes, assetExists: process.env.SKIP_ASSET_CHECK ? undefined : asset })
+  for (const w of warnings) console.error(`warning: ${w}`)
+  if (errors.length) { console.error(errors.map((e) => `error: ${e}`).join('\n')); process.exit(1) }
+}
+const pack = normalizePack(rawPack)
 const C = pack.case
 const slug = C.slug
 
@@ -33,7 +41,7 @@ function uuid(name) {
   const x = h.subarray(0, 16).toString('hex')
   return `${x.slice(0, 8)}-${x.slice(8, 12)}-${x.slice(12, 16)}-${x.slice(16, 20)}-${x.slice(20, 32)}`
 }
-const q = (v) => (v === null || v === undefined ? 'null' : `$q$${String(v).replace(/\$q\$/g, '')}$q$`)
+const q = (v) => (v === null || v === undefined ? 'null' : String(v) === '' ? "''" : `$q$${String(v).replace(/\$q\$/g, '')}$q$`)
 const j = (v) => `${q(JSON.stringify(v))}::jsonb`
 const uarr = (ids) => (ids.length ? `array[${ids.map((i) => `'${i}'::uuid`).join(',')}]::uuid[]` : `'{}'::uuid[]`)
 const en = (e, a) => (e && String(e).trim() ? e : a)
@@ -65,7 +73,8 @@ line(`select ur.user_id into v_user from user_roles ur where ur.role::text = 'SU
 line(`if v_user is null then raise exception 'needs a SUPER_ADMIN user'; end if;`)
 
 const img = (name) => `demo/detective/${folder}/${name}.webp`
-line(`insert into detective_cases(id, slug, title, title_ar, description, description_ar, case_type, difficulty, age_min, age_max, status, created_by, category, estimated_minutes, briefing, briefing_ar, objective, objective_ar, cover_image_path) values ('${caseId}', ${q(slug)}, ${q(C.title)}, ${q(C.title_ar)}, ${q(en(C.description, C.description_ar))}, ${q(C.description_ar)}, 'FULL', ${Number(C.difficulty) || 2}, ${C.age_min ?? 'null'}, ${C.age_max ?? 'null'}, 'DRAFT', v_user, ${q(C.category_ar || C.category)}, ${Number(C.estimated_minutes) || 15}, ${q(en(C.briefing, C.briefing_ar))}, ${q(C.briefing_ar)}, ${q(en(C.objective, C.objective_ar))}, ${q(C.objective_ar)}, '${img('cover')}') on conflict (id) do nothing;`)
+line(`insert into detective_cases(id, slug, title, title_ar, description, description_ar, case_type, difficulty, age_min, age_max, status, created_by, category, estimated_minutes, briefing, briefing_ar, objective, objective_ar, cover_image_path) values ('${caseId}', ${q(slug)}, ${q(C.title)}, ${q(C.title_ar)}, ${q(en(C.description, C.description_ar))}, ${q(C.description_ar)}, 'FULL', ${Number(C.difficulty) || 2}, ${C.age_min ?? 'null'}, ${C.age_max ?? 'null'}, 'DRAFT', v_user, ${q(C.category_ar || C.category || 'MYSTERY')}, ${Number(C.estimated_minutes) || 15}, ${q(en(C.briefing, C.briefing_ar))}, ${q(C.briefing_ar)}, ${q(en(C.objective, C.objective_ar))}, ${q(C.objective_ar)}, '${img('cover')}') on conflict (id) do nothing;`)
+if (Object.keys(pack.settings).length) line(`update detective_cases set settings = ${j(pack.settings)} where id = '${caseId}';`)
 line(`insert into detective_case_versions(id, case_id, version_number, status, created_by) values ('${version}', '${caseId}', 1, 'DRAFT', v_user) on conflict (id) do nothing;`)
 
 for (const s of pack.stages) {
@@ -141,6 +150,7 @@ for (const qq of pack.stages_questions) {
 for (const s of pack.suspects) {
   const desc = s.description_ar ?? s.background_ar ?? ''
   line(`insert into detective_suspects(id, version_id, name, name_ar, description, description_ar, relationship, background, timeline, alibi) values ('${suspectId[s.key]}', '${version}', ${q(s.name)}, ${q(s.name_ar)}, ${q(en(s.description, desc))}, ${q(desc + (s.background_ar ? ` ${s.background_ar}` : ''))}, ${q(s.relationship_ar ?? s.relationship)}, ${q(s.relationship ?? s.relationship_ar)}, ${j(s.timeline ?? {})}, ${q(s.alibi_ar ?? s.alibi)}) on conflict (id) do nothing;`)
+  if (pack.pack_version >= 2) line(`update detective_suspects set motive = ${q(en(s.motive, s.motive_ar))}, motive_ar = ${q(s.motive_ar)}, alibi_ar = ${q(s.alibi_ar)}, relationship_ar = ${q(s.relationship_ar)}${s.portrait ? `, portrait_path = '${img(s.portrait)}'` : ''} where id = '${suspectId[s.key]}';`)
 }
 for (const [i, st] of pack.statements.entries()) {
   const sid = suspectId[st.suspect] ?? fail(`statement suspect ${st.suspect}`)
@@ -151,10 +161,22 @@ for (const t of pack.timeline_events) {
 }
 for (const h of pack.hints) {
   line(`insert into detective_hints(id, version_id, stage_id, hint_text, hint_text_ar, unlock_rule, penalty, position) values ('${uuid(`hint:${h.stage}:${h.position}`)}', '${version}', '${stageId[h.stage] ?? fail(`hint stage ${h.stage}`)}', ${q(en(h.hint_text, h.hint_text_ar))}, ${q(h.hint_text_ar)}, '{}'::jsonb, ${h.penalty ?? -2}, ${h.position}) on conflict (id) do nothing;`)
+  if (h.level) line(`update detective_hints set level = ${h.level} where id = '${uuid(`hint:${h.stage}:${h.position}`)}';`)
 }
 const S = pack.solution
 const alts = (S.alternative_hypotheses ?? []).map((a) => ({ en: en(a.en, a.ar), ar: a.ar, why_wrong_en: en(a.why_wrong_en, a.why_wrong_ar), why_wrong_ar: a.why_wrong_ar }))
 line(`insert into detective_solutions(id, version_id, public_reveal, public_reveal_ar, solution_key, alternative_hypotheses, educational_explanation, educational_explanation_ar) values ('${uuid('solution')}', '${version}', ${q(en(S.public_reveal, S.public_reveal_ar))}, ${q(S.public_reveal_ar)}, ${j({ final_question: finalId })}, ${j(alts)}, ${q(en(S.educational_explanation, S.educational_explanation_ar))}, ${q(S.educational_explanation_ar)}) on conflict (id) do nothing;`)
+for (const [i, p] of pack.lab_procedures.entries()) {
+  line(`insert into detective_lab_procedures(id, version_id, procedure_key, evidence_id, exam_type, title, title_ar, requires_evidence, result, result_ar, report, release_seconds, points, position) values ('${uuid(`lab:${p.key}`)}', '${version}', ${q(p.key)}, ${p.evidence ? `'${ev(p.evidence, 'lab')}'` : 'null'}, ${q(p.exam_type)}, ${q(en(p.title, p.title_ar))}, ${q(p.title_ar)}, ${uarr((p.requires ?? []).map((k) => ev(k, 'lab')))}, ${q(en(p.result, p.result_ar))}, ${q(p.result_ar)}, ${j(p.report ?? {})}, ${p.release_seconds ?? 0}, ${p.points ?? 0}, ${p.position ?? i + 1}) on conflict (id) do nothing;`)
+}
+for (const c of pack.confrontations) {
+  line(`insert into detective_confrontations(id, version_id, suspect_id, evidence_id, response, response_ar, reveals_contradiction, points) values ('${uuid(`confront:${c.suspect}:${c.evidence}`)}', '${version}', '${suspectId[c.suspect] ?? fail(`confront suspect ${c.suspect}`)}', '${ev(c.evidence, 'confrontation')}', ${q(en(c.response, c.response_ar))}, ${q(c.response_ar)}, ${c.reveals_contradiction ? 'true' : 'false'}, ${c.points ?? 0}) on conflict (id) do nothing;`)
+}
+if (pack.verdict) {
+  const V = pack.verdict
+  const opts = (xs) => xs.map((o) => ({ id: o.id, text: en(o.text, o.text_ar), text_ar: o.text_ar }))
+  line(`insert into detective_verdict_criteria(version_id, suspect_id, motive_options, motive_answer, method_options, method_answer, key_evidence, timeline_order${V.weights ? ', weights' : ''}) values ('${version}', '${suspectId[V.suspect]}', ${j(opts(V.motives))}, ${q(V.motive)}, ${j(opts(V.methods))}, ${q(V.method)}, ${uarr(V.key_evidence.map((k) => ev(k, 'verdict')))}, ${V.timeline?.length ? `array[${V.timeline.map(q).join(',')}]::text[]` : `'{}'::text[]`}${V.weights ? `, ${j(V.weights)}` : ''}) on conflict (version_id) do nothing;`)
+}
 line(`end $$;`)
 console.log(out.join('\n'))
 console.error(`${slug}: ${pack.scenes.length} scenes, ${evidence.length} evidence, ${pack.stages_questions.length} questions, ${pack.suspects.length} suspects -> case ${caseId}`)

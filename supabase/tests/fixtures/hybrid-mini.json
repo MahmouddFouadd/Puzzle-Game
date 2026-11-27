@@ -1,0 +1,30 @@
+{
+  "pack_version": 2,
+  "case": { "slug": "hybrid-mini-fixture", "title": "Hybrid fixture", "title_ar": "قضية اختبار", "difficulty": 2, "estimated_minutes": 10,
+    "description_ar": "قضية صغيرة للاختبارات", "briefing_ar": "ملخص", "objective_ar": "هدف" },
+  "settings": { "stages": ["BRIEFING", "CRIME_SCENE", "LAB", "INTERROGATION", "VERDICT"], "guidance": { "max_hints": 2, "cooldown_seconds": 60 } },
+  "stages": [ { "stage_key": "scene", "position": 1, "title": "Scene", "title_ar": "المسرح" } ],
+  "scenes": [ { "position": 1, "title": "Room", "title_ar": "الغرفة", "introduction_ar": "غرفة", "evidence": [
+    { "key": "knife", "title": "Knife", "title_ar": "سكين", "description_ar": "سكين", "classification": "OBSERVATION", "importance": 5, "x": 10, "y": 10, "width": 10, "height": 10 },
+    { "key": "towel", "title": "Towel", "title_ar": "منشفة", "description_ar": "منشفة", "classification": "OBSERVATION", "importance": 4, "x": 40, "y": 40, "width": 10, "height": 10 },
+    { "key": "card", "title": "Key card", "title_ar": "كارت", "description_ar": "كارت", "classification": "FACT", "importance": 3, "x": 70, "y": 70, "width": 10, "height": 10 } ] } ],
+  "suspects": [
+    { "key": "manager", "name": "Manager", "name_ar": "المدير", "relationship_ar": "مدير", "motive_ar": "اختلاس", "alibi_ar": "كان في مكتبه" },
+    { "key": "cleaner", "name": "Cleaner", "name_ar": "العامل", "relationship_ar": "عامل", "motive_ar": "لا يوجد", "alibi_ar": "كان في الدور الثاني" } ],
+  "statements": [ { "suspect": "manager", "statement_ar": "لم أدخل الغرفة", "truth_status": "FALSE", "conflicting_evidence": ["card"] } ],
+  "stages_questions": [
+    { "stage": "scene", "position": 1, "type": "MULTIPLE_CHOICE", "prompt_ar": "سؤال", "options": [ { "id": "a", "text_ar": "أ" }, { "id": "b", "text_ar": "ب" } ], "answer_key": { "option_id": "a" }, "associated_evidence": ["knife"], "points": 10, "penalty": -2 },
+    { "stage": "scene", "position": 2, "type": "FINAL_CONCLUSION", "prompt_ar": "مين؟", "options": [ { "id": "a", "text_ar": "المدير" }, { "id": "b", "text_ar": "العامل" } ], "answer_key": { "option_id": "a" }, "associated_evidence": ["card"], "points": 20, "penalty": -5 } ],
+  "relations": [ { "from": "knife", "to": "towel", "relation_type": "SUPPORTS", "public_explanation_ar": "نفس الدم" } ],
+  "hints": [ { "stage": "scene", "position": 1, "level": 1, "penalty": -1, "hint_text_ar": "ابدأ بالباب" }, { "stage": "scene", "position": 2, "level": 2, "penalty": -2, "hint_text_ar": "الكارت مهم" } ],
+  "timeline_events": [ { "event_key": "enter", "label_ar": "دخول", "position": 1 }, { "event_key": "fight", "label_ar": "شجار", "position": 2 }, { "event_key": "leave", "label_ar": "خروج", "position": 3 } ],
+  "solution": { "public_reveal_ar": "المدير هو القاتل", "educational_explanation_ar": "الكارت يكذب أقواله" },
+  "lab_procedures": [
+    { "key": "blood-knife", "evidence": "knife", "exam_type": "BLOOD", "title_ar": "تحليل دم السكين", "result_ar": "الدم يطابق الضحية", "report": { "sample_ids": ["S-1"] }, "points": 15 },
+    { "key": "prints-card", "evidence": "card", "exam_type": "FINGERPRINT", "title_ar": "بصمات الكارت", "requires": ["knife"], "result_ar": "بصمة جزئية", "release_seconds": 600, "points": 10 } ],
+  "confrontations": [ { "suspect": "manager", "evidence": "card", "response_ar": "يمكن نسيته هناك", "reveals_contradiction": true, "points": 20 } ],
+  "verdict": { "suspect": "manager",
+    "motives": [ { "id": "fraud", "text_ar": "إخفاء اختلاس" }, { "id": "anger", "text_ar": "غضب" } ], "motive": "fraud",
+    "methods": [ { "id": "knife", "text_ar": "بالسكين" }, { "id": "poison", "text_ar": "سم" } ], "method": "knife",
+    "key_evidence": ["knife", "card"], "timeline": ["enter", "fight", "leave"] }
+}
