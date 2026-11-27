@@ -48,7 +48,7 @@ export default function Dashboard() {
   const [days, setDays] = useState(14)
   const [hidden, setHidden] = useState<Set<string>>(new Set())
   const load = useCallback(() => {
-    supabase.rpc('admin_kpis', { p_days: days }).then(({ data, error: err }) => { if (err || !data) setError(true); else { setK(data as Kpis); setError(false) } })
+    supabase.rpc('admin_kpis', { p_days: days }).then(({ data, error: err }) => { if (err || !data || !(data as Kpis).users || !Array.isArray((data as Kpis).series)) setError(true); else { setK(data as Kpis); setError(false) } })
   }, [days])
   useEffect(() => { load(); const id = window.setInterval(load, 60_000); return () => window.clearInterval(id) }, [load])
   const maxDay = useMemo(() => Math.max(1, ...(k?.series ?? []).map((d) => SERIES.filter((s) => !hidden.has(s.k)).reduce((n, s) => n + d[s.k], 0))), [k, hidden])

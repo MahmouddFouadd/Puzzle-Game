@@ -17,12 +17,12 @@ describe('app variants', () => {
     expect(defaultAuthenticatedPath(variant)).toBe('/admin')
   })
 
-  it('limits the Admin APK to admin routes and sends login to story management', () => {
+  it('limits the Admin APK to admin routes and sends login to the dashboard', () => {
     const variant = resolveAppVariant('admin')
     expect(canAccessAdminRoutes(variant)).toBe(true)
     expect(canAccessPlayerRoutes(variant)).toBe(false)
-    expect(defaultLandingPath(variant)).toBe('/admin/stories')
-    expect(defaultAuthenticatedPath(variant)).toBe('/admin/stories')
+    expect(defaultLandingPath(variant)).toBe('/admin')
+    expect(defaultAuthenticatedPath(variant)).toBe('/admin')
   })
 
   it('limits the User APK to player routes and keeps admin routes out of its route table', () => {

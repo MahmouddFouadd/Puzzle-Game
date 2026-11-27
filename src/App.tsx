@@ -97,7 +97,7 @@ export default function App() {
       )}
       {canAccessAdminRoutes(APP_VARIANT) && (
         <Route path="/admin" element={<RequireAuth><AdminLayout /></RequireAuth>}>
-          <Route index element={APP_VARIANT === 'admin' ? <Navigate to="stories" replace /> : <RequireAuth permission="report.view"><Dashboard /></RequireAuth>} />
+          <Route index element={<RequireAuth permission="report.view"><Dashboard /></RequireAuth>} />
           <Route path="stories" element={<RequireAuth permission="story.manage"><Stories /></RequireAuth>} />
           <Route path="stories/:id" element={<RequireAuth permission="story.manage"><StoryEditor /></RequireAuth>} />
           <Route path="stories/:id/questions" element={<RequireAuth permission="story.manage"><QuestionBank /></RequireAuth>} />
