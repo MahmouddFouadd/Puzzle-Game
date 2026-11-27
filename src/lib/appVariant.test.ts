@@ -21,7 +21,7 @@ describe('app variants', () => {
     const variant = resolveAppVariant('admin')
     expect(canAccessAdminRoutes(variant)).toBe(true)
     expect(canAccessPlayerRoutes(variant)).toBe(false)
-    expect(defaultLandingPath(variant)).toBe('/admin/stories')
+    expect(defaultLandingPath(variant)).toBe('/admin')
     expect(defaultAuthenticatedPath(variant)).toBe('/admin')
   })
 

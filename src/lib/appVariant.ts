@@ -14,7 +14,7 @@ export function canAccessPlayerRoutes(variant: AppVariant): boolean {
 }
 
 export function defaultLandingPath(variant: AppVariant): string {
-  return variant === 'admin' ? '/admin/stories' : '/join'
+  return variant === 'admin' ? '/admin' : '/join'
 }
 
 export function defaultAuthenticatedPath(variant: AppVariant): string {
