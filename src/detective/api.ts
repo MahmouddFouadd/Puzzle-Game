@@ -142,7 +142,14 @@ export function detectiveError(e: unknown, ar: boolean): string {
     not_enough_players: ['محتاجين محققين اتنين على الأقل.', 'At least two detectives are needed.'],
     players_not_ready: ['فيه محققين لسه مش جاهزين.', 'Some detectives are not ready.'],
     already_started: ['التحقيق بدأ بالفعل.', 'The investigation already started.'],
-    invalid_nickname: ['اكتب اسم من 1 لـ 30 حرف.', 'Enter a name of 1–30 characters.']
+    invalid_nickname: ['اكتب اسم من 1 لـ 30 حرف.', 'Enter a name of 1–30 characters.'],
+    sample_missing: ['لازم تلاقي العينة الأول في مسرح الجريمة.', 'Find the sample at the crime scene first.'],
+    evidence_not_found: ['استخدم بس الأدلة اللي لقيتها.', 'Use only evidence you have found.'],
+    hint_cooldown: ['استنى شوية قبل التلميح الجاي.', 'Wait a little before the next hint.'],
+    hint_limit: ['استخدمت كل التلميحات المتاحة للقضية دي.', 'You have used every hint for this case.'],
+    verdict_required: ['لازم تقدّم الاتهام النهائي الأول.', 'Submit your final accusation first.'],
+    verdict_already_submitted: ['الاتهام اتقدّم خلاص.', 'The accusation was already submitted.'],
+    too_much_evidence: ['اختار 6 أدلة بحد أقصى.', 'Choose at most 6 pieces of evidence.']
   }
   for (const [code, [a, en]] of Object.entries(t)) if (m.includes(code)) return ar ? a : en
   if (/fetch|network/i.test(m)) return ar ? 'الاتصال انقطع… بنحاول نرجعك للتحقيق.' : 'Connection lost… trying to reconnect.'
@@ -174,3 +181,45 @@ export async function partyState(partyId: string) { return must(await supabase.r
 export async function partyReady(partyId: string, ready: boolean) { const r = await supabase.rpc('detective_party_ready', { p_party: partyId, p_ready: ready }); if (r.error) throw new Error(r.error.message) }
 export async function partyStart(partyId: string) { const r = await supabase.rpc('detective_party_start', { p_party: partyId }); if (r.error) throw new Error(r.error.message) }
 export async function partyLeave(partyId: string) { const r = await supabase.rpc('detective_party_leave', { p_party: partyId }); if (r.error) throw new Error(r.error.message) }
+
+// ---------- Hybrid investigation (migration 0029) ----------
+export type StageKind = 'BRIEFING' | 'CRIME_SCENE' | 'EVIDENCE' | 'LAB' | 'INTERROGATION' | 'BOARD' | 'DEDUCTION' | 'VERDICT' | 'RESOLUTION'
+export type LabProcedure = {
+  id: string; key: string; exam_type: string; title: string; title_ar: string; evidence_id: string | null; available: boolean
+  status: 'PENDING' | 'READY' | null; ready_at: string | null; result: string | null; result_ar: string | null; report: Record<string, unknown> | null
+}
+export type VerdictOption = { id: string; text: string; text_ar: string }
+export type Investigation = {
+  settings: { stages: StageKind[]; guidance: { max_hints?: number; cooldown_seconds?: number; area_hints?: boolean } }
+  lab: LabProcedure[]
+  suspects: Array<{ id: string; portrait_path: string | null; motive: string | null; motive_ar: string | null; alibi_ar: string | null; relationship_ar: string | null; background: string | null }>
+  confrontations: Array<{ suspect_id: string; evidence_id: string; response: string; response_ar: string; reveals_contradiction: boolean }>
+  verdict: { enabled: boolean; motive_options: VerdictOption[]; method_options: VerdictOption[]; evidence_max: number; timeline_events: number
+    submitted: { suspect_id: string; motive: string; method: string; evidence: string[]; timeline: string[]; explanation: string | null } | null } | null
+  hints: { used: number; max: number | null; cooldown_seconds: number; last_used_at: string | null }
+  server_now: string
+}
+export type VerdictInput = { suspect: string; motive: string; method: string; evidence: string[]; timeline: string[]; explanation?: string }
+export type Resolution = {
+  verdict: null | {
+    correct: { suspect_id: string; motive: string; method: string; key_evidence: string[]; timeline: string[]; motive_options: VerdictOption[]; method_options: VerdictOption[] }
+    yours: { suspect_id: string; motive: string; method: string; evidence: string[]; timeline: string[]; explanation: string | null } | null
+    breakdown: { suspect: number; motive: number; method: number; evidence: number; timeline: number; total: number; max: number } | null; points: number | null
+  }
+  lab: Array<{ key: string; title: string; title_ar: string; exam_type: string; requested: boolean; result: string; result_ar: string; report: Record<string, unknown> }>
+  confrontations: { total: number; used: number; contradictions_total: number; contradictions_found: number }
+}
+
+export async function loadInvestigation(sessionId: string) { return must(await supabase.rpc('get_detective_investigation', { p_session: sessionId })) as Investigation }
+export async function requestLab(sessionId: string, procedureId: string) {
+  return must(await supabase.rpc('detective_lab_request', { p_session: sessionId, p_procedure: procedureId })) as { status: 'PENDING' | 'READY'; ready_at: string; already: boolean; score?: number }
+}
+export async function confrontSuspect(sessionId: string, suspectId: string, evidenceId: string) {
+  return must(await supabase.rpc('detective_confront', { p_session: sessionId, p_suspect: suspectId, p_evidence: evidenceId })) as
+    { matched: boolean; response?: string; response_ar?: string; reveals_contradiction?: boolean; already?: boolean; score?: number }
+}
+export async function submitVerdict(sessionId: string, v: VerdictInput) {
+  return must(await supabase.rpc('detective_submit_verdict', { p_session: sessionId, p_suspect: v.suspect, p_motive: v.motive, p_method: v.method,
+    p_evidence: v.evidence, p_timeline: v.timeline, p_explanation: v.explanation ?? null })) as { submitted: true }
+}
+export async function loadResolution(sessionId: string) { return must(await supabase.rpc('detective_resolution', { p_session: sessionId })) as Resolution }
