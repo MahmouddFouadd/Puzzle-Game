@@ -46,7 +46,7 @@ jobs:
           mkdir -p apk-artifacts
           admin_apk=$(find android/app/build/outputs/apk/admin/debug -maxdepth 1 -type f -name '*.apk' | head -1)
           test -n "$admin_apk"
-          cp "$admin_apk" apk-artifacts/Story-Puzzle-Admin-debug.apk
+          cp "$admin_apk" apk-artifacts/Friends-Zone-Admin-debug.apk
       - name: Build User debug APK
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
@@ -58,10 +58,10 @@ jobs:
           (cd android && ./gradlew assembleUserDebug --no-daemon)
           user_apk=$(find android/app/build/outputs/apk/user/debug -maxdepth 1 -type f -name '*.apk' | head -1)
           test -n "$user_apk"
-          cp "$user_apk" apk-artifacts/Story-Puzzle-User-debug.apk
+          cp "$user_apk" apk-artifacts/Friends-Zone-User-debug.apk
       - name: Upload debug APKs
         uses: actions/upload-artifact@v4
         with:
-          name: story-puzzle-debug-apks
+          name: friends-zone-debug-apks
           path: apk-artifacts/*.apk
           if-no-files-found: error
