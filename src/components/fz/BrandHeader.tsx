@@ -14,13 +14,13 @@ export function BrandHeader() {
   return (
     <header className="fz-header">
       <div className="mx-auto flex h-16 max-w-[var(--fz-content-max)] items-center gap-3 px-4 md:px-8">
-        <Link to="/" className="fz-focus flex shrink-0 items-center gap-2.5 rounded-xl" aria-label={ar ? 'فريندز زون – الرئيسية' : 'Friends Zone – Home'}>
-          <FzMark size={38} />
+        <Link to="/" className="fz-focus flex min-w-0 items-center gap-2.5 overflow-hidden rounded-xl" aria-label={ar ? 'فريندز زون – الرئيسية' : 'Friends Zone – Home'}>
+          <FzMark size={38} className="shrink-0" />
           <FzWordmark lang={lang} size={ar ? 24 : 21} className="hidden min-[380px]:inline-flex" />
         </Link>
         <div className="flex-1" />
         <DesktopNav />
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <button type="button" className="fz-icon-btn text-sm font-extrabold" onClick={toggle} aria-label={ar ? 'Switch to English' : 'التحويل للعربية'} lang={ar ? 'en' : 'ar'}>{ar ? 'EN' : 'ع'}</button>
           <Link to="/me#settings" className="fz-icon-btn" aria-label={ar ? 'الإعدادات' : 'Settings'}><IconSettings size={20} /></Link>
           <Link to="/me" className="fz-focus flex items-center gap-2 rounded-full" aria-label={ar ? `ملفي: ${name || 'لاعب'}` : `My profile: ${name || 'Player'}`}>
