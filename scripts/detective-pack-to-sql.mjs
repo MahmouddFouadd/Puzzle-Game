@@ -158,6 +158,7 @@ for (const [i, st] of pack.statements.entries()) {
 }
 for (const t of pack.timeline_events) {
   line(`insert into detective_timeline_events(id, version_id, event_key, label, label_ar, window_key, position) values ('${uuid(`timeline:${t.event_key}`)}', '${version}', ${q(t.event_key)}, ${q(en(t.label, t.label_ar))}, ${q(t.label_ar)}, ${q(t.window_key)}, ${t.position}) on conflict (id) do nothing;`)
+  if (pack.pack_version >= 2 && t.reveal_with) line(`update detective_timeline_events set reveal_evidence = '${ev(t.reveal_with, 'timeline')}' where id = '${uuid(`timeline:${t.event_key}`)}';`)
 }
 for (const h of pack.hints) {
   line(`insert into detective_hints(id, version_id, stage_id, hint_text, hint_text_ar, unlock_rule, penalty, position) values ('${uuid(`hint:${h.stage}:${h.position}`)}', '${version}', '${stageId[h.stage] ?? fail(`hint stage ${h.stage}`)}', ${q(en(h.hint_text, h.hint_text_ar))}, ${q(h.hint_text_ar)}, '{}'::jsonb, ${h.penalty ?? -2}, ${h.position}) on conflict (id) do nothing;`)

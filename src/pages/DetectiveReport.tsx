@@ -5,6 +5,7 @@ import { detectiveError, detectiveReport, startDetectiveSession, type DetectiveR
 import { SceneViewer } from '../detective/SceneViewer'
 import { RELATIONS } from '../detective/Board'
 import { imageUrl } from './DetectiveCatalog'
+import { ResolutionPanel } from '../detective/hybrid/ResolutionPanel'
 
 function CountUp({ to }: { to: number }) {
   const [v, setV] = useState(0)
@@ -102,6 +103,7 @@ export default function DetectiveReportPage() {
                 {r.solution.alternatives.map((a, i) => <p key={i}>• {ar ? a.ar ?? a.hypothesis_ar ?? a.hypothesis : a.en ?? a.hypothesis}{(ar ? a.why_wrong_ar : a.why_wrong_en) ? ` — ${ar ? a.why_wrong_ar : a.why_wrong_en}` : ''}</p>)}</div>)}
           </section>
         )}
+        {sessionId && <ResolutionPanel sessionId={sessionId} ar={ar} evidenceTitle={(id) => evTitle.get(id) ?? '—'} />}
 
         {scene && (
           <section className="space-y-2">
