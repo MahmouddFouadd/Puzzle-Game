@@ -34,7 +34,7 @@ export function BottomNav() {
         {NAV_ITEMS.map(({ to, label, Icon, end }) => (
           <li key={to}>
             <NavLink to={to} end={end} className="fz-bottom-link">
-              <span className="fz-bottom-ico" aria-hidden="true"><Icon size={22} /></span>{ar ? label[0] : label[1]}
+              <span className="fz-bottom-ico" aria-hidden="true"><Icon size={22} /></span><span className="fz-bottom-label">{ar ? label[0] : label[1]}</span>
             </NavLink>
           </li>
         ))}
