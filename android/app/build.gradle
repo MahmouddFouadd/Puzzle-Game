@@ -21,12 +21,12 @@ android {
         admin {
             dimension "edition"
             applicationIdSuffix ".admin"
-            manifestPlaceholders = [appLabel: "Story Puzzle Admin"]
+            manifestPlaceholders = [appLabel: "Friends Zone Admin"]
         }
         user {
             dimension "edition"
             // Preserve the existing package id for player app upgrades.
-            manifestPlaceholders = [appLabel: "Story Puzzle Player"]
+            manifestPlaceholders = [appLabel: "Friends Zone"]
         }
     }
     // Release signing is read from environment variables set by CI (GitHub Secrets).

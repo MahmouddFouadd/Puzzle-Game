@@ -1,7 +1,7 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { useI18n, type Key } from '../../lib/i18n'
-import { StoryLogo } from '../../components/StoryArt'
+import { FzMark } from '../../brand/Logo'
 
 const nav: { to: string; key: Key; perm: string; icon: string; end?: boolean }[] = [
   { to: '/admin', key: 'dashboard', perm: 'report.view', icon: '📊', end: true },
@@ -25,13 +25,13 @@ export default function AdminLayout() {
     <div className="admin-arcade min-h-screen md:flex">
       <aside className="border-b border-white/10 bg-[#0e0e15]/95 p-3 backdrop-blur md:sticky md:top-0 md:h-screen md:w-64 md:shrink-0 md:overflow-y-auto md:border-b-0 md:border-e">
         <Link to="/admin" className="mb-4 flex items-center gap-2 rounded-2xl p-2 hover:bg-white/5">
-          <StoryLogo className="h-11 w-11" />
-          <div className="min-w-0"><div className="truncate text-lg font-extrabold text-white">{t('appName')}</div><div className="text-[11px] font-semibold uppercase tracking-widest text-[#a78bfa]">{ar ? 'لوحة التحكم' : 'Control center'}</div></div>
+          <FzMark size={44} />
+          <div className="min-w-0"><div className="truncate text-lg font-extrabold text-white">{t('appName')}</div><div className="text-[11px] font-semibold uppercase tracking-widest text-fz-cyan">{ar ? 'لوحة التحكم' : 'Control center'}</div></div>
         </Link>
         <nav className="flex gap-1 overflow-x-auto md:flex-col" aria-label="Admin">
           {nav.filter((n) => can(n.perm)).map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end}
-              className={({ isActive }) => `flex shrink-0 items-center gap-2.5 whitespace-nowrap rounded-xl px-3 py-2.5 text-sm font-semibold transition ${isActive ? 'bg-[#8b5cf6] text-white shadow-[0_8px_24px_rgba(139,92,246,.35)]' : 'text-white/65 hover:bg-white/5 hover:text-white'}`}>
+              className={({ isActive }) => `flex shrink-0 items-center gap-2.5 whitespace-nowrap rounded-xl px-3 py-2.5 text-sm font-semibold transition ${isActive ? 'bg-fz-purple text-white shadow-[0_8px_24px_rgba(109,74,255,.35)]' : 'text-white/65 hover:bg-white/5 hover:text-white'}`}>
               <span className="text-base" aria-hidden="true">{n.icon}</span>{t(n.key)}
             </NavLink>
           ))}
