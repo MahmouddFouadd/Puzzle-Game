@@ -1,9 +1,9 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 const config: CapacitorConfig = {
   appId: 'com.storypuzzle.app',
-  appName: 'Story Puzzle',
+  appName: 'Friends Zone',
   webDir: 'dist',
-  android: { backgroundColor: '#0b0b10' },
-  plugins: { SplashScreen: { launchAutoHide: true, backgroundColor: '#0b0b10', showSpinner: false } }
+  android: { backgroundColor: '#101426' },
+  plugins: { SplashScreen: { launchAutoHide: true, backgroundColor: '#101426', showSpinner: false } }
 }
 export default config

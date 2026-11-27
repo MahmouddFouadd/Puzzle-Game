@@ -1,3 +1,4 @@
+import { FzMark } from './brand/Logo'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { RequireAuth } from './auth/RequireAuth'
 import { isConfigured } from './lib/supabase'
@@ -55,7 +56,7 @@ export default function App() {
   if (!isConfigured) return (
     <main className="grid min-h-screen place-items-center bg-ink-900 p-6 text-parchment-100">
       <section className="card w-full max-w-xl space-y-4 text-center" role="alert">
-        <h1 className="font-display text-3xl text-gold-400">{t('appName')}</h1>
+        <div className="flex flex-col items-center gap-3"><FzMark size={72} /><h1 className="fz-display text-3xl">{t('appName')}</h1></div>
         <p className="text-lg">{t('configMissing')}</p>
         <p className="text-sm opacity-80">{t('configMissingMobile')}</p>
       </section>

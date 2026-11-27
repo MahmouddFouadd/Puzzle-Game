@@ -1,5 +1,7 @@
+@import './brand/tokens.css';
+@import './brand/components.css';
 @tailwind base; @tailwind components; @tailwind utilities;
-body { @apply bg-ink-900 text-parchment-100 font-body antialiased; background-image: radial-gradient(circle at 12% 8%, rgba(224,179,74,.14), transparent 32%), radial-gradient(circle at 88% 92%, rgba(31,122,140,.18), transparent 36%), radial-gradient(rgba(232,215,170,.05) 1px, transparent 1px); background-size: auto, auto, 22px 22px; background-attachment: fixed; }
+body { @apply bg-fz-navy text-parchment-100 font-body antialiased; background-image: radial-gradient(circle at 12% 8%, rgba(224,179,74,.14), transparent 32%), radial-gradient(circle at 88% 92%, rgba(31,122,140,.18), transparent 36%), radial-gradient(rgba(232,215,170,.05) 1px, transparent 1px); background-size: auto, auto, 22px 22px; background-attachment: fixed; }
 .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-semibold transition disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-400; }
 .btn-primary { @apply btn bg-gold-500 text-ink-900 hover:bg-gold-400; box-shadow: 0 4px 0 #8a6214, 0 10px 24px rgba(201,150,43,.25); }
 .btn-primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #8a6214; }
@@ -68,7 +70,7 @@ body { @apply bg-ink-900 text-parchment-100 font-body antialiased; background-im
 @keyframes bk-fall { to { transform: translateY(110vh) rotate(720deg); } }
 .bk-spotlight { background: radial-gradient(circle at 50% 30%, rgba(255,185,56,.35), transparent 60%); }
 /* ---- Arcade hub (player app home) ---- */
-.arcade { @apply min-h-screen text-white; background: radial-gradient(circle at 80% -10%, rgba(139,92,246,.28), transparent 40%), radial-gradient(circle at -10% 60%, rgba(255,106,61,.12), transparent 40%), #0b0b10; }
+.arcade { @apply min-h-screen text-white; font-family: var(--fz-font-text); background: radial-gradient(60rem 30rem at 85% -10%, rgba(109,74,255,.28), transparent 60%), radial-gradient(40rem 24rem at -10% 40%, rgba(32,213,210,.10), transparent 60%), var(--fz-bg); background-attachment: fixed; }
 .ar-shell { @apply mx-auto w-full max-w-xl px-4; padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: calc(6.5rem + env(safe-area-inset-bottom)); }
 .ar-card { @apply rounded-3xl border border-white/[.06] bg-[#16161f]; }
 .ar-btn { @apply inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-2xl bg-[#8b5cf6] px-5 font-bold text-white transition hover:bg-[#9d74ff] active:scale-[.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white; box-shadow: 0 10px 30px rgba(139,92,246,.35); }

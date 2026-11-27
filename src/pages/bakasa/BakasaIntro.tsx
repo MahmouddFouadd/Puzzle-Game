@@ -1,3 +1,4 @@
+import { BottomNav } from '../../components/fz/MainNavigation'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useI18n } from '../../lib/i18n'
@@ -67,6 +68,8 @@ export default function BakasaIntro() {
           <Link to="/bakasa/history" className="text-center text-sm underline opacity-75">{ar ? 'سجل مبارياتي' : 'My match history'}</Link>
         </nav>
       </div>
+      <div className="h-24 lg:hidden" aria-hidden="true" />
+      <BottomNav />
     </main>
   )
 }

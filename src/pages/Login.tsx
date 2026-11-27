@@ -1,3 +1,4 @@
+import { FzMark } from '../brand/Logo'
 import { useState, type FormEvent } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
@@ -25,18 +26,18 @@ export default function Login() {
   }
 
   return (
-    <main className="min-h-screen grid place-items-center p-4 bg-gradient-to-b from-ink-900 to-ink-800">
-      <form onSubmit={submit} className="card w-full max-w-sm space-y-4">
-        <h1 className="font-display text-3xl text-gold-400">{t('appName')}</h1>
+    <main className="fz-page grid place-items-center p-4">
+      <form onSubmit={submit} className="fz-card w-full max-w-sm space-y-4 p-6">
+        <div className="flex flex-col items-center gap-3 text-center"><FzMark size={72} /><h1 className="fz-display text-3xl">{t('appName')}</h1></div>
         <label className="block">{t('email')}
-          <input className="input mt-1" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="fz-input mt-1" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
         <label className="block">{t('password')}
-          <input className="input mt-1" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input className="fz-input mt-1" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
-        {error && <p role="alert" className="text-danger">{error}</p>}
+        {error && <p role="alert" className="text-fz-danger">{error}</p>}
         <div className="flex gap-2">
-          <button className="btn-primary flex-1" disabled={busy} type="submit">{t('signIn')}</button>
+          <button className="fz-btn fz-btn-primary flex-1" disabled={busy} type="submit">{t('signIn')}</button>
           <LangToggle />
         </div>
       </form>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Story Puzzle</string>
-    <string name="title_activity_main">Story Puzzle</string>
+    <string name="app_name">Friends Zone</string>
+    <string name="title_activity_main">Friends Zone</string>
     <string name="package_name">com.storypuzzle.app</string>
     <string name="custom_url_scheme">com.storypuzzle.app</string>
 </resources>
