@@ -729,14 +729,16 @@
    "position": 2,
    "label": "Hoda reports her card broken",
    "label_ar": "هدى بتبلّغ إن كارتها اتكسر",
-   "window_key": "22:50"
+   "window_key": "22:50",
+   "reveal_with": "broken-card"
   },
   {
    "event_key": "hoda_leaves",
    "position": 3,
    "label": "Hoda hands in HK-02 and clocks out",
    "label_ar": "هدى بتسلّم HK-02 وتبصم خروج",
-   "window_key": "23:04"
+   "window_key": "23:04",
+   "reveal_with": "broken-card"
   },
   {
    "event_key": "tarek_leaves",
@@ -750,28 +752,32 @@
    "position": 5,
    "label": "HK-02 re-encoded from S.KAMAL",
    "label_ar": "HK-02 بيتبرمج من حساب S.KAMAL",
-   "window_key": "23:52"
+   "window_key": "23:52",
+   "reveal_with": "access-log"
   },
   {
    "event_key": "camera_off",
    "position": 6,
    "label": "Third-floor camera off",
    "label_ar": "كاميرا الدور التالت بتتقفل",
-   "window_key": "00:05"
+   "window_key": "00:05",
+   "reveal_with": "cctv"
   },
   {
    "event_key": "room_entered",
    "position": 7,
    "label": "Room 307 opened with HK-02",
    "label_ar": "الأوضة 307 بتتفتح بـ HK-02",
-   "window_key": "00:12"
+   "window_key": "00:12",
+   "reveal_with": "access-log"
   },
   {
    "event_key": "knife_dumped",
    "position": 8,
    "label": "Knife dumped in the housekeeping bag",
    "label_ar": "السكين بتترمي في كيس العربة",
-   "window_key": "00:31"
+   "window_key": "00:31",
+   "reveal_with": "waste-bag"
   },
   {
    "event_key": "body_found",

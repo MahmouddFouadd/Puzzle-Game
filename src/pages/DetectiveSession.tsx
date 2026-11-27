@@ -10,8 +10,13 @@ import { EvidenceBoard, RELATIONS } from '../detective/Board'
 import { imageUrl } from './DetectiveCatalog'
 import { PartyBoard, usePartyState } from './DetectiveParty'
 import { VoiceBar } from '../voice/VoiceBar'
+import { useDetectiveLive, useInvestigation } from '../detective/hybrid/useInvestigation'
+import { LabPanel } from '../detective/hybrid/LabPanel'
+import { InterrogationPanel } from '../detective/hybrid/InterrogationPanel'
+import { VerdictPanel } from '../detective/hybrid/VerdictPanel'
+import { confrontSuspect, requestLab, submitVerdict, type VerdictInput } from '../detective/api'
 
-type Tab = 'questions' | 'evidence' | 'board' | 'suspects' | 'timeline' | 'notes'
+type Tab = 'questions' | 'evidence' | 'lab' | 'board' | 'suspects' | 'timeline' | 'verdict' | 'notes'
 const CLASS_LABEL: Record<string, [string, string]> = {
   OBSERVATION: ['ملاحظة', 'Observation'], FACT: ['حقيقة', 'Fact'], INFERENCE: ['استنتاج', 'Inference'], PROBABILITY: ['احتمال', 'Probability'], ASSUMPTION: ['افتراض', 'Assumption']
 }
@@ -120,19 +125,33 @@ export default function DetectiveSession() {
   useEffect(() => { if (!toast) return; const id = window.setTimeout(() => setToast(null), 2200); return () => window.clearTimeout(id) }, [toast])
   const elapsed = useElapsed(p?.progress?.started_at, p?.progress?.completed_at)
   const { s: party } = usePartyState(p?.party?.id, 4000)
-  // Team investigations: pull teammates' discoveries/answers; finish together.
-  useEffect(() => {
-    if (!p?.party || p.party.mode !== 'COOPERATIVE') return
-    const id = window.setInterval(() => { void load().then((d) => { if (d?.progress?.completed_at) nav(`/detective/report/${sessionId}`) }) }, 4000)
-    return () => window.clearInterval(id)
-  }, [p?.party, load, nav, sessionId])
+  const { inv, hybrid, reload: reloadInv } = useInvestigation(sessionId)
+  const team = p?.party?.mode === 'COOPERATIVE'
+  // Live team sync (Realtime pings + polling fallback): teammates' discoveries, lab requests, confrontations, accusation; finish together.
+  const sync = useDetectiveLive(sessionId, () => {
+    void load().then((d) => { if (d?.progress?.completed_at) nav(`/detective/report/${sessionId}`) })
+    void reloadInv()
+  }, team ? 4000 : 20000)
 
   const found = useMemo(() => (p?.scenes ?? []).flatMap((s) => s.evidence), [p])
   const sceneOf = useMemo(() => new Map((p?.scenes ?? []).flatMap((s) => s.evidence.map((e) => [e.id, s] as const))), [p])
   const scene = p?.scenes[sceneIdx]
   const stage = p?.stages.find((s) => s.current) ?? null
   const finalAnswered = !!p?.questions.find((q) => q.question_type === 'FINAL_CONCLUSION')?.answered
-  const run = async (fn: () => Promise<unknown>) => { setBusy(true); try { await fn(); await load() } catch (e) { setToast({ text: detectiveError(e, ar), tone: 'bad' }) } setBusy(false) }
+  const run = async (fn: () => Promise<unknown>) => { setBusy(true); try { await fn(); await Promise.all([load(), reloadInv()]) } catch (e) { setToast({ text: detectiveError(e, ar), tone: 'bad' }) } setBusy(false) }
+  const stagesOn = (k: string) => !!inv?.settings.stages.includes(k as never)
+  const accuse = (v: VerdictInput) => run(async () => { if (!sessionId) return; await submitVerdict(sessionId, v); setToast({ text: ar ? '⚖️ الاتهام اتقدّم' : '⚖️ Accusation submitted', tone: 'ok' }) })
+  const lab = (id: string) => run(async () => {
+    if (!sessionId) return
+    const r = await requestLab(sessionId, id)
+    setToast({ text: r.status === 'READY' ? (ar ? '🧪 التقرير جاهز' : '🧪 Report ready') : (ar ? '🧪 العينة اتبعتت للمعمل' : '🧪 Sample sent to the lab'), tone: 'ok' })
+  })
+  const confront = async (suspect: string, evidence: string) => {
+    if (!sessionId) return null
+    setBusy(true)
+    try { const r = await confrontSuspect(sessionId, suspect, evidence); await reloadInv(); if (r.reveals_contradiction && !r.already) setToast({ text: ar ? '⚠️ لقيت تناقض!' : '⚠️ Contradiction found!', tone: 'warm' }); return r }
+    catch (e) { setToast({ text: detectiveError(e, ar), tone: 'bad' }); return null } finally { setBusy(false) }
+  }
 
   const tap = async (x: number, y: number) => {
     if (!sessionId || !scene || inspecting.current) return
@@ -142,7 +161,7 @@ export default function DetectiveSession() {
       if (r.found && !r.already && r.evidence) {
         setReveal({ ...r.evidence, points: r.points }); setFlash(r.evidence.id); window.setTimeout(() => setFlash(null), 1400)
         if (hint?.kind === 'area') setHint(null)
-        await load()
+        await Promise.all([load(), reloadInv()])
       } else if (r.found && r.already) setToast({ text: ar ? 'الدليل ده في ملفك بالفعل 📁' : 'Already in your file 📁', tone: 'info' })
       else if (r.locked) setToast({ text: ar ? '🔒 فيه حاجة هنا… محتاجة دليل تاني الأول' : '🔒 Something is here… find another clue first', tone: 'info' })
       else if (r.warm) setToast({ text: ar ? 'دافي 🔥 قرّب شوية!' : 'Warm 🔥 you are close!', tone: 'warm' })
@@ -171,8 +190,15 @@ export default function DetectiveSession() {
   const sceneDone = !!revealScene && revealScene.evidence.length >= revealScene.evidence_total
   const nextScene = revealScene ? p.scenes.findIndex((s) => s.id !== revealScene.id && s.evidence.length < s.evidence_total) : -1
   const stageQs = p.questions.filter((q) => !q.locked)
-  const tabs: [Tab, string][] = [['questions', ar ? '❓ الأسئلة' : '❓ Questions'], ['evidence', `${ar ? '📁 الأدلة' : '📁 Evidence'} ${p.stats.found}`], ['board', ar ? '🧷 اللوحة' : '🧷 Board'],
-    ['suspects', ar ? '👥 الأشخاص' : '👥 People'], ['timeline', ar ? '🕒 الأحداث' : '🕒 Timeline'], ['notes', ar ? '📝 ملاحظات' : '📝 Notes']]
+  const labReady = inv?.lab.filter((l) => l.status === 'READY').length ?? 0
+  const tabs: [Tab, string][] = [['questions', ar ? '❓ الأسئلة' : '❓ Questions'], ['evidence', `${ar ? '📁 الأدلة' : '📁 Evidence'} ${p.stats.found}`],
+    ...(hybrid && stagesOn('LAB') ? [['lab', `${ar ? '🧪 المعمل' : '🧪 Lab'} ${labReady}/${inv!.lab.length}`] as [Tab, string]] : []),
+    ['suspects', hybrid && stagesOn('INTERROGATION') ? (ar ? '🗣️ الاستجواب' : '🗣️ Interrogate') : (ar ? '👥 الأشخاص' : '👥 People')],
+    ['board', ar ? '🧷 اللوحة' : '🧷 Board'], ['timeline', ar ? '🕒 الأحداث' : '🕒 Timeline'],
+    ...(hybrid && inv?.verdict ? [['verdict', ar ? '⚖️ الاتهام' : '⚖️ Accuse'] as [Tab, string]] : []),
+    ['notes', ar ? '📝 ملاحظات' : '📝 Notes']]
+  const needsVerdict = hybrid && !!inv?.verdict
+  const canClose = finalAnswered && (!needsVerdict || (!!inv?.verdict?.submitted && !!inv?.captain))
 
   return (
     <main className="det">
@@ -183,6 +209,8 @@ export default function DetectiveSession() {
             <h1 className="min-w-0 flex-1 truncate font-display text-lg font-bold">{ar ? p.case.title_ar : p.case.title}</h1>
             <span className="det-chip" dir="ltr">⏱ {elapsed}</span>
             <span className="det-chip text-[#f5c46b]" dir="ltr">★ {p.progress?.score ?? 0}</span>
+            {team && <span className="det-chip" role="status" title={sync === 'live' ? (ar ? 'متزامن مع الفريق' : 'Synced with your team') : sync === 'polling' ? (ar ? 'بنحدّث كل شوية' : 'Refreshing periodically') : (ar ? 'غير متصل' : 'Offline')}>
+              <span className={`h-2 w-2 rounded-full ${sync === 'live' ? 'bg-[#2dd4bf]' : sync === 'polling' ? 'bg-[#f5a623]' : 'bg-[#e5484d]'}`} aria-hidden="true" />{inv?.captain && needsVerdict ? '👑' : ''}</span>}
           </div>
           <ol className="flex items-center gap-1.5" aria-label={ar ? 'مراحل التحقيق' : 'Investigation stages'}>
             {p.stages.map((s) => {
@@ -244,7 +272,9 @@ export default function DetectiveSession() {
               {stage && <p className="text-sm text-[#9fb0c4]">{ar ? `المرحلة الحالية: ${stage.title_ar}` : `Current stage: ${stage.title}`}</p>}
               {stageQs.map((q) => <QuestionCard key={q.id} shuffleSeed={p.session.id} q={q} found={found} ar={ar} busy={busy} onSubmit={(qq, a) => void submit(qq, a)} />)}
               {p.questions.some((q) => q.locked) && <p className="rounded-lg bg-[#14233a] p-3 text-center text-sm text-[#9fb0c4]">🔒 {ar ? `${p.questions.filter((q) => q.locked).length} أسئلة هتتفتح لما تخلّص المرحلة الحالية` : `${p.questions.filter((q) => q.locked).length} questions unlock after this stage`}</p>}
-              {finalAnswered && <button type="button" className="det-btn w-full text-lg" disabled={busy} onClick={() => void finish()}>🗂️ {ar ? 'اقفل القضية واعرف الحل' : 'Close the case & reveal the solution'}</button>}
+              {canClose && <button type="button" className="det-btn w-full text-lg" disabled={busy} onClick={() => void finish()}>🗂️ {ar ? 'اقفل القضية واعرف الحل' : 'Close the case & reveal the solution'}</button>}
+              {finalAnswered && needsVerdict && !canClose && (
+                <button type="button" className="det-btn-ghost w-full" onClick={() => setTab('verdict')}>⚖️ {!inv?.verdict?.submitted ? (ar ? 'باقي الاتهام النهائي قبل قفل القضية' : 'The final accusation is still needed') : (ar ? 'مستني قائد الفريق يقفل القضية' : 'Waiting for the captain to close the case')}</button>)}
             </div>
           )}
           {tab === 'evidence' && (
@@ -262,9 +292,12 @@ export default function DetectiveSession() {
               {p.scenes.map((s) => s.evidence_total > s.evidence.length && <p key={s.id} className="text-xs text-[#7d8fa6]">❔ {ar ? `${s.evidence_total - s.evidence.length} أدلة لسه مخفية في "${s.title_ar}"` : `${s.evidence_total - s.evidence.length} hidden clues left in "${s.title}"`}</p>)}
             </div>
           )}
+          {tab === 'lab' && inv && <div role="tabpanel"><LabPanel lab={inv.lab} found={found} ar={ar} busy={busy} serverNow={inv.server_now} onRequest={(id) => void lab(id)} onRefresh={() => void reloadInv()} /></div>}
+          {tab === 'verdict' && inv?.verdict && <div role="tabpanel"><VerdictPanel sessionId={p.session.id} verdict={inv.verdict} captain={inv.captain} suspects={p.suspects} timeline={p.timeline} found={found} ar={ar} busy={busy} onSubmit={(v) => void accuse(v)} /></div>}
+          {tab === 'suspects' && hybrid && stagesOn('INTERROGATION') && inv && <div role="tabpanel"><InterrogationPanel suspects={p.suspects} extra={inv.suspects} confrontations={inv.confrontations} found={found} ar={ar} busy={busy} imageUrl={imageUrl} onConfront={confront} /></div>}
           {tab === 'board' && <div role="tabpanel"><EvidenceBoard evidence={found} links={p.board} busy={busy}
             onLink={(a, b, r) => void run(() => boardLink(sessionId!, a, b, r))} onUnlink={(a, b) => void run(() => boardLink(sessionId!, a, b, 'UNCERTAIN', true))} /></div>}
-          {tab === 'suspects' && (
+          {tab === 'suspects' && !(hybrid && stagesOn('INTERROGATION')) && (
             <div className="space-y-3" role="tabpanel">
               {p.suspects.length === 0 && <p className="text-sm text-[#9fb0c4]">{ar ? 'مفيش أشخاص في القضية دي.' : 'No people in this case.'}</p>}
               {p.suspects.map((s) => (
@@ -281,6 +314,7 @@ export default function DetectiveSession() {
               {p.timeline.map((t) => <li key={t.id} className="relative"><span className="absolute -start-[1.45rem] top-1.5 h-3 w-3 rounded-full bg-[#2dd4bf]" aria-hidden="true" />
                 <span className="font-mono text-xs text-[#f5c46b]" dir="ltr">{t.window_key}</span><div className="text-sm">{ar ? t.label_ar : t.label}</div></li>)}
               {p.timeline.length === 0 && <li className="text-sm text-[#9fb0c4]">{ar ? 'مفيش خط زمني للقضية دي.' : 'No timeline for this case.'}</li>}
+              {!!p.timeline_hidden && <li className="text-sm text-[#7d8fa6]">🔒 {ar ? `${p.timeline_hidden} أحداث لسه مخفية… الأدلة هي اللي هتكشفها.` : `${p.timeline_hidden} events still hidden… evidence will reveal them.`}</li>}
             </ol>
           )}
           {tab === 'notes' && (

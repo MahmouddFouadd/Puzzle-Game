@@ -33,6 +33,7 @@ export type DetectivePayload = {
   progress: { score: number; current_stage_id: string | null; started_at: string; completed_at: string | null } | null
   board: BoardLink[]; hints_used: Array<{ key: string; penalty: number; text?: string | null; text_ar?: string | null }>
   note: string | null; stats: { found: number; total: number; inspections: number }; server_now: string
+  timeline_hidden?: number
   party?: { id: string; code: string; mode: 'COOPERATIVE' | 'COMPETITIVE'; status: string } | null
 }
 export type InspectResult = { found: boolean; warm?: boolean; locked?: boolean; already?: boolean; points?: number; score?: number; evidence?: DetectiveEvidence & { scene_id?: string } }
@@ -149,7 +150,11 @@ export function detectiveError(e: unknown, ar: boolean): string {
     hint_limit: ['استخدمت كل التلميحات المتاحة للقضية دي.', 'You have used every hint for this case.'],
     verdict_required: ['لازم تقدّم الاتهام النهائي الأول.', 'Submit your final accusation first.'],
     verdict_already_submitted: ['الاتهام اتقدّم خلاص.', 'The accusation was already submitted.'],
-    too_much_evidence: ['اختار 6 أدلة بحد أقصى.', 'Choose at most 6 pieces of evidence.']
+    too_much_evidence: ['اختار 6 أدلة بحد أقصى.', 'Choose at most 6 pieces of evidence.'],
+    captain_only: ['القرار ده لقائد الفريق بس.', 'Only the team captain can do this.'],
+    too_many_events: ['اختار أحداث أقل للتسلسل.', 'Choose fewer events for the sequence.'],
+    procedure_not_found: ['الفحص ده مش متاح.', 'This examination is not available.'],
+    suspect_not_found: ['اختار مشتبه به من القضية.', 'Choose a suspect from the case.']
   }
   for (const [code, [a, en]] of Object.entries(t)) if (m.includes(code)) return ar ? a : en
   if (/fetch|network/i.test(m)) return ar ? 'الاتصال انقطع… بنحاول نرجعك للتحقيق.' : 'Connection lost… trying to reconnect.'
@@ -191,6 +196,7 @@ export type LabProcedure = {
 export type VerdictOption = { id: string; text: string; text_ar: string }
 export type Investigation = {
   settings: { stages: StageKind[]; guidance: { max_hints?: number; cooldown_seconds?: number; area_hints?: boolean } }
+  captain: boolean
   lab: LabProcedure[]
   suspects: Array<{ id: string; portrait_path: string | null; motive: string | null; motive_ar: string | null; alibi_ar: string | null; relationship_ar: string | null; background: string | null }>
   confrontations: Array<{ suspect_id: string; evidence_id: string; response: string; response_ar: string; reveals_contradiction: boolean }>
@@ -208,6 +214,8 @@ export type Resolution = {
   }
   lab: Array<{ key: string; title: string; title_ar: string; exam_type: string; requested: boolean; result: string; result_ar: string; report: Record<string, unknown> }>
   confrontations: { total: number; used: number; contradictions_total: number; contradictions_found: number }
+  timeline: Array<{ event_key: string; label: string; label_ar: string; window_key: string | null }>
+  suspects: Array<{ id: string; name: string; name_ar: string }>
 }
 
 export async function loadInvestigation(sessionId: string) { return must(await supabase.rpc('get_detective_investigation', { p_session: sessionId })) as Investigation }

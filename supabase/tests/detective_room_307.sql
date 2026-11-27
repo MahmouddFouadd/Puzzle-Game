@@ -9,11 +9,16 @@ begin
   if exists (select 1 from detective_cases where id = v_case and status <> 'PUBLISHED') then perform publish_detective_case(v_case); end if;
   perform set_config('app.uid', '00000000-0000-0000-0000-0000000000d2', false);
   v_s := (start_detective_session(v_case, 'SOLO')->>'session_id')::uuid;
+  r := get_detective_session_payload(v_s);
+  if jsonb_array_length(r->'timeline') <> 3 or (r->>'timeline_hidden')::int <> 6 or r::text ~ 'S.KAMAL' then raise exception 'FAIL timeline leaks before evidence: %', r->'timeline'; end if;
   inv := get_detective_investigation(v_s);
   if jsonb_array_length(inv->'lab') <> 1 then raise exception 'FAIL only the medical examiner summary should be available at start: %', inv->'lab'; end if;
   for e in select ev.* from detective_evidence ev join detective_scenes sc on sc.id = ev.scene_id where sc.version_id = v_ver loop
     perform detective_inspect(v_s, e.scene_id, e.x + e.width / 2, e.y + e.height / 2);
   end loop;
+  r := get_detective_session_payload(v_s);
+  if jsonb_array_length(r->'timeline') <> 9 or (r->>'timeline_hidden')::int <> 0 then raise exception 'FAIL timeline after evidence %', r->>'timeline_hidden'; end if;
+  raise notice 'ok room-307 timeline: 3 public events at start, all 9 after the evidence is found';
   for p in select * from detective_lab_procedures where version_id = v_ver loop perform detective_lab_request(v_s, p.id); end loop;
   update detective_lab_requests set ready_at = now() where session_id = v_s;
   inv := get_detective_investigation(v_s);

@@ -144,4 +144,22 @@ begin
   inv := get_detective_investigation(v_o);
   if jsonb_array_length(inv->'confrontations') <> 0 or jsonb_array_length(inv->'lab') <> 0 then raise exception 'FAIL another team sees progress'; end if;
   raise notice 'ok other players cannot read or act on a team investigation, and do not inherit its progress';
+  -- live updates: only session members may listen on detective:<session>
+  perform set_config('app.uid', D1, false);
+  if not detective_topic_allowed('detective:' || v_s) then raise exception 'FAIL member cannot listen'; end if;
+  if detective_topic_allowed('detective:not-a-uuid') or detective_topic_allowed('voice:detective:' || v_s) then raise exception 'FAIL bad topic allowed'; end if;
+  perform set_config('app.uid', D3, false);
+  if detective_topic_allowed('detective:' || v_s) then raise exception 'FAIL outsider can listen to team updates'; end if;
+  raise notice 'ok live-update topic is limited to session members';
+  -- captain: only the host may accuse or close a case with an accusation stage
+  perform set_config('app.uid', D2, false);
+  if (get_detective_investigation(v_s)->>'captain')::boolean then raise exception 'FAIL member reported as captain'; end if;
+  begin perform detective_submit_verdict(v_s, v_mgr, 'fraud', 'knife', array[v_card], '{}'); raise exception 'FAIL member accused'; exception when others then if sqlerrm <> 'captain_only' then raise; end if; end;
+  begin perform detective_finish(v_s); raise exception 'FAIL member finished'; exception when others then if sqlerrm not in ('captain_only', 'conclusion_required') then raise; end if; end;
+  perform set_config('app.uid', D1, false);
+  if not (get_detective_investigation(v_s)->>'captain')::boolean then raise exception 'FAIL host not captain'; end if;
+  perform detective_submit_verdict(v_s, v_mgr, 'fraud', 'knife', array[v_card], '{}');
+  perform set_config('app.uid', D2, false);
+  if get_detective_investigation(v_s)->'verdict'->'submitted' is null then raise exception 'FAIL teammate does not see the submitted accusation'; end if;
+  raise notice 'ok captain: only the host accuses and closes; teammates see the accusation';
 end $$;

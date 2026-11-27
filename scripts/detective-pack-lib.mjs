@@ -13,6 +13,7 @@
  *                          key_evidence: [evidence keys], timeline: [event_keys], weights? }
  *      suspects[].motive_ar / motive / alibi_ar / relationship_ar / portrait
  *      hints[].level (1 objective, 2 hint, 3 guided)
+ *      timeline_events[].reveal_with (evidence key that reveals the event; hidden until found)
  */
 
 export const STAGE_KINDS = ['BRIEFING', 'CRIME_SCENE', 'EVIDENCE', 'LAB', 'INTERROGATION', 'BOARD', 'DEDUCTION', 'VERDICT', 'RESOLUTION']
@@ -74,6 +75,7 @@ export function validatePack(raw, { boxes = {}, assetExists } = {}) {
   const hasEv = (k) => evidence.has(k)
   const suspects = new Set((pack.suspects ?? []).map((s) => s.key))
   const events = new Set((pack.timeline_events ?? []).map((t) => t.event_key))
+  for (const t of pack.timeline_events ?? []) if (t.reveal_with && !evidence.has(t.reveal_with)) err(`timeline ${t.event_key}: reveal_with unknown evidence ${t.reveal_with}`)
 
   for (const r of pack.relations ?? []) if (!hasEv(r.from) || !hasEv(r.to)) err(`relation ${r.from}->${r.to} references unknown evidence`)
   for (const st of pack.statements ?? []) {
