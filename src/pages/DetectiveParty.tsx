@@ -5,7 +5,7 @@ import { useI18n } from '../lib/i18n'
 import { detectiveError, joinParty, partyLeave, partyReady, partyStart, partyState, type PartyState } from '../detective/api'
 import { Avatar, AvatarPicker, randomAvatar } from '../bakasa/ui'
 import { InvitePanel } from '../bakasa/Lobby'
-import { imageUrl, Stars } from './DetectiveCatalog'
+import { DetectiveImage, Stars } from './DetectiveCatalog'
 import { VoiceBar } from '../voice/VoiceBar'
 
 export const partyUrl = (code: string) => shareUrl(`/detective/join/${code}`)
@@ -74,7 +74,7 @@ export default function DetectiveParty() {
         <span className="font-mono text-sm tracking-widest text-[#f5c46b]" dir="ltr">{s.party.code}</span></header>
       {s.party.status !== 'CLOSED' && <VoiceBar kind="detective" roomId={s.party.id} selfId={s.me} names={Object.fromEntries(s.members.map((m) => [m.user_id, m.nickname]))} />}
       <section className="relative overflow-hidden rounded-2xl border border-[#2a3a52]">
-        {s.case.cover_image_path && <img src={imageUrl(s.case.cover_image_path)} alt="" className="aspect-[21/9] w-full object-cover opacity-60" />}
+        <DetectiveImage src={s.case.cover_image_path} alt={ar ? s.case.title_ar : s.case.title} className="aspect-[21/9] w-full object-cover opacity-60" />
         <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#0b1220] to-transparent p-4">
           <span className="text-xs font-bold uppercase tracking-[.3em] text-[#2dd4bf]">{coop ? (ar ? 'تحقيق جماعي · فريق واحد' : 'Team investigation') : (ar ? 'منافسة · كل محقق لوحده' : 'Competition · solo race')}</span>
           <h1 className="det-title">{ar ? s.case.title_ar : s.case.title}</h1><Stars n={s.case.difficulty} />

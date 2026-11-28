@@ -10,6 +10,12 @@ export const CATEGORY_LABEL: Record<string, [string, string]> = {
   HISTORICAL: ['لغز تاريخي', 'Historical'], LOGIC: ['تحقيق منطقي', 'Logic'], EDUCATIONAL: ['لغز تعليمي', 'Educational']
 }
 export const imageUrl = (p: string | null | undefined) => (!p ? '' : p.startsWith('http') ? p : `/${p.replace(/^\//, '')}`)
+export function DetectiveImage({ src, alt, className = '' }: { src?: string | null; alt: string; className?: string }) {
+  const [failed, setFailed] = useState(!src)
+  useEffect(() => { setFailed(!src) }, [src])
+  if (failed) return <div className={`grid place-items-center bg-[#0d1626] ${className}`} role="img" aria-label={alt}><DetectiveArt className="h-24 w-24 opacity-80" /></div>
+  return <img src={imageUrl(src)} alt={alt} loading="lazy" className={className} onError={() => setFailed(true)} />
+}
 export const Stars = ({ n }: { n: number }) => <span aria-label={`${n}/5`} className="tracking-tight text-[#f5c46b]">{'★'.repeat(n)}<span className="text-white/20">{'★'.repeat(Math.max(0, 5 - n))}</span></span>
 
 export default function DetectiveCatalog() {
@@ -63,8 +69,7 @@ export default function DetectiveCatalog() {
             <li key={c.id}>
               <Link to={`/detective/case/${c.id}`} className="group block overflow-hidden rounded-2xl border border-[#2a3a52] bg-[#111b2d] transition hover:border-[#2dd4bf]/60">
                 <div className="relative aspect-video bg-[#0d1626]">
-                  {c.cover_image_path ? <img src={imageUrl(c.cover_image_path)} alt="" loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-                    : <div className="grid h-full place-items-center"><DetectiveArt className="h-28 w-28" /></div>}
+                  <DetectiveImage src={c.cover_image_path} alt={ar ? c.title_ar : c.title} className="h-full w-full object-cover transition group-hover:scale-105" />
                   <span className="absolute top-2 rounded bg-black/60 px-2 py-0.5 font-mono text-[11px] tracking-widest text-[#f5c46b] ltr:left-2 rtl:right-2" dir="ltr">CASE #{String(i + 101).padStart(3, '0')}</span>
                   {c.completed && <span className="det-stamp absolute bottom-2 bg-black/40 ltr:right-2 rtl:left-2">{ar ? 'محلولة' : 'Solved'}</span>}
                 </div>

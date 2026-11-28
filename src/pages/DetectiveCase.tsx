@@ -3,8 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useI18n } from '../lib/i18n'
 import { useAuth } from '../auth/AuthProvider'
 import { createParty, detectiveError, listDetectiveCases, startDetectiveSession, type DetectiveCase, type PartyMode } from '../detective/api'
-import { DetectiveArt } from '../components/GameArt'
-import { CATEGORY_LABEL, imageUrl, Stars } from './DetectiveCatalog'
+import { CATEGORY_LABEL, DetectiveImage, Stars } from './DetectiveCatalog'
 
 /** Cinematic case preview – no evidence, answers or solution. */
 export default function DetectiveCasePreview() {
@@ -60,7 +59,7 @@ export default function DetectiveCasePreview() {
         <Link to="/detective" className="det-btn-ghost min-h-0 py-2 text-sm">{ar ? '→ القضايا' : '← Cases'}</Link>
         <section className="relative overflow-hidden rounded-2xl border border-[#2a3a52]">
           <div className="aspect-video bg-[#0d1626]">
-            {c.cover_image_path ? <img src={imageUrl(c.cover_image_path)} alt="" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><DetectiveArt className="h-36 w-36" /></div>}
+            <DetectiveImage src={c.cover_image_path} alt={ar ? c.title_ar : c.title} className="h-full w-full object-cover" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-[#0b1220]/40 to-transparent" aria-hidden="true" />
           <div className="absolute inset-x-0 bottom-0 space-y-1 p-4">
