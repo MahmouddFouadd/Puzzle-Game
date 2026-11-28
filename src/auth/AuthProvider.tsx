@@ -62,7 +62,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return error ? error.message : null
     },
     signInAnonymously: async (displayName) => {
-      const { error } = await supabase.auth.signInAnonymously({ options: { data: { display_name: displayName.slice(0, 60) } } })
+      const name = displayName.trim().slice(0, 60)
+      const existing = (await supabase.auth.getSession()).data.session
+      if (existing) {
+        const { error } = await supabase.auth.updateUser({ data: { display_name: name } })
+        if (error) return error.message
+        const result = await supabase.rpc('set_player_display_name', { p_name: name })
+        return result.error?.message ?? null
+      }
+      const { error } = await supabase.auth.signInAnonymously({ options: { data: { display_name: name } } })
       return error ? error.message : null
     },
     signOut: async () => { await supabase.auth.signOut() }
