@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { DetectiveEvidence, LabProcedure } from '../api'
 
 export const EXAM: Record<string, { icon: string; ar: string; en: string }> = {
@@ -15,9 +15,18 @@ export const EXAM: Record<string, { icon: string; ar: string; en: string }> = {
 
 function useCountdown(until: string | null, serverOffset: number) {
   const [now, setNow] = useState(Date.now())
+  const previousUntil = useRef<string | null>(until)
+  const previousValue = useRef<number | undefined>(undefined)
+  if (previousUntil.current !== until) {
+    previousUntil.current = until
+    previousValue.current = undefined
+  }
   useEffect(() => { if (!until) return; const id = window.setInterval(() => setNow(Date.now()), 1000); return () => window.clearInterval(id) }, [until])
   if (!until) return 0
-  return Math.max(0, Math.ceil((Date.parse(until) - (now + serverOffset)) / 1000))
+  const raw = Math.max(0, Math.ceil((Date.parse(until) - (now + serverOffset)) / 1000))
+  const value = previousValue.current === undefined ? raw : Math.min(previousValue.current, raw)
+  previousValue.current = value
+  return value
 }
 
 function ReportDoc({ p, ar }: { p: LabProcedure; ar: boolean }) {
